@@ -1,0 +1,29 @@
+{
+  "name": "@tom-ricci/cra-template",
+  "version": "1.0.0",
+  "keywords": [
+    "react",
+    "create-react-app",
+    "template",
+    "typescript"
+  ],
+  "description": "The base TypeScript template for Create React App with Tailwind and filesystem routing pre-configured.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  },
+  "files": [
+    "template",
+    "template.json"
+  ],
+  "main": "index.js",
+  "author": "Thomas Ricci",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-ricci/cra-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tom-ricci/cra-template/issues"
+  },
+  "homepage": "https://github.com/tom-ricci/cra-template#readme"
+}
