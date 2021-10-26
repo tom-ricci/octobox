@@ -1,4 +1,4 @@
-import React, {FC, ReactElement} from "react";
+import React, { FC, ReactElement } from "react";
 
 interface Props {
 
@@ -12,4 +12,4 @@ const Index: FC<Props> = (): ReactElement => {
   );
 };
 
-export {Index};
+export { Index };

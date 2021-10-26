@@ -1,1 +1,1 @@
-export const useTempHook = (): void => {}
+export const useTempHook = (): void => {};
