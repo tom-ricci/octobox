@@ -22,12 +22,14 @@ yarn create react-app my-app --template @tom-ricci
 # Usage
 Tailwind is preconfigured and imported, to use it all you need to do is add CSS classes to components. It's set up to use Dark Mode via classes.
 
-The routing solution is simple. Components in the `src/pages` directory are associated with paths based on their name and location. Files named `Index.tsx` or `Index.jsx` inside a directory will load similar to `index.html` files. Files sorrounded in brackets will load dynamically, and spread operators will load as wildcards. Anything which returns a 404 will render `NotFound.tsx` For example:
+The routing solution is simple. Components in the `src/pages` directory are associated with paths based on their name and location. Files named `Index.tsx` or `Index.jsx` inside a directory will load similar to `index.html` files. Files sorrounded in brackets will load dynamically, and spread operators will load as wildcards. Anything which returns a 404 will render `NotFound.tsx`. For example:
 * src/pages/Index.tsx => ./
 * src/pages/about/Index.tsx => ./about
 * src/pages/posts/[post].tsx => ./posts/:post
 * src/pages/users/[...profiles] => ./users/*
 * src/NotFound.jsx => ./somenonexistentpath
+> Note:
+> Only default exports will be used for rendering pages.
 
 Page transitions are also simple. You can use Framer Motion's motion component to animate. Pages are wrapped in AnimatePresence, so you can animate an element's class using normal Framer Motion syntax.
 

@@ -6,15 +6,5 @@ module.exports = {
         require('autoprefixer'),
       ],
     },
-  },
-  webpack: {
-    module: {
-      rules: [
-        {
-          test: /\.tsx$/,
-          use: 'glob-import-loader'
-        },
-      ]
-    }
   }
 }
