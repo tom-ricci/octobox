@@ -7,7 +7,7 @@
     "template",
     "typescript"
   ],
-  "description": "An opinionated TypeScript template with Tailwind, filesystem routing, and page animations out of the box.",
+  "description": "An opinionated, low-level React framework for Typescript with Tailwind, Sass, filesystem routing, and page animations.",
   "license": "MIT",
   "engines": {
     "node": ">=14"
@@ -16,7 +16,7 @@
     "template",
     "template.json"
   ],
-  "main": "index.js",
+  "main": "README.md",
   "author": "Thomas Ricci",
   "repository": {
     "type": "git",

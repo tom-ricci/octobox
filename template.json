@@ -22,7 +22,8 @@
       "framer-motion": "^4.1.17",
       "fast-glob":  "^3.2.7",
       "fs-extra": "^10.0.0",
-      "@types/fs-extra": "^9.0.13"
+      "@types/fs-extra": "^9.0.13",
+      "replaceall": "^0.1.6"
     },
     "scripts": {
       "start": "craco start",
