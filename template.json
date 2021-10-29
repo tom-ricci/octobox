@@ -26,9 +26,10 @@
       "replaceall": "^0.1.6"
     },
     "scripts": {
-      "start": "craco start",
+      "start": "npm run route && craco start",
       "build": "craco build",
-      "test": "craco test"
+      "test": "craco test",
+      "route": "node buildRoutes.js"
     },
     "eslintConfig": {
       "extends": ["react-app", "react-app/jest"]

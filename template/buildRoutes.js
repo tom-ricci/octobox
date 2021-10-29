@@ -1,5 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require("fs-extra");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const glob = require("fast-glob");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const replaceAll = require("replaceall");
 const build = async () => {
   try {
@@ -34,7 +37,6 @@ const build = async () => {
         path = `/${path}`;
       }
       path.toLowerCase();
-      console.log(path);
       return { path, component: `./pages/${route}` };
     });
     let current = await fs.readFile(`${__dirname}/src/Routes.tsx`);
