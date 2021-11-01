@@ -6,7 +6,7 @@ interface Props {
 
 }
 
-// TODO: sass, npm script for sass, plugins (rename to static), 404 page in plugins, npm build, give this a name, move all scripts into name.config.js
+// TODO: npm build, give this a name, move all scripts into name.config.js
 
 export const App: FC<Props> = (): ReactElement => {
   return (

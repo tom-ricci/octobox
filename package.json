@@ -1,11 +1,15 @@
 {
-  "name": "@tom-ricci/cra-template",
+  "name": "now",
   "version": "0.2.1",
   "keywords": [
     "react",
     "create-react-app",
     "template",
-    "typescript"
+    "typescript",
+    "now",
+    "framework",
+    "tailwind",
+    "sass"
   ],
   "description": "An opinionated, low-level React framework for Typescript with Tailwind, Sass, filesystem routing, and page animations.",
   "license": "MIT",

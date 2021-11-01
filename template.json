@@ -23,13 +23,15 @@
       "fast-glob":  "^3.2.7",
       "fs-extra": "^10.0.0",
       "@types/fs-extra": "^9.0.13",
-      "replaceall": "^0.1.6"
+      "replaceall": "^0.1.6",
+      "sass": "1.43.4"
     },
     "scripts": {
-      "start": "npm run route && craco start",
+      "start": "npm run route && npm run sass && craco start",
       "build": "craco build",
       "test": "craco test",
-      "route": "node buildRoutes.js"
+      "route": "node buildRoutes.js",
+      "sass": "sass --watch src/styles/main.scss src/styles/main.css"
     },
     "eslintConfig": {
       "extends": ["react-app", "react-app/jest"]
