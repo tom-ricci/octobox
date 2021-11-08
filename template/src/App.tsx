@@ -6,8 +6,7 @@ interface Props {
 
 }
 
-// TODO: npm build, give this a name, move all scripts into name.config.js
-
+// TODO: make static 404 page and replace static.html with it, use this for routing https://github.com/rafgraph/spa-github-pages
 export const App: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>

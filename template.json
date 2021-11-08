@@ -28,10 +28,11 @@
     },
     "scripts": {
       "start": "npm run route && npm run sass && craco start",
-      "build": "craco build",
+      "build": "npm run route && npm run buildSass && craco build",
       "test": "craco test",
-      "route": "node buildRoutes.js",
-      "sass": "sass --watch src/styles/main.scss src/styles/main.css"
+      "route": "node scripts.config.js",
+      "sass": "sass --watch src/styles/main.scss src/styles/main.css",
+      "buildSass": "sass src/styles/main.scss src/styles/main.css"
     },
     "eslintConfig": {
       "extends": ["react-app", "react-app/jest"]
