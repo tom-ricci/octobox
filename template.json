@@ -24,10 +24,11 @@
       "fs-extra": "^10.0.0",
       "@types/fs-extra": "^9.0.13",
       "replaceall": "^0.1.6",
-      "sass": "1.43.4"
+      "sass": "^1.43.4",
+      "concurrently" : "^6.3.0"
     },
     "scripts": {
-      "start": "npm run route && npm run sass && craco start",
+      "start": "npm run route && concurrently --kill-others \"npm run sass\" \"craco start\"",
       "build": "npm run route && npm run buildsass && craco build",
       "test": "craco test",
       "route": "node scripts.config.js",

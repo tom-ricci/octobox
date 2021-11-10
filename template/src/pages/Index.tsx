@@ -1,4 +1,5 @@
 import React, { FC, ReactElement } from "react";
+import { Page } from "../Router";
 
 interface Props {
 
@@ -7,7 +8,9 @@ interface Props {
 const Index: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
-      <h1>Hello world!</h1>
+      <Page>
+        <h1>Hello world!</h1>
+      </Page>
     </React.Fragment>
   );
 };

@@ -57,7 +57,7 @@ const buildRoutes = async () => {
         path.toLowerCase();
         return { path, component: `./pages/${route}` };
       });
-      let current = await fs.readFile(`${__dirname}/src/Routes.tsx`);
+      let current = await fs.readFile(`${__dirname}/src/Router.tsx`);
       current = current.toString();
       const oldGen = current.substring(current.indexOf("// routes-begin"), current.indexOf("// routes-end"));
       let newGen = "// routes-begin\n// AUTO-GENERATED SECTION - DO NOT EDIT";
@@ -79,9 +79,9 @@ const routes = [ `;
       }else{
         newGen += "\nconst routes = null;\n";
       }
-      newGen += `const appBasename = "${config.rootPath}"\n`;
+      newGen += `const appBasename = "${config.rootPath}";\n`;
       const finalString = replaceAll(oldGen, newGen, current);
-      await fs.writeFile(`${__dirname}/src/Routes.tsx`, finalString);
+      await fs.writeFile(`${__dirname}/src/Router.tsx`, finalString);
     }catch(e) {
       console.log(e);
     }
