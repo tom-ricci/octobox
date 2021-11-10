@@ -3,10 +3,12 @@ An opinionated TypeScript template with Tailwind, filesystem routing, and page a
 
 # Features
 * Tailwind CSS
-* Filesystem routing with React Router
+* Dynamic filesystem routing with React Router
 * Page transition animations with Framer Motion
-* Preconfigured directories
+* Static filesystem routing
+* GitHub Pages support
 * No configuration needed
+* 
 # Install
 To use this template, add `--template @tom-ricci` when creating a new app.
 
@@ -20,20 +22,35 @@ npx create-react-app my-app --template @tom-ricci
 yarn create react-app my-app --template @tom-ricci
 ```
 # Usage
-Tailwind is preconfigured and imported, to use it all you need to do is add CSS classes to components. It's set up to use Dark Mode via classes.
+### Styles
+Tailwind is preconfigured and imported, to use it all you need to do is add CSS classes to components. It's set up to use Dark Mode via classes. To build Sass, use `npm run buildsass`. To daemonize this process, use `npm run sass`. The Sass daemon is initalized on startup so you don't have to use this if you run the development server, though.
 
-The routing solution is simple. Components in the `src/pages` directory are associated with paths based on their name and location. Files named `Index.tsx` or `Index.jsx` inside a directory will load similar to `index.html` files. Files sorrounded in brackets will load dynamically, and spread operators will load as wildcards. Anything which returns a 404 will render `NotFound.tsx`. For example:
-* src/pages/Index.tsx => ./
+### Routing
+
+#### Static Routing
+Simply place your static HTML files inside `/public`. Since GitHub Pages supports static routing by default, nothing is required to make this work. 
+
+Static routes will be preferred over dynamic routes, so if a static route and dynamic route are the same, the static content will load instead of the dynamic content.
+
+#### Dynamic Routing
+Components in the `src/pages` directory are associated with paths based on their name and location. Only default exports are used.
+
+Files named `Index.tsx` or `Index.jsx` inside a directory will load similar to `index.html` files, with the route being the route of the directory.
+
+Files sorrounded in brackets will load dynamically, and spread operators will load as wildcards. Anything which returns a 404 will render `NotFound.tsx`.
+
+For example:
+* ./ => src/pages/Index.tsx
 * src/pages/about/Index.tsx => ./about
-* src/pages/posts/[post].tsx => ./posts/:post
-* src/pages/users/[...profiles] => ./users/*
-* src/NotFound.jsx => ./somenonexistentpath
-> Note:
-> Only default exports will be used for rendering pages.
+* ./posts/:post => src/pages/posts/[post].tsx
+* ./users/* => src/pages/users/[...profiles]
+* ./somenonexistentpath => src/NotFound.jsx
 
-Page transitions are also simple. You can use Framer Motion's motion component to animate. Pages are wrapped in AnimatePresence, so you can animate an element's class using normal Framer Motion syntax.
+To transition between dynamic routes, you can use Framer Motion's motion component. Simply prepend `motion.` to the top level element of pages with the correct props to animate the element.
 
-The directories found in `src/` are generally simple to understand. `hooks/` is for React Hooks, `pages/` is for pages to be rendered, `static/` is for static files, and `styles/` is for custom CSS styles, with main.css being already imported.
+### SEO
+Since GitHub pages doesn't natively support dynamically routed SPAs, Octobox has to redirect users from the 404 page when they attempt to navigate to a dynamic page if they're not already on another dynamic page. While this does mean GitHub Pages can host this app, it also means web crawlers may not crawl all of the app's routes. Because of this, you need to specify each route in `public/sitemap.txt` with the route being a query string for web crawlers to work. 
 
-While no configuration is needed as it is all generated for you, you can edit said configurations to fit your needs.
-
+For example:
+* ./about => ./?/about
+* ./shop/checkout => ./?/shop/checkout

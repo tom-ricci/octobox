@@ -1,5 +1,5 @@
 {
-  "name": "@tom-ricci/cra-template",
+  "name": "@tom-ricci/cra-template-octobox",
   "version": "0.3.0",
   "keywords": [
     "react",
@@ -11,7 +11,7 @@
     "tailwind",
     "sass"
   ],
-  "description": "An opinionated, low-level React framework for Typescript with Tailwind, Sass, filesystem routing, and page animations.",
+  "description": "An opinionated, low-level React framework for Typescript with Tailwind, Sass, dynamic filesystem routing, static filesystem routing, and page animations designed to be hosted on GitHub Pages.",
   "license": "MIT",
   "engines": {
     "node": ">=14"

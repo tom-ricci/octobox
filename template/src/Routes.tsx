@@ -6,6 +6,7 @@ import { NotFound } from "./NotFound";
 // routes-begin
 // AUTO-GENERATED SECTION - DO NOT EDIT
 const routes = null;
+const appBasename = "/example"
 // routes-end
 
 interface Props {
@@ -16,7 +17,7 @@ export const Routes: FC<Props> = (): ReactElement => {
   const renderRoutes = routes !== null;
   return (
     <React.Fragment>
-      <BrowserRouter>
+      <BrowserRouter basename={appBasename}>
         <AnimatePresence exitBeforeEnter={true}>
           <Switch>
             {renderRoutes &&

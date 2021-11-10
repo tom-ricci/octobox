@@ -1,4 +1,21 @@
-const buildRoutes = () => {
+// DONT EDIT THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING
+
+let config = {
+  rootPath: ""
+};
+const buildConfigRootPath = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const fs = require("fs-extra");
+  const build = async () => {
+    let json = await fs.readJson(`${__dirname}/package.json`);
+    config.rootPath = json.homepage;
+    if(config.rootPath.endsWith("/")) {
+      config.rootPath = config.rootPath.substring(0, config.rootPath.length - 1);
+    }
+  };
+  await build().catch(e => console.log(e));
+};
+const buildRoutes = async () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const fs = require("fs-extra");
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -62,12 +79,41 @@ const routes = [ `;
       }else{
         newGen += "\nconst routes = null;\n";
       }
+      newGen += `const appBasename = "${config.rootPath}"\n`;
       const finalString = replaceAll(oldGen, newGen, current);
       await fs.writeFile(`${__dirname}/src/Routes.tsx`, finalString);
     }catch(e) {
       console.log(e);
     }
   };
-  build().catch(e => console.log(e));
+  await build().catch(e => console.log(e));
 };
-buildRoutes();
+const buildStaticNotFoundPage = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const fs = require("fs-extra");
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const replaceAll = require("replaceall");
+  const build = async () => {
+    let currentConfig = {};
+    if(config.rootPath.startsWith("/")) {
+      currentConfig.rootPath = config.rootPath.substring(1);
+    }else{
+      currentConfig.rootPath = config.rootPath;
+    }
+    const segments = currentConfig.rootPath.split("/").length;
+    let current = await fs.readFile(`${__dirname}/public/404.html`);
+    current = current.toString();
+    const oldGen = current.substring(current.indexOf("// path-begin"), current.indexOf("// path-end"));
+    let newGen = "// path-begin\n    // AUTO-GENERATED SECTION - DO NOT EDIT\n";
+    newGen += `    var pathSegmentsToKeep = ${segments};\n    `;
+    const finalString = replaceAll(oldGen, newGen, current);
+    await fs.writeFile(`${__dirname}/public/404.html`, finalString);
+  };
+  await build().catch(e => console.log(e));
+};
+const runScripts = async () => {
+  await buildConfigRootPath();
+  await buildRoutes();
+  await buildStaticNotFoundPage();
+}
+runScripts().catch(e => console.log(e));
