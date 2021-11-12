@@ -31,7 +31,7 @@
       "start": "npm run route && concurrently --kill-others \"npm run sass\" \"craco start\"",
       "build": "npm run route && npm run buildsass && craco build",
       "test": "craco test",
-      "route": "node scripts.config.js",
+      "route": "node octobox.js",
       "sass": "sass --watch src/styles/main.scss src/styles/main.css",
       "buildsass": "sass src/styles/main.scss src/styles/main.css"
     },

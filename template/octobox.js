@@ -79,7 +79,7 @@ const routes = [ `;
       }else{
         newGen += "\nconst routes = null;\n";
       }
-      newGen += `const appBasename = "${config.rootPath}";\n`;
+      newGen += `const appBasename = "${config.rootPath}";\nexport { appBasename };\n`;
       const finalString = replaceAll(oldGen, newGen, current);
       await fs.writeFile(`${__dirname}/src/Router.tsx`, finalString);
     }catch(e) {
