@@ -70,8 +70,9 @@ const generate = (path, domain, root) => {
   fse.writeJsonSync(`./${path}/package.json`, json);
   fs.writeFile(`./${path}/public/sitemap.txt`, `${domain}/%PUBLIC_URL%/?/`, e => console.error(e));
   // log completion
-  console.log(`Success! Octobox app created at ${__dirname}/${path}!`);
-  console.log("Inside that directory, you can run several commands:\n\n  \x1b[94mnpm start\n    \x1b[37mStarts the development server.\n\n  \x1b[94mnpm run build\n    \x1b[37mBundles the app into static files for production.\n\n  \x1b[94mnpm test\n    \x1b[37mStarts the test runner.\n\n  \x1b[94mnpm run eject\n    \x1b[37mRemoves this tool and copies build dependencies, configuration files\n    and scripts into the app directory. If you do this, you can’t go back!\n\nWe suggest that you begin by typing:\n\n  \x1b[94mcd \x1b[37mtest\n  \x1b[94mnpm start\n\n\x1b[37mHappy hacking!");
+  console.log(`Success! Octobox app created at ./${path}!`);
+  console.log("We suggest that you begin by typing:\n\n  \x1b[94mcd \x1b[37mtest\n  \x1b[94mnpm start\n\n\x1b[37mHappy hacking!");
+  process.exit();
 };
 
 configure();

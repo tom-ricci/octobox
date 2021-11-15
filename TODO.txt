@@ -1,3 +1,6 @@
 TODO: replace react branding with octobox
+TODO: test stuffs
+TODO: stylelint
+TODO: jest? maybe?
 TODO: supply intellij tsx template in docs
 TODO: finish docs
