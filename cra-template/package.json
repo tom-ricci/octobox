@@ -2,16 +2,17 @@
   "name": "@tom-ricci/cra-template",
   "version": "0.4.2",
   "keywords": [
+    "octobox",
+    "create-octobox-app",
     "react",
-    "create-react-app",
-    "template",
     "typescript",
-    "now",
     "framework",
     "tailwind",
-    "sass"
+    "sass",
+    "routing",
+    "github pages"
   ],
-  "description": "An opinionated, simple React framework for Typescript with Tailwind, Sass, dynamic filesystem routing, static filesystem routing, and page animations designed to be hosted on GitHub Pages.",
+  "description": "An opinionated, simple Typescript framework with Tailwind, Sass, dynamic filesystem routing, static filesystem routing, and page animations designed to be hosted on GitHub Pages.",
   "license": "MIT",
   "engines": {
     "node": ">=14"
@@ -24,10 +25,10 @@
   "author": "Thomas Ricci",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tom-ricci/cra-template.git"
+    "url": "git+https://github.com/tom-ricci/octobox.git"
   },
   "bugs": {
-    "url": "https://github.com/tom-ricci/cra-template/issues"
+    "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://github.com/tom-ricci/cra-template#readme"
+  "homepage": "https://github.com/tom-ricci/octobox#readme"
 }

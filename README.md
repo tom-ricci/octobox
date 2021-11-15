@@ -1,26 +1,18 @@
 # Octobox
-An opinionated TypeScript template with Tailwind, filesystem routing, and page animations out of the box.
+An opinionated Typescript framework with Tailwind, filesystem routing, page animations, and more out of the box.
 
 # Features
+* Typescript Support
 * Tailwind CSS
 * Dynamic filesystem routing with React Router
 * Page transition animations with Framer Motion
 * Static filesystem routing
+* Miscellaneous hooks
 * GitHub Pages support
 * No configuration needed
-* 
 # Install
-To use this template, add `--template @tom-ricci` when creating a new app.
-
-For example:
-
-```sh
-npx create-react-app my-app --template @tom-ricci
-
-# or
-
-yarn create react-app my-app --template @tom-ricci
-```
+To use this template, run `npx create-octobox-app`.
+> Occasionally, Windows users may experience JScript errors trying to run the creator. To fix this, reassign your .js file association from JScript to Node.js
 # Usage
 ### Styles
 Tailwind is preconfigured and imported, to use it all you need to do is add CSS classes to components. It's set up to use Dark Mode via classes. To build Sass, use `npm run buildsass`. To daemonize this process, use `npm run sass`. The Sass daemon is initalized on startup so you don't have to use this if you run the development server, though.
@@ -49,8 +41,10 @@ For example:
 To transition between dynamic routes, you can use Framer Motion's motion component. Simply prepend `motion.` to the top level element of pages with the correct props to animate the element.
 
 ### SEO
-Since GitHub pages doesn't natively support dynamically routed SPAs, Octobox has to redirect users from the 404 page when they attempt to navigate to a dynamic page if they're not already on another dynamic page. While this does mean GitHub Pages can host this app, it also means web crawlers may not crawl all of the app's routes. Because of this, you need to specify each route in `public/sitemap.txt` with the route being a query string for web crawlers to work. 
+Since GitHub Pages doesn't natively support dynamically routed SPAs, Octobox has to redirect users from the 404 page when they attempt to navigate to a dynamic page if they're not already on another dynamic page. While this does mean GitHub Pages can host this app, it also means web crawlers may not crawl all of the app's routes. Because of this, you need to specify each route in `public/sitemap.txt` with the route being a query string for web crawlers to work.
 
 For example:
 * ./about => ./?/about
 * ./shop/checkout => ./?/shop/checkout
+
+Octobox generates a sitemap path for you, allowing you to never have to touch the sitemap if you don't want to. If you don't edit the sitemap, however, crawlers will only be able to index your homepage.
