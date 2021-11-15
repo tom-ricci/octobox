@@ -1,4 +1,4 @@
-# @tom-ricci/cra-template
+# Octobox
 An opinionated TypeScript template with Tailwind, filesystem routing, and page animations out of the box.
 
 # Features

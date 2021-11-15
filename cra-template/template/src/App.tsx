@@ -7,6 +7,9 @@ interface Props {
 }
 
 // TODO: simplify docs
+// TODO: add create-octobox-app to this repo
+// TODO: readme for create-octobox-app
+// TODO: windows bug about file association with js files
 // TODO: minify octobox.js
 // TODO: replace react branding with octobox
 // TODO: supply intellij tsx template in docs
