@@ -1,6 +1,9 @@
 TODO: replace react branding with octobox
 TODO: test stuffs
-TODO: stylelint
-TODO: jest? maybe?
+TODO: maybe add more things to the generator for app name, meta tags, etc?
+TODO: more utility hooks
+TODO: more testing
 TODO: supply intellij tsx template in docs
+TODO: daemonize route npm script
 TODO: finish docs
+TODO: finish tests

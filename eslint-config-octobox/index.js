@@ -1,22 +1,4 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true
-  },
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-  ],
-  "parserOptions": {
-    "ecmaVersion": 12,
-    "sourceType": "module"
-  },
   "rules": {
     "@typescript-eslint/no-explicit-any": [
       "off"
@@ -48,18 +30,18 @@ module.exports = {
             "await": { "before": true, "after": true },
             "break": { "before": false, "after": false },
             "case": { "before": false, "after": true },
-            "catch": { "before": false, "after": false },
+            "catch": { "before": true, "after": false },
             "class": { "before": true, "after": true },
             "const": { "before": false, "after": true },
             "continue": { "before": true, "after": true },
             "debugger": { "before": false, "after": false },
             "default": { "before": true, "after": true },
             "delete": { "before": false, "after": true },
-            "do": { "before": false, "after": false },
+            "do": { "before": false, "after": true },
             "else": { "before": false, "after": false },
             "export": { "before": false, "after": true },
             "extends": { "before": true, "after": true },
-            "finally": { "before": false, "after": false },
+            "finally": { "before": true, "after": false },
             "for": { "before": false, "after": false },
             "from": { "before": true, "after": true },
             "function": { "before": true, "after": false },
@@ -81,7 +63,7 @@ module.exports = {
             "typeof": { "before": true, "after": true },
             "var": { "before": true, "after": true },
             "void": { "before": true, "after": true },
-            "while": { "before": false, "after": false },
+            "while": { "before": true, "after": false },
             "with": { "before": false, "after": false },
             "yield": { "before": false, "after": true }
           }

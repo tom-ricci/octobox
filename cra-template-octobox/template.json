@@ -25,18 +25,26 @@
       "@types/fs-extra": "^9.0.13",
       "replaceall": "^0.1.6",
       "sass": "^1.43.4",
-      "concurrently" : "^6.3.0"
+      "concurrently": "^6.3.0",
+      "stylelint": "^14.1.0",
+      "stylelint-config-standard-scss": "^2.0.1",
+      "stylelint-config-octobox": "^0.0.1",
+      "eslint-config-octobox": "^0.0.1"
     },
     "scripts": {
-      "start": "npm run route && concurrently --kill-others \"npm run sass\" \"craco start\"",
-      "build": "npm run route && npm run buildsass && craco build",
-      "test": "craco test",
-      "route": "node octobox.js",
-      "sass": "sass --watch src/styles/main.scss src/styles/main.css",
-      "buildsass": "sass src/styles/main.scss src/styles/main.css"
+      "start": "npm run build-route && concurrently --kill-others \"npm run watch-sass\" \"craco start\"",
+      "test": "npm run lint && craco test",
+      "build": "npm run build-route && npm run build-sass && npm run build-es",
+      "build-route": "node octobox.js",
+      "build-sass": "sass src/styles/main.scss src/styles/main.css",
+      "build-es": "craco build",
+      "watch-sass": "sass --watch src/styles/main.scss src/styles/main.css",
+      "lint": "npm run lint-sass && npm run lint-es",
+      "lint-sass": "npx stylelint \"**/*.scss\" --yes",
+      "lint-es": "eslint \"**/src/.{js,ts,jsx,tsx}\""
     },
     "eslintConfig": {
-      "extends": ["react-app", "react-app/jest"]
+      "extends": ["react-app", "react-app/jest", ".eslintrc.js"]
     }
   }
 }
