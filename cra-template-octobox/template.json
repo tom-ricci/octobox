@@ -29,7 +29,8 @@
       "stylelint": "^14.1.0",
       "stylelint-config-standard-scss": "^2.0.1",
       "stylelint-config-octobox": "^0.0.1",
-      "eslint-config-octobox": "^0.0.1"
+      "eslint-config-octobox": "^0.0.1",
+      "postcss-scss": "^4.0.2"
     },
     "scripts": {
       "start": "npm run build-route && concurrently --kill-others \"npm run watch-sass\" \"craco start\"",

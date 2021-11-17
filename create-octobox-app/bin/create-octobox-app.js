@@ -4,16 +4,15 @@
 // import/configure libs
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { promisify } = require("util");
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
 });
-readline.question[promisify.custom] = (question) => {
-  return new Promise((resolve) => {
-    readline.question(question, resolve);
-  });
-};
+const ask = (query, defaultAnswer) => {
+  return new Promise(resolve => {
+    readline.question(`\x1b[94m${query} \x1b[37m(${defaultAnswer}) `, resolve);
+  })
+}
 
 // FIXME: i cant figure out how to get readlines working promisifi- (or maybe i do?? just had an idea they might work if i dont close readline)
 const configure = async () => {
@@ -81,9 +80,8 @@ const configure = async () => {
           let octoboxLint;
           octoboxLint = answer.length === 0 || answer === "Y" || answer === "TRUE" || answer === "YES";
 
-          // generate app
-          readline.close();
-          generate(path, domain, root, octoboxLint);
+          // add customizations and generate
+          customize(domain).then(customizations => generate(path, domain, root, octoboxLint, customizations));
 
         });
 
@@ -94,10 +92,46 @@ const configure = async () => {
   });
 };
 
-const generate = (path, domain, root, octoboxLint) => {
+const customize = async (domain) => {
+  const title = lintCustomization(await ask("App name:", "Octobox app"), "Octobox app");
+  const color = lintCustomization(await ask("Primary theme color:", "#000000"), "#000000");
+  const bgColor = lintCustomization(await ask("Secondary theme color:", "#ffffff"), "#ffffff");
+  const desc = lintCustomization(await ask("App description:", "An Octobox app"), "An octobox app");
+  const keywords = lintCustomization(await ask("App keywords:", "octobox"), "octobox");
+  const author = lintCustomization(await ask("App author:", "App developer"), "App developer");
+  const creator = lintCustomization(await ask("App creator:", "App developer"), "App developer");
+  const publisher = lintCustomization(await ask("App publisher:", "App developer"), "App developer");
+  const banner = lintCustomization(await ask("App social media banner URL:", "https://http.cat/100"), "https://http.cat/100");
+  const siteName = lintCustomization(await ask("App owner's website's name:", domain), domain);
+  return {
+    title,
+    color,
+    bgColor,
+    desc,
+    keywords,
+    author,
+    creator,
+    publisher,
+    banner,
+    siteName,
+    domain
+  };
+};
+
+const lintCustomization = (str, defaultAnswer) => {
+  if(str.length === 0) {
+    return defaultAnswer;
+  }else{
+    return str;
+  }
+}
+
+const generate = (path, domain, root, octoboxLint, customizations) => {
+
+  readline.close();
 
   // gen cra template
-  console.log("\x1b[94mCreating Octobox app. This will take a while...");
+  console.log("\x1b[94mCreating Octobox app. This will take a while...\x1b[37m");
   execSync(`npx --yes create-react-app ${path} --template octobox`);
 
   // gen octobox items
@@ -117,14 +151,84 @@ const generate = (path, domain, root, octoboxLint) => {
     fs.writeFileSync(`./${path}/.stylelintrc.js`, `${fs.readFileSync(`./${path}/.stylelintrc.js`).toString()};\n`);
   }
 
-  // log completion
-  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nScroll up for non-fatal error logs\n-----------------------------------------------\n\x1b[94mSuccess! Octobox app created at \x1b[37m./${path}\x1b[94m!`);
-  console.log(`\x1b[94mWe suggest that you begin by typing:
+  // customize index, 404, and manifest
+  const index =
+`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>${customizations.title}</title>
+    <link rel="icon" href="%PUBLIC_URL%/favicon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="${customizations.color}"/>
+    <meta name="description" content="${customizations.desc}"/>
+    <meta name="keywords" content="${customizations.keywords}"/>
+    <meta name="robots" content="index, follow"/>
+    <meta name="language" content="English"/>
+    <meta name="revisit-after" content="1 days"/>
+    <meta name="author" content="${customizations.author}"/>
+    <meta name="creator" content="${customizations.creator}"/>
+    <meta name="publisher" content="${customizations.publisher}"/>
+    <meta property="og:title" content="${customizations.title}"/>
+    <meta property="og:description" content="${customizations.desc}"/>
+    <meta property="og:image" content="${customizations.banner}"/>
+    <meta property="og:url" content="${customizations.domain}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta property="og:site_name" content="${customizations.siteName}"/>
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png"/>
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
+    <script type="text/javascript">
+      !function(n){if("/"===n.search[1]){var a=n.search.slice(1).split("&").map(function(n){return n.replace(/~and~/g,"&")}).join("?");window.history.replaceState(null,null,n.pathname.slice(0,-1)+a+n.hash)}}(window.location);
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+`;
+  const notFound =
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" href="%PUBLIC_URL%/favicon.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>${customizations.title}</title>
+  <meta name="description" content="404 Not Found!">
+  <script type="text/javascript">
+    // path-begin
+    // AUTO-GENERATED SECTION - DO NOT EDIT
+    var pathSegmentsToKeep = 0;
+    // path-end
+    var l=window.location;l.replace(l.protocol+"//"+l.hostname+(l.port?":"+l.port:"")+l.pathname.split("/").slice(0,1+pathSegmentsToKeep).join("/")+"/?/"+l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/").replace(/&/g,"~and~")+(l.search?"&"+l.search.slice(1).replace(/&/g,"~and~"):"")+l.hash);
+  </script>
+</head>
+<body>
+</body>
+</html>
+`;
+  const manifest = JSON.parse(fs.readFileSync(`./${path}/public/manifest.json`).toString());
+  manifest.short_name = customizations.title;
+  manifest.name = customizations.title;
+  manifest.start_url = "/%PUBLIC_URL%/";
+  manifest.theme_color = customizations.color;
+  manifest.background_color = customizations.bgColor;
+  fs.writeFileSync(`./${path}/public/index.html`, index);
+  fs.writeFileSync(`./${path}/public/404.html`, notFound);
+  fs.writeFileSync(`./${path}/public/manifest.json`, JSON.stringify(manifest, null, 2));
 
-  \x1b[94mcd \x1b[37m${path}
+  // run route builder once
+  execSync("npm run build-route", {cwd: `./${path}`});
+
+  // log completion
+  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for generation logs\n-----------------------------------------------\nSuccess! Octobox app created at \x1b[37m./${path}\x1b[94m!`);
+  console.log(`We suggest that you begin by typing:
+
+  cd \x1b[37m${path}
   \x1b[94mnpm start
 
-\x1b[94mHappy hacking!\x1b[37m`);
+Happy hacking!\x1b[37m`);
   process.exit();
 };
 

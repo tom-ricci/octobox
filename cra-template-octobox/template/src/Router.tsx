@@ -1,5 +1,5 @@
 import React, { FC, ReactElement, useEffect } from "react";
-import { BrowserRouter, Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { NotFound } from "./NotFound";
 
