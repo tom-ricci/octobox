@@ -1,6 +1,6 @@
 {
   "name": "stylelint-config-octobox",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Octobox's stylelint config based on Thomas Ricci's styleguide. This is not meant to be used standalone, and should only be used in an Octobox app.",
   "main": "index.js",
   "scripts": {

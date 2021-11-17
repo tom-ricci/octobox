@@ -4,4 +4,4 @@ module.exports = {
     "stylelint-config-octobox"
   ],
   "rules": {}
-};
+}

@@ -1,9 +1,13 @@
 TODO: replace react branding with octobox
-TODO: test stuffs
 TODO: maybe add more things to the generator for app name, meta tags, etc?
 TODO: more utility hooks
-TODO: more testing
+TODO: more testing - on gh pages this time too
 TODO: supply intellij tsx template in docs
 TODO: daemonize route npm script
+TODO: replace cra template readme with new readme
 TODO: finish docs
-TODO: finish tests
+TODO: finish tests by making new projects with different settings and using them and testing each octobox feature
+TODO: add readmes to every package
+TODO: finish finish docs
+TODO: update all packages to 1.0.0
+TODO: publish
