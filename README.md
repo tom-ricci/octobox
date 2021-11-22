@@ -1,30 +1,31 @@
 # Octobox
-An opinionated Typescript framework with Tailwind, filesystem routing, page animations, and more out of the box.
+### Stop scaffolding. Start coding.
+Octobox is a configuration-less Typescript framework for building React apps. Forget having to spend time configuring linters, CSS frameworks, routing, SEO, and more with Octobox. Just run `npx create-octobox-app`, answer a few questions, and let Octobox take care of the rest for you.
 
 # Features
-* Typescript Support
+* Client-side filesystem routing
+* Server-side static routing
+* Page transition animations
 * Tailwind CSS
-* Dynamic filesystem routing with React Router
-* Page transition animations with Framer Motion
-* Static filesystem routing
+* Sass
 * Miscellaneous hooks
 * GitHub Pages support
-* No configuration needed
-# Install
-To use this template, run `npx create-octobox-app`.
+* ESLint and Stylelint support
+* SEO
+* No configuration needed (although it's there if you want it)
+
+# Setup
+To create an Octobox app, run `npx create-octobox-app`.
 > Occasionally, Windows users may experience JScript errors trying to run the creator. To fix this, reassign your .js file association from JScript to Node.js
+
 # Usage
-### Styles
-Tailwind is preconfigured and imported, to use it all you need to do is add CSS classes to components. It's set up to use Dark Mode via classes. To build Sass, use `npm run buildsass`. To daemonize this process, use `npm run sass`. The Sass daemon is initalized on startup so you don't have to use this if you run the development server, though.
 
 ### Routing
 
-#### Static Routing
-Simply place your static HTML files inside `/public`. Since GitHub Pages supports static routing by default, nothing is required to make this work. 
+#### Static (Server-Side) Routing
+Simply place your static HTML files inside `public`. That's it.
 
-Static routes will be preferred over dynamic routes, so if a static route and dynamic route are the same, the static content will load instead of the dynamic content.
-
-#### Dynamic Routing
+#### Dynamic (Client-Side) Routing
 Components in the `src/pages` directory are associated with paths based on their name and location. Only default exports are used.
 
 Files named `Index.tsx` or `Index.jsx` inside a directory will load similar to `index.html` files, with the route being the route of the directory.
@@ -32,19 +33,42 @@ Files named `Index.tsx` or `Index.jsx` inside a directory will load similar to `
 Files sorrounded in brackets will load dynamically, and spread operators will load as wildcards. Anything which returns a 404 will render `NotFound.tsx`.
 
 For example:
-* ./ => src/pages/Index.tsx
-* src/pages/about/Index.tsx => ./about
-* ./posts/:post => src/pages/posts/[post].tsx
-* ./users/* => src/pages/users/[...profiles]
-* ./somenonexistentpath => src/NotFound.jsx
+* ./ = src/pages/Index.tsx
+* ./about = src/pages/about/Index.tsx
+* ./posts/:post = src/pages/posts/[post].tsx
+* ./users/* = src/pages/users/[...profiles]
+* ./somenonexistentpath = src/NotFound.jsx
 
-To transition between dynamic routes, you can use Framer Motion's motion component. Simply prepend `motion.` to the top level element of pages with the correct props to animate the element.
+To animate transitions between dynamic routes, you can use Framer Motion's motion component. Simply prepend `motion.` to the top level element of pages with the correct props to animate the element.
+
+#### Route Conflicts
+When a static route and dynamic route share the same name, the conflict will be resolved in one of two ways.
+1. If the user came from a static route or no route at all, the static route will load.
+2. If the user came from a dynamic route, the dynamic route will load unless a page reload occoured (we'll talk about that later).
+
+#### Switching To Static Routes
+If a user is going to a static route from a dynamic route, a page reload must occour. If no reload occours, Octobox will attempt to route the user to a dynamic route when the user should be routed to a static route.
+
+### Styles
+Tailwind and Sass are both preconfigured and imported, so no setup is necessary. Simply use classes in your JSX.
+> Tailwind, by default, is configured to enable Dark Mode based on classes.
 
 ### SEO
-Since GitHub Pages doesn't natively support dynamically routed SPAs, Octobox has to redirect users from the 404 page when they attempt to navigate to a dynamic page if they're not already on another dynamic page. While this does mean GitHub Pages can host this app, it also means web crawlers may not crawl all of the app's routes. Because of this, you need to specify each route in `public/sitemap.txt` with the route being a query string for web crawlers to work.
+Due to the way Octobox handles routing, web crawlers may not crawl all of the app's dynamic routes. Because of this, you need to specify each dynamic route in `public/sitemap.txt` with the route being a query string for web crawlers to index your client-side routes.
 
 For example:
-* ./about => ./?/about
-* ./shop/checkout => ./?/shop/checkout
+* ./about = ./?/about
+* ./shop/checkout = ./?/shop/checkout
 
-Octobox generates a sitemap path for you, allowing you to never have to touch the sitemap if you don't want to. If you don't edit the sitemap, however, crawlers will only be able to index your homepage.
+Octobox generates a simple sitemap for you, allowing you to never have to touch the sitemap if you don't want to. If you don't edit the sitemap, however, crawlers may not index all of your pages.
+
+### Hosting
+
+#### Using `serve`
+The easiest way to host an Octobox app is to let it host itself. Run `npm run host` to host your app with `serve`.
+
+#### On GitHub Pages
+To host your app on GitHub Pages, save the artifacts of `npm run build` in the root of your site.
+
+### On Other Hosts
+As long as your host resolves routes statically and returns 404.html when no static route is found (like GitHub Pages), you can host an Octobox app however you would any other website.

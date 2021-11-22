@@ -29,8 +29,7 @@
       "stylelint": "^14.1.0",
       "stylelint-config-standard-scss": "^2.0.1",
       "stylelint-config-octobox": "^0.0.1",
-      "eslint-config-octobox": "^0.0.1",
-      "postcss-scss": "^4.0.2"
+      "eslint-config-octobox": "^0.0.1"
     },
     "scripts": {
       "start": "npm run build-route && concurrently --kill-others \"npm run watch-sass\" \"craco start\"",
@@ -41,7 +40,7 @@
       "build-es": "craco build",
       "watch-sass": "sass --watch src/styles/main.scss src/styles/main.css",
       "lint": "npm run lint-sass && npm run lint-es",
-      "lint-sass": "npx stylelint \"**/*.scss\" --yes",
+      "lint-sass": "npx --yes stylelint \"**/*.scss\"",
       "lint-es": "eslint \"**/src/.{js,ts,jsx,tsx}\""
     },
     "eslintConfig": {
