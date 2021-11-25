@@ -1,6 +1,7 @@
 TODO: more testing - on gh pages this time too
 TODO: in cli, replace /%PUBLIC_URL%/ in manifest with just %PUBLIC_URL%
 TODO: remove temp file from src/assets, replace it with src/assets being generated with cli
+TODO: update/publish cra-template, cli
 TODO: daemonize route builder
 TODO: abstract current scripts to script packages
 TODO: finish docs
