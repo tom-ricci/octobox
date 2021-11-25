@@ -14,7 +14,6 @@ const ask = (query, defaultAnswer) => {
   })
 }
 
-// FIXME: i cant figure out how to get readlines working promisifi- (or maybe i do?? just had an idea they might work if i dont close readline)
 const configure = async () => {
 
   // configure octobox variables
@@ -220,12 +219,13 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   const manifest = JSON.parse(fs.readFileSync(`./${path}/public/manifest.json`).toString());
   manifest.short_name = customizations.title;
   manifest.name = customizations.title;
-  manifest.start_url = "/%PUBLIC_URL%/";
+  manifest.start_url = "%PUBLIC_URL%";
   manifest.theme_color = customizations.color;
   manifest.background_color = customizations.bgColor;
   fs.writeFileSync(`./${path}/public/index.html`, index);
   fs.writeFileSync(`./${path}/public/404.html`, notFound);
   fs.writeFileSync(`./${path}/public/manifest.json`, JSON.stringify(manifest, null, 2));
+  fs.mkdirSync(`./${path}/src/assets/`);
 
   // run route builder once
   execSync("npm run build-route", {cwd: `./${path}`});
