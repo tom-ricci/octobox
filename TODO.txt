@@ -1,4 +1,4 @@
-TODO: daemonize route builder
+TODO: make another route builder that isnt daemonized and run that one in cli, then delete it after use
 TODO: abstract current scripts to script packages
 TODO: finish docs
 TODO: add licenses to packages
