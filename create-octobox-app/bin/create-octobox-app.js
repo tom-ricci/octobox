@@ -228,7 +228,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   fs.mkdirSync(`./${path}/src/assets/`);
 
   // run route builder once
-  execSync("npm run build-route", {cwd: `./${path}`});
+  execSync("node octobox.js add", {cwd: `./${path}`});
 
   // log completion
   console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for generation logs\n-----------------------------------------------\nSuccess! Octobox app created at \x1b[37m./${path}\x1b[94m!`);
