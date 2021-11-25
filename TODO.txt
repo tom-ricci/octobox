@@ -1,12 +1,12 @@
-TODO: fix meta tag/link href resolution in index and docs
 TODO: daemonize route builder
 TODO: abstract current scripts to script packages
 TODO: finish docs
+TODO: add licenses to packages
 TODO: finish tests by making new projects with different settings and using them and testing each octobox feature
 TODO: replace react branding with octobox
 TODO: add readmes to every package
 TODO: add readme inside octobox template
 TODO: finish finish docs
-TODO: update all packages to 1.0.0
+TODO: update all packages to 1.0.0 including parent
 TODO: check all todos
 TODO: publish

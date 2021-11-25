@@ -166,7 +166,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   <head>
     <meta charset="utf-8">
     <title>${customizations.title}</title>
-    <link rel="icon" href="%PUBLIC_URL%/favicon.png"/>
+    <link rel="icon" href="${customizations.domain}/%PUBLIC_URL%/favicon.ico"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="${customizations.color}"/>
     <meta name="description" content="${customizations.desc}"/>
@@ -183,8 +183,8 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
     <meta property="og:url" content="${customizations.domain}"/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta property="og:site_name" content="${customizations.siteName}"/>
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png"/>
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
+    <link rel="apple-touch-icon" href="${customizations.domain}/%PUBLIC_URL%/logo192.png"/>
+    <link rel="manifest" href="${customizations.domain}/%PUBLIC_URL%/manifest.json"/>
     <script type="text/javascript">
       !function(n){if("/"===n.search[1]){var a=n.search.slice(1).split("&").map(function(n){return n.replace(/~and~/g,"&")}).join("?");window.history.replaceState(null,null,n.pathname.slice(0,-1)+a+n.hash)}}(window.location);
     </script>
@@ -200,7 +200,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="icon" href="%PUBLIC_URL%/favicon.png"/>
+  <link rel="icon" href="${customizations.domain}/%PUBLIC_URL%/favicon.ico"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>${customizations.title}</title>
   <meta name="description" content="404 Not Found!">

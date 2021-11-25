@@ -29,13 +29,14 @@
       "stylelint": "^14.1.0",
       "stylelint-config-standard-scss": "^2.0.1",
       "stylelint-config-octobox": "^0.0.1",
-      "eslint-config-octobox": "^0.0.1"
+      "eslint-config-octobox": "^0.0.1",
+      "nodemon": "^2.0.15"
     },
     "scripts": {
-      "start": "npm run build-route && concurrently --kill-others \"npm run watch-sass\" \"craco start\"",
+      "start": "concurrently --kill-others \"npm run build-route\" \"npm run watch-sass\" \"craco start\"",
       "test": "npm run lint && craco test",
       "build": "npm run build-route && npm run build-sass && npm run build-es",
-      "build-route": "node octobox.js",
+      "build-route": "nodemon --watch src/pages octobox.js",
       "build-sass": "sass src/styles/main.scss src/styles/main.css",
       "build-es": "craco build",
       "watch-sass": "sass --watch src/styles/main.scss src/styles/main.css",
