@@ -12,4 +12,4 @@ const Index: FC<Props> = (): ReactElement => {
   );
 };
 
-export default Index ;
+export default Index;

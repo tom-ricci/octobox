@@ -1,6 +1,8 @@
 TODO: replace react branding with octobox
 TODO: more testing - on gh pages this time too
-TODO: supply intellij tsx template in docs
+TODO: add routes to its own package, like octobox-runner or octobox-script-runner or octobox-executor or run-octobox-scripts or something like that
+TODO: octobox scripts is wrapper for all scripts
+TODO: eject octobox scripts
 TODO: daemonize route npm script
 TODO: add static host like serve
 TODO: finish docs

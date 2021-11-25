@@ -99,8 +99,8 @@ const customize = async (domain) => {
   const desc = lintCustomization(await ask("App description:", "An Octobox app"), "An octobox app");
   const keywords = lintCustomization(await ask("App keywords:", "octobox"), "octobox");
   const author = lintCustomization(await ask("App author:", "App developer"), "App developer");
-  const creator = lintCustomization(await ask("App creator:", "App developer"), "App developer");
-  const publisher = lintCustomization(await ask("App publisher:", "App developer"), "App developer");
+  const creator = lintCustomization(await ask("App creator:", author), author);
+  const publisher = lintCustomization(await ask("App publisher:", creator), creator);
   const banner = lintCustomization(await ask("App social media banner URL:", "https://http.cat/100"), "https://http.cat/100");
   const siteName = lintCustomization(await ask("App owner's website's name:", domain), domain);
   return {
@@ -136,7 +136,16 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
 
   // gen octobox items
   const packageJson = JSON.parse(fs.readFileSync(`./${path}/package.json`).toString());
+  // add required to package
   packageJson.homepage = `/${root}`;
+  // add customizations to package
+  packageJson.name = customizations.name;
+  packageJson.version = "0.0.0";
+  packageJson.description = customizations.desc;
+  packageJson.author = customizations.author;
+  packageJson.license = "MIT";
+  packageJson.keywords = customizations.keywords.split(",");
+  packageJson.stylelint = "\"extends\": [\"./stylelintrc.js\"]";
   fs.writeFileSync(`./${path}/package.json`, JSON.stringify(packageJson, null, 2));
   fs.writeFileSync(`./${path}/public/sitemap.txt`, `${domain}/%PUBLIC_URL%/?/`);
   if(!octoboxLint) {

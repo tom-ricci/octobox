@@ -1,5 +1,5 @@
 import React, { FC, ReactElement, useEffect } from "react";
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { NotFound } from "./NotFound";
 
@@ -26,13 +26,13 @@ export const Router: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
       <AnimatePresence exitBeforeEnter={true}>
-        <Switch>
+        <Routes>
           {renderRoutes &&
           routes.map(({ path, component }) => (
-            <Route key={path} path={`${path}`} component={component} exact={true}/>
+            <Route key={path} path={`${path}`} element={component}/>
           ))}
-          <Route key={"notFound"} path="/*" component={NotFound}/>
-        </Switch>
+          <Route key={"notFound"} path="/*" element={<NotFound/>}/>
+        </Routes>
       </AnimatePresence>
     </React.Fragment>
   );
