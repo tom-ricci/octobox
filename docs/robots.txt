@@ -1,0 +1,4 @@
+# https://www.robotstxt.org/robotstxt.html
+Sitemap: %PUBLIC_URL%/sitemap.txt
+User-agent: *
+Disallow:

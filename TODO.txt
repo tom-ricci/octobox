@@ -1,13 +1,13 @@
-TODO: replace react branding with octobox
 TODO: more testing - on gh pages this time too
-TODO: add routes to its own package, like octobox-runner or octobox-script-runner or octobox-executor or run-octobox-scripts or something like that
-TODO: octobox scripts is wrapper for all scripts
-TODO: eject octobox scripts
-TODO: daemonize route npm script
-TODO: add static host like serve
+TODO: in cli, replace /%PUBLIC_URL%/ in manifest with just %PUBLIC_URL%
+TODO: remove temp file from src/assets, replace it with src/assets being generated with cli
+TODO: daemonize route builder
+TODO: abstract current scripts to script packages
 TODO: finish docs
 TODO: finish tests by making new projects with different settings and using them and testing each octobox feature
+TODO: replace react branding with octobox
 TODO: add readmes to every package
+TODO: add readme inside octobox template
 TODO: finish finish docs
 TODO: update all packages to 1.0.0
 TODO: publish

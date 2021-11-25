@@ -1,0 +1,78 @@
+{
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^6.4.2",
+    "@testing-library/jest-dom": "^5.15.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.10",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-router-dom": "^5.3.2",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "autoprefixer": "^9.8.8",
+    "concurrently": "^6.4.0",
+    "eslint": "^7.32.0",
+    "eslint-config-octobox": "^0.0.1",
+    "fast-glob": "^3.2.7",
+    "framer-motion": "^4.1.17",
+    "fs-extra": "^10.0.0",
+    "postcss": "^7.0.39",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.2",
+    "react-scripts": "4.0.3",
+    "replaceall": "^0.1.6",
+    "sass": "^1.43.5",
+    "stylelint": "^14.1.0",
+    "stylelint-config-octobox": "^0.0.1",
+    "stylelint-config-standard-scss": "^2.0.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
+    "typescript": "^4.5.2",
+    "web-vitals": "^2.1.2"
+  },
+  "scripts": {
+    "start": "npm run build-route && concurrently --kill-others \"npm run watch-sass\" \"craco start\"",
+    "build": "npm run build-route && npm run build-sass && npm run build-es",
+    "test": "npm run lint && craco test",
+    "eject": "react-scripts eject",
+    "build-route": "node octobox.js",
+    "build-sass": "sass src/styles/main.scss src/styles/main.css",
+    "build-es": "craco build",
+    "watch-sass": "sass --watch src/styles/main.scss src/styles/main.css",
+    "lint": "npm run lint-sass && npm run lint-es",
+    "lint-sass": "npx --yes stylelint \"**/*.scss\"",
+    "lint-es": "eslint \"**/src/.{js,ts,jsx,tsx}\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      ".eslintrc.js"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "homepage": "/octobox",
+  "description": "An octobox app",
+  "author": "Thomas Ricci",
+  "license": "MIT",
+  "keywords": [
+    "octobox"
+  ],
+  "stylelint": "\"extends\": [\"./stylelintrc.js\"]"
+}

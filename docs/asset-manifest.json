@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/octobox/static/css/main.20a179ef.chunk.css",
+    "main.js": "/octobox/static/js/main.5fb6ca6e.chunk.js",
+    "main.js.map": "/octobox/static/js/main.5fb6ca6e.chunk.js.map",
+    "runtime-main.js": "/octobox/static/js/runtime-main.fd7aafa3.js",
+    "runtime-main.js.map": "/octobox/static/js/runtime-main.fd7aafa3.js.map",
+    "static/js/2.9ec49435.chunk.js": "/octobox/static/js/2.9ec49435.chunk.js",
+    "static/js/2.9ec49435.chunk.js.map": "/octobox/static/js/2.9ec49435.chunk.js.map",
+    "static/js/3.907e3445.chunk.js": "/octobox/static/js/3.907e3445.chunk.js",
+    "static/js/3.907e3445.chunk.js.map": "/octobox/static/js/3.907e3445.chunk.js.map",
+    "index.html": "/octobox/index.html",
+    "static/css/main.20a179ef.chunk.css.map": "/octobox/static/css/main.20a179ef.chunk.css.map",
+    "static/js/2.9ec49435.chunk.js.LICENSE.txt": "/octobox/static/js/2.9ec49435.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fd7aafa3.js",
+    "static/js/2.9ec49435.chunk.js",
+    "static/css/main.20a179ef.chunk.css",
+    "static/js/main.5fb6ca6e.chunk.js"
+  ]
+}
