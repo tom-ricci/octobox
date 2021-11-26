@@ -34,16 +34,9 @@
 
     },
     "scripts": {
-      "start": "concurrently --kill-others \"npm run build-route-with-daemon\" \"npm run watch-sass\" \"craco start\"",
-      "test": "npm run lint && craco test",
-      "build": "npm run build-route && npm run build-sass && npm run build-es",
-      "build-route": "echo Watching for route-associated file changes... && chokidar --initial --silent \"./src/pages/**/{Index.{tsx,jsx},[[]*.{tsx,jsx}}\" -c \"node octobox.js {event}\"",
-      "build-sass": "sass src/styles/main.scss src/styles/main.css",
-      "build-es": "craco build",
-      "watch-sass": "sass --watch src/styles/main.scss src/styles/main.css",
-      "lint": "npm run lint-sass && npm run lint-es",
-      "lint-sass": "npx --yes stylelint \"**/*.scss\"",
-      "lint-es": "eslint \"**/src/.{js,ts,jsx,tsx}\""
+      "start": "node octobox.js add ; npm run lint ; concurrently \"chokidar --silent \"./src/pages/**/{Index.{tsx,jsx},[[]*.{tsx,jsx}}\" -c \"node octobox.js {event}\"\" \"sass --watch src/styles/main.scss src/styles/main.css\" \"craco start\"",
+      "build": "node octobox.js add ; sass src/styles/main.scss src/styles/main.css ; craco build",
+      "lint": "eslint --fix \"**/src/.{js,ts,jsx,tsx}\" ; npx --yes stylelint --fix \"**/*.scss\""
     },
     "eslintConfig": {
       "extends": ["react-app", "react-app/jest", ".eslintrc.js"]
