@@ -30,13 +30,30 @@
       "stylelint-config-standard-scss": "^2.0.1",
       "stylelint-config-octobox": "^0.0.1",
       "eslint-config-octobox": "^0.0.1",
-      "chokidar-cli": "^3.0.0"
-
+      "chokidar-cli": "^3.0.0",
+      "npm-run-all": "^4.1.5"
     },
     "scripts": {
-      "start": "node octobox.js add ; npm run lint ; concurrently \"chokidar --silent \"./src/pages/**/{Index.{tsx,jsx},[[]*.{tsx,jsx}}\" -c \"node octobox.js {event}\"\" \"sass --watch src/styles/main.scss src/styles/main.css\" \"craco start\"",
-      "build": "node octobox.js add ; sass src/styles/main.scss src/styles/main.css ; craco build",
-      "lint": "eslint --fix \"**/src/.{js,ts,jsx,tsx}\" ; npx --yes stylelint --fix \"**/*.scss\""
+      "start": "npm-run-all -s -c process:start:*",
+      "test": "npm-run-all -s -c process:test:*",
+      "build": "npm-run-all -s -c process:build:*",
+      "eject": "npm-run-all -s -c process:eject:*",
+      "serve": "npm-run-all -s -c process:serve:*",
+      "deploy": "npm-run-all -s -c process:deploy:*",
+      "process:start:router": "node octobox.js add",
+      "process:start:eslint": "eslint --fix \"**/*.{js,ts,jsx,tsx}\"",
+      "process:start:stylelint": "npx --yes stylelint --fix \"**/*.scss\"",
+      "process:start:server": "concurrently \"chokidar --silent \"./src/pages/**/{Index.{tsx,jsx},[[]*.{tsx,jsx}}\" -c \"node octobox.js {event}\"\" \"sass --watch src/styles/main.scss src/styles/main.css\" \"craco start\"",
+      "process:test:craco": "craco test",
+      "process:build:router": "node octobox.js add",
+      "process:build:eslint": "eslint --fix \"**/*.{js,ts,jsx,tsx}\"",
+      "process:build:stylelint": "npx --yes stylelint --fix \"**/*.scss\"",
+      "process:build:styles": "sass src/styles/main.scss src/styles/main.css",
+      "process:build:craco": "craco build",
+      "process:eject:craco": "craco eject",
+      "process:serve:serve": "npx --yes serve build",
+      "process:deploy:build": "npm run build",
+      "process:deploy:serve": "npm run process:serve:serve"
     },
     "eslintConfig": {
       "extends": ["react-app", "react-app/jest", ".eslintrc.js"]

@@ -1,4 +1,3 @@
-TODO: abstract current scripts to script packages
 TODO: finish docs
 TODO: add licenses to packages
 TODO: finish tests by making new projects with different settings and using them and testing each octobox feature
