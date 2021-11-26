@@ -1,6 +1,6 @@
 {
   "name": "octobox",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Octobox's parent utility package.",
   "main": "index.js",
   "scripts": {
@@ -41,5 +41,5 @@
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://github.com/tom-ricci/octobox#readme"
+  "homepage": "https://www.octobox.thomasricci.dev"
 }

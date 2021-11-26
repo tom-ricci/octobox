@@ -1,6 +1,6 @@
 {
   "name": "create-octobox-app",
-  "version": "0.6.1",
+  "version": "0.8.1",
   "description": "Creates an Octobox app.",
   "main": "./bin/create-octobox-app.js",
   "scripts": {
@@ -29,5 +29,5 @@
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://github.com/tom-ricci/octobox#readme"
+  "homepage": "https://www.octobox.thomasricci.dev"
 }

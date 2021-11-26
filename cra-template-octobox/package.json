@@ -1,6 +1,6 @@
 {
   "name": "cra-template-octobox",
-  "version": "0.8.2",
+  "version": "0.10.1",
   "keywords": [
     "octobox",
     "create-octobox-app",
@@ -30,5 +30,5 @@
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://github.com/tom-ricci/octobox#readme"
+  "homepage": "https://www.octobox.thomasricci.dev"
 }
