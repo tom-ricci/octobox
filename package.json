@@ -1,6 +1,6 @@
 {
   "name": "octobox",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Octobox's parent utility package.",
   "main": "index.js",
   "scripts": {

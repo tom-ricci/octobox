@@ -18,6 +18,10 @@ module.exports = {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
+  "ignorePatterns": [
+    "octobox.js",
+    "build/**/*"
+  ],
   "rules": {
     "@typescript-eslint/no-empty-interface": [
       "off"

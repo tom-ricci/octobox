@@ -1,5 +1,5 @@
 # Octobox
-### Stop scaffolding. Start coding.
+### Stop scaffolding. Start building.
 Octobox is a configuration-less Typescript framework for building React apps. Forget having to spend time configuring linters, CSS frameworks, routing, SEO, and more with Octobox. Just run `npx create-octobox-app`, answer a few questions, and let Octobox take care of the rest for you.
 
 # Features

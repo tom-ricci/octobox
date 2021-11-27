@@ -1,6 +1,1 @@
-TODO: finish tests by making new projects with different settings and using them and testing each octobox feature
-TODO: stylelint config rules
-TODO: finish finish docs
-TODO: update all packages to 1.0.0 including parent
-TODO: check all todos
-TODO: publish
+TODO: npm run publish-major
