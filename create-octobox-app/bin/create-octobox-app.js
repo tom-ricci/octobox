@@ -101,7 +101,7 @@ const customize = async (domain) => {
   const creator = lintCustomization(await ask("App creator:", author), author);
   const publisher = lintCustomization(await ask("App publisher:", creator), creator);
   const banner = lintCustomization(await ask("App social media banner URL:", "https://http.cat/100"), "https://http.cat/100");
-  const siteName = lintCustomization(await ask("App owner's website's name:", domain), domain);
+  const siteName = lintCustomization(await ask("App owner's website's name:", title), title);
   return {
     title,
     color,
