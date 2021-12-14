@@ -131,7 +131,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
 
   // gen cra template
   console.log("\x1b[94mCreating Octobox app. This will take a while...\x1b[37m");
-  execSync(`npx --yes create-react-app ${path} --template octobox`);
+  execSync(`npx --yes create-react-app@latest ${path} --template octobox`);
 
   // gen octobox items
   const packageJson = JSON.parse(fs.readFileSync(`./${path}/package.json`).toString());
@@ -143,7 +143,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   packageJson.description = customizations.desc;
   packageJson.author = customizations.author;
   packageJson.license = "MIT";
-  packageJson.keywords = customizations.keywords.split(",");
+  packageJson.keywords = customizations.keywords.split(",").map(value => value.trim());
   packageJson.stylelint = "\"extends\": [\"./stylelintrc.js\"]";
   fs.writeFileSync(`./${path}/package.json`, JSON.stringify(packageJson, null, 2));
   fs.writeFileSync(`./${path}/public/sitemap.txt`, `${domain}/%PUBLIC_URL%/?/`);
