@@ -230,10 +230,16 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   fs.writeFileSync(`./${path}/public/404.html`, notFound);
   fs.writeFileSync(`./${path}/public/manifest.json`, JSON.stringify(manifest, null, 2));
   fs.mkdirSync(`./${path}/src/assets/`);
+  fs.mkdirSync(`./${path}/src/components/`);
 
   // run route builder once
   execSync("node octobox.js add", {cwd: `./${path}`});
 
+  // finish install
+  finishInstall(path);
+};
+
+const finishInstall = (path) => {
   // log completion
   console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for generation logs\n-----------------------------------------------\nSuccess! Octobox app created at \x1b[37m./${path}\x1b[94m!`);
   console.log(`We suggest that you begin by typing:
@@ -243,6 +249,6 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
 
 Happy hacking!\x1b[37m`);
   process.exit();
-};
+}
 
 configure().catch(e => console.log(e));
