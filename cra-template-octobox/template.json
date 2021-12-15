@@ -28,8 +28,8 @@
       "concurrently": "^6.3.0",
       "stylelint": "^14.1.0",
       "stylelint-config-standard-scss": "^2.0.1",
-      "stylelint-config-octobox": "^0.0.1",
-      "eslint-config-octobox": "^0.0.1",
+      "stylelint-config-octobox": "^1.0.0",
+      "eslint-config-octobox": "^1.0.0",
       "chokidar-cli": "^3.0.0",
       "npm-run-all": "^4.1.5"
     },
