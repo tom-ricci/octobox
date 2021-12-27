@@ -145,6 +145,9 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   packageJson.license = "MIT";
   packageJson.keywords = customizations.keywords.split(",").map(value => value.trim());
   packageJson.stylelint = "\"extends\": [\"./stylelintrc.js\"]";
+  packageJson.octobox = {
+    "version": process.env.npm_package_version
+  };
   fs.writeFileSync(`./${path}/package.json`, JSON.stringify(packageJson, null, 2));
   fs.writeFileSync(`./${path}/public/sitemap.txt`, `${domain}/%PUBLIC_URL%/?/`);
   if(!octoboxLint) {
