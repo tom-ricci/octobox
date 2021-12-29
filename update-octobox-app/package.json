@@ -33,5 +33,8 @@
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://github.com/tom-ricci/octobox#readme"
+  "homepage": "https://github.com/tom-ricci/octobox#readme",
+  "dependencies": {
+    "jsdom": "^19.0.0"
+  }
 }
