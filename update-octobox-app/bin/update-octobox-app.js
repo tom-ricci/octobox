@@ -29,7 +29,7 @@ const updatePackageVersion = (version) => {
 
 // check which version we're on, and run the amount of updates required to update from that version
 const updateToLatest = async () => {
-  if(checkIfRoot()) {
+  if(await checkIfRoot()) {
     const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
     switch(pkg.octobox) {
       case "1.0.0":
@@ -46,7 +46,7 @@ const updateToLatest = async () => {
         console.log("\x1b[94mYou don't seem to have a valid Octobox version to update from. Edit your package.json's \"octobox\" paramater to the version of Octobox this app uses!\x1b[37m");
     }
   }else{
-    console.log("\x1b[94mYou don't seem to be in the root folder of your application and/or have an \"octobox\" paramater in your package.json! Navigate to the directory containing your application's package.json and/or add an \"octobox\" paramater equaling the version of Octobox this app uses!\x1b[37m");
+    console.log("\x1b[94mYou don't seem to be in the root folder of your application and/nor have an \"octobox\" paramater in your package.json! Navigate to the directory containing your application's package.json and/or add an \"octobox\" paramater equaling the version of Octobox this app uses!\x1b[37m");
   }
   stop();
 }
@@ -153,14 +153,31 @@ SOFTWARE.
   }
 }
 
-const checkIfRoot = () => {
+const checkIfRoot = async () => {
   if(fs.existsSync("./package.json")) {
     const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
     if("octobox" in pkg) {
       return true;
+    }else{
+      const onePointOh = lintCustomization(await ask("Updating from version 1.0.0:", "n"), "n");
+      if(onePointOh.toUpperCase() === "Y" || onePointOh.toUpperCase() === "YES" || onePointOh.toUpperCase() === "TRUE" || onePointOh.toUpperCase() === "T") {
+        pkg.engines = {
+          "node": ">=16"
+        }
+        pkg.octobox = "1.0.0"
+      }
+      fs.writeFileSync("./package.json", JSON.stringify(pkg, null, 2));
     }
   }else{
     return false;
+  }
+}
+
+const lintCustomization = (str, defaultAnswer) => {
+  if(str.length === 0) {
+    return defaultAnswer;
+  }else{
+    return str;
   }
 }
 
