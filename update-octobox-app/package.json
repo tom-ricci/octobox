@@ -35,6 +35,8 @@
   },
   "homepage": "https://github.com/tom-ricci/octobox#readme",
   "dependencies": {
-    "jsdom": "^19.0.0"
+    "jsdom": "^19.0.0",
+    "require-from-string": "^2.0.2",
+    "stringify-object": "^4.0.0"
   }
 }

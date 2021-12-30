@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node index.js",
     "publish": "npm run publish-major",
-    "update-major": "npm run update-main-major && npm run update-linter-major && npm run update-script-major",
     "publish-cra-patch": "cd cra-template-octobox && npm version patch && npm publish",
     "publish-cli-patch": "cd create-octobox-app && npm version patch && npm publish && cd ../ && cd update-octobox-app && npm version patch && npm publish",
     "publish-eslint-patch": "cd eslint-config-octobox && npm version patch && npm publish",
