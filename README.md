@@ -1,6 +1,4 @@
-<br>
-<h1 style="display: inline !important">Octobox</h1>&nbsp;&nbsp;&nbsp;<sup><a href="./archive/1.0.0.README.md">View 1.0.0 docs</a></sup>
-
+# Octobox
 ### Stop scaffolding. Start building.
 Octobox is a configuration-less Typescript framework for building React apps. Forget having to spend time configuring linters, CSS frameworks, routing, SEO, and more with Octobox. Just run `npx create-octobox-app@latest`, answer a few questions, and let Octobox take care of the rest for you.
 
@@ -99,3 +97,5 @@ As long as your host resolves routes statically and returns 404.html when no sta
 
 ### Final Notes
 Thanks for choosing Octobox! If you have any questions, either [send me an email](mailto:me@thomasricci.dev) or get in touch another way. This documentation will be improved Soon™, but for now this is the extent of it. As Octobox is still in relatively early stages of development, expect things to change. Happy hacking!
+
+* [View 1.0.0 Docs](./archive/1.0.0.README.md)
