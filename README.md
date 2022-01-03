@@ -16,7 +16,7 @@ Octobox is a configuration-less Typescript framework for building React apps. Fo
 * Optional ESLint and Stylelint configs
 * SEO
 * A great CLI
-* No configuration needed (although it's there if you want it)
+* No configuration needed
 
 # Setup
 To create an Octobox app, run `npx create-octobox-app@latest`.
