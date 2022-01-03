@@ -1,5 +1,5 @@
 <br>
-<h1 style="display: inline">Octobox</h1>&nbsp;&nbsp;&nbsp;<sup><a href="./archive/1.0.0.README.md">View 1.0.0 docs</a></sup>
+<h1 style="display: inline !important">Octobox</h1>&nbsp;&nbsp;&nbsp;<sup><a href="./archive/1.0.0.README.md">View 1.0.0 docs</a></sup>
 
 ### Stop scaffolding. Start building.
 Octobox is a configuration-less Typescript framework for building React apps. Forget having to spend time configuring linters, CSS frameworks, routing, SEO, and more with Octobox. Just run `npx create-octobox-app@latest`, answer a few questions, and let Octobox take care of the rest for you.
