@@ -1,6 +1,6 @@
 {
   "name": "update-octobox-app",
-  "version": "0.0.2",
+  "version": "1.1.0",
   "description": "Octobox's updating CLI.",
   "main": "./bin/update-octobox-app.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "create-octobox-app",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Creates an Octobox app.",
   "main": "./bin/create-octobox-app.js",
   "scripts": {
