@@ -19,7 +19,7 @@ const ask = (query, defaultAnswer) => {
 }
 
 // log current version and version to go to
-const log = (version) => console.log(`\x1b[94mIt seems like you're running @${version}. Updating to @latest. This will take a while.\x1b[37m\x1b[0m`);
+const log = (version) => console.log(`\x1b[94mIt seems like you're running \x1b[37m@${version}\x1b[94m. Updating to \x1b[37m@latest\x1b[94m. This will take a while.\x1b[37m\x1b[0m`);
 
 const updatePackageVersion = (version) => {
   const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
@@ -87,7 +87,7 @@ const update1_1_0 = async () => {
     ...newScripts
   }
   pkg.stylelint = {
-    extends: ["./stylelintrc.js"]
+    extends: ["./.stylelintrc.js"]
   }
   pkg.scripts = scripts;
   fs.writeFileSync("./package.json", JSON.stringify(pkg, null, 2));
@@ -150,6 +150,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 `;
     fs.writeFileSync("./LICENSE", license);
+    logCompletion();
   }
 }
 
@@ -165,8 +166,11 @@ const checkIfRoot = async () => {
           "node": ">=16"
         }
         pkg.octobox = "1.0.0"
+        fs.writeFileSync("./package.json", JSON.stringify(pkg, null, 2));
+        return true;
+      }else{
+        return false;
       }
-      fs.writeFileSync("./package.json", JSON.stringify(pkg, null, 2));
     }
   }else{
     return false;
@@ -181,6 +185,10 @@ const lintCustomization = (str, defaultAnswer) => {
   }
 }
 
+const logCompletion = () => {
+  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for update logs\n-----------------------------------------------\nSuccess! Octobox app updated to \x1b[37m@latest\x1b[94m! Happy hacking!\x1b[37m`);
+}
+
 const stop = () => {
   console.log("\x1b[0m");
   process.exit(0);
@@ -188,6 +196,7 @@ const stop = () => {
 
 const stopWithErr = (e) => {
   console.error(e);
+  console.log("\x1b[94mSomething went wrong while updating. Update cancelled.\x1b[0m");
   stop();
 }
 
