@@ -10,17 +10,17 @@ const readline = require('readline').createInterface({
 });
 const ask = (query, defaultAnswer) => {
   return new Promise(resolve => {
-    readline.question(`\x1b[94m${query} \x1b[37m(${defaultAnswer}) `, resolve);
+    readline.question(`\x1b[94m${query} \x1b[0m(${defaultAnswer}) `, resolve);
   })
 }
 
 const configure = async () => {
 
   // configure octobox variables
-  console.log("\x1b[94mWelcome! This CLI will create an Octobox app for you.\nPress \x1b[37m^C\x1b[94m at any time to quit.")
+  console.log("\x1b[94mWelcome! This CLI will create an Octobox app for you.\nPress \x1b[0m^C\x1b[94m at any time to quit.")
 
   // readline for path
-  readline.question("\x1b[94mDevelopment path: \x1b[37m(./my-octobox-app/) ", answer => {
+  readline.question("\x1b[94mDevelopment path: \x1b[0m(./my-octobox-app/) ", answer => {
 
     // path creation
     let path;
@@ -39,7 +39,7 @@ const configure = async () => {
     }
 
     // readline for domain
-    readline.question("\x1b[94mDomain name: \x1b[37m(https://my-octobox-app.test) ", answer => {
+    readline.question("\x1b[94mDomain name: \x1b[0m(https://my-octobox-app.test) ", answer => {
 
       // domain creation
       let domain;
@@ -53,7 +53,7 @@ const configure = async () => {
       }
 
       // readline for host
-      readline.question("\x1b[94mHosted path: \x1b[37m(/) ", answer => {
+      readline.question("\x1b[94mHosted path: \x1b[0m(/) ", answer => {
 
         // host creation
         let root;
@@ -72,7 +72,7 @@ const configure = async () => {
         }
 
         // readline for linter
-        readline.question("\x1b[94mUse default linter configs: \x1b[37m(Y) ", answer => {
+        readline.question("\x1b[94mUse default linter configs: \x1b[0m(Y) ", answer => {
 
           // octobox linter config toggle
           answer = answer.toUpperCase();
@@ -130,7 +130,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   readline.close();
 
   // gen cra template
-  console.log("\x1b[94mCreating Octobox app. This will take a while...\x1b[37m");
+  console.log("\x1b[94mCreating Octobox app. This will take a while...\x1b[0m");
   execSync(`npx --yes create-react-app@latest ${path} --template octobox`);
 
   // gen octobox items
@@ -270,14 +270,13 @@ SOFTWARE.
 
 const finishInstall = (path) => {
   // log completion
-  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for generation logs\n-----------------------------------------------\nSuccess! Octobox app created at \x1b[37m./${path}\x1b[94m!`);
+  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for generation logs\n-----------------------------------------------\nSuccess! Octobox app created at \x1b[0m./${path}\x1b[94m!`);
   console.log(`We suggest that you begin by typing:
 
-  cd \x1b[37m${path}
+  cd \x1b[0m${path}
   \x1b[94mnpm start
 
-Happy hacking!\x1b[37m`);
-  console.log("\x1b[0m");
+Happy hacking!\x1b[0m`);
   process.exit();
 }
 

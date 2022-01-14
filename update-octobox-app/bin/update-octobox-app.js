@@ -14,12 +14,12 @@ const Jsdom = require("jsdom").JSDOM;
 // this is here if queries are required in the future
 const ask = (query, defaultAnswer) => {
   return new Promise(resolve => {
-    readline.question(`\x1b[94m${query} \x1b[37m(${defaultAnswer}) `, resolve);
+    readline.question(`\x1b[94m${query} \x1b[0m(${defaultAnswer}) `, resolve);
   })
 }
 
 // log current version and version to go to
-const log = (version) => console.log(`\x1b[94mIt seems like you're running \x1b[37m@${version}\x1b[94m. Updating to \x1b[37m@latest\x1b[94m. This will take a while.\x1b[37m\x1b[0m`);
+const log = (version) => console.log(`\x1b[94mIt seems like you're running \x1b[0m@${version}\x1b[94m. Updating to \x1b[0m@latest\x1b[94m. This will take a while.\x1b[0m`);
 
 const updatePackageVersion = (version) => {
   const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
@@ -40,13 +40,13 @@ const updateToLatest = async () => {
         break;
       case "1.1.0":
       case "v1.1.0":
-        console.log("\x1b[94mYou're already running the latest version of Octobox! If you think this is a mistake, try appending \"@latest\" to the command you ran.\nFor example, try \"npx update-octobox-app@latest\".\x1b[37m");
+        console.log("\x1b[94mYou're already running the latest version of Octobox! If you think this is a mistake, try appending \"@latest\" to the command you ran.\nFor example, try \"npx update-octobox-app@latest\".\x1b[0m");
         break;
       default:
-        console.log("\x1b[94mYou don't seem to have a valid Octobox version to update from. Edit your package.json's \"octobox\" paramater to the version of Octobox this app uses!\x1b[37m");
+        console.log("\x1b[94mYou don't seem to have a valid Octobox version to update from. Edit your package.json's \"octobox\" paramater to the version of Octobox this app uses!\x1b[0m");
     }
   }else{
-    console.log("\x1b[94mYou don't seem to be in the root folder of your application and/nor have an \"octobox\" paramater in your package.json! Navigate to the directory containing your application's package.json and/or add an \"octobox\" paramater equaling the version of Octobox this app uses!\x1b[37m");
+    console.log("\x1b[94mYou don't seem to be in the root folder of your application and/nor have an \"octobox\" paramater in your package.json! Navigate to the directory containing your application's package.json and/or add an \"octobox\" paramater equaling the version of Octobox this app uses!\x1b[0m");
   }
   stop();
 }
@@ -186,11 +186,10 @@ const lintCustomization = (str, defaultAnswer) => {
 }
 
 const logCompletion = () => {
-  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for update logs\n-----------------------------------------------\nSuccess! Octobox app updated to \x1b[37m@latest\x1b[94m! Happy hacking!\x1b[37m`);
+  console.log(`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\x1b[94mScroll up for update logs\n-----------------------------------------------\nSuccess! Octobox app updated to \x1b[0m@latest\x1b[94m! Happy hacking!\x1b[0m`);
 }
 
 const stop = () => {
-  console.log("\x1b[0m");
   process.exit(0);
 }
 
