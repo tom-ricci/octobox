@@ -147,7 +147,7 @@ const generate = (path, domain, root, octoboxLint, customizations) => {
   packageJson.stylelint = {
     "extends": ["./stylelintrc.js"]
   }
-  packageJson.octobox = "1.1.0";
+  packageJson.octobox = "1.2.0";
   fs.writeFileSync(`./${path}/package.json`, JSON.stringify(packageJson, null, 2));
   fs.writeFileSync(`./${path}/public/sitemap.txt`, `${domain}/%PUBLIC_URL%/?/`);
   if(!octoboxLint) {
