@@ -1,6 +1,6 @@
 {
   "name": "octobox-router",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Octobox's router.",
   "main": "./bin/octobox-router.js",
   "scripts": {
