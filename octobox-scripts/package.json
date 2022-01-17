@@ -14,6 +14,9 @@
     "octobox",
     "scripts"
   ],
+  "bin": {
+    "octobox-scripts": "./bin/octobox-scripts.js"
+  },
   "author": "Thomas Ricci",
   "license": "MIT",
   "bugs": {
