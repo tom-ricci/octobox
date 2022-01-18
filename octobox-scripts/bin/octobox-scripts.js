@@ -2,11 +2,8 @@
 'use strict';
 
 //deps and commands
-// TODO: look through all of the commands and determine how to run them with this script. remember, they can't just be run with "npm run commandname", they have to be run via the script itself
-const { spawn, exec, execSync } = require('child_process');
-const scripts = {
-  "eject:react": "react-scripts eject",
-}
+const { spawn, execSync } = require('child_process');
+const fs = require("fs");
 
 //logger
 const log = (msg) => {
@@ -17,6 +14,7 @@ const execute = async (command) => {
   switch(command) {
 
     case "start":
+      log("Starting development server...");
       const firstRouterRun = execSync("octobox-router add", {cwd: "./"});
       console.log(firstRouterRun.toString());
       const firstEslintRun = execSync('eslint --fix "**/*.{js,ts,jsx,tsx}"', {cwd: "./"});
@@ -43,6 +41,7 @@ const execute = async (command) => {
       break;
 
     case "test":
+      console.log("Running automated tests...");
       let testChild = spawn("react-scripts test", {cwd: "./"});
       testChild.stdout.setEncoding('utf8');
       testChild.stdout.on('data', data => {
@@ -58,6 +57,7 @@ const execute = async (command) => {
       break;
 
     case "build":
+      log("Building app...");
       const buildRouterRun = execSync("octobox-router add", {cwd: "./"});
       console.log(buildRouterRun.toString());
       const buildEslintRun = execSync('eslint --fix "**/*.{js,ts,jsx,tsx}"', {cwd: "./"});
@@ -81,6 +81,7 @@ const execute = async (command) => {
       break;
 
     case "serve":
+      console.log("Serving app...");
       let serveChild = spawn("npx --yes serve build", {cwd: "./"});
       serveChild.stdout.setEncoding('utf8');
       serveChild.stdout.on('data', data => {
@@ -96,6 +97,7 @@ const execute = async (command) => {
       break;
 
     case "deploy":
+      console.log("Deploying app...");
       let deployChild = spawn("octobox-scripts build", {cwd: "./"});
       deployChild.stdout.setEncoding('utf8');
       deployChild.stdout.on('data', data => {
@@ -123,7 +125,33 @@ const execute = async (command) => {
       break;
 
     case "eject":
-      // TODO: this
+      log("Ejecting...");
+      const pkg = JSON.parse(fs.readFileSync("./package.json").toString());
+      pkg.scrips = {
+        "octobox:start": "npm-run-all -s -c octobox:start:*",
+        "octobox:start:router": "octobox-router add",
+        "octobox:start:eslint": "eslint --fix \"**/*.{js,ts,jsx,tsx}\"",
+        "octobox:start:stylelint": "npx --yes stylelint --fix \"**/*.scss\"",
+        "octobox:start:server": "concurrently \"npm run octobox:chokidar\" \"sass --watch src/styles/main.scss src/styles/main.css\" \"npm run start\"",
+        "octobox:test": "npm-run-all -s -c octobox:test:*",
+        "octobox:test:react": "npm run test",
+        "octobox:build": "npm-run-all -s -c octobox:build:*",
+        "octobox:build:router": "octobox-router add",
+        "octobox:build:eslint": "eslint --fix \"**/*.{js,ts,jsx,tsx}\"",
+        "octobox:build:stylelint": "npx --yes stylelint --fix \"**/*.scss\"",
+        "octobox:build:styles": "sass src/styles/main.scss src/styles/main.css",
+        "octobox:build:react": "npm run build",
+        "octobox:serve": "npm-run-all -s -c octobox:serve:*",
+        "octobox:serve:serve": "npx --yes serve build",
+        "octobox:deploy": "npm-run-all -s -c octobox:deploy:*",
+        "octobox:deploy:build": "npm run octobox:build",
+        "octobox:deploy:serve": "npm run octobox:serve:serve",
+        "octobox:chokidar": "chokidar \"./src/pages/**/{Index.{tsx,jsx},[[]*.{tsx,jsx}}\" -c \"octobox-router {event}\""
+      };
+      delete pkg.octobox;
+      fs.writeFileSync("./package.json", JSON.stringify(pkg, null, 2));
+      const ejectReact = execSync("npm run eject", {cwd: "./"});
+      console.log(ejectReact.toString());
       break;
 
     default:
@@ -137,33 +165,6 @@ const execute = async (command) => {
       log("    - eject");
   }
 }
-
-// command executor
-// don't make this sync, this is async to make sure async methods can be called in the future if needed
-// const execute = async (command) => {
-//   if(command in scripts) {
-//     let child = spawn(scripts[command], {cwd: "./"});
-//     child.stdout.setEncoding('utf8');
-//     child.stdout.on('data', function(data) {
-//       console.log('stdout: ' + data);
-//     });
-//
-//     child.stderr.setEncoding('utf8');
-//     child.stderr.on('data', function(data) {
-//       console.log('stderr: ' + data);
-//     });
-//
-//     child.on('close', function(code) {
-//       console.log("Exited with code " + code);
-//     });
-//   }else{
-    log("Command not found!");
-    log("List of supported commands:");
-    Object.keys(scripts).forEach(log);
-//     log("Syntax:");
-//     log("Running \"octobox-scripts $command $subsystem $process $subprocesses...\" will execute $command:$subsystem:$process:$subprocesses...");
-//   }
-// }
 
 // command parser
 const parse = () => {
