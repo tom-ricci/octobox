@@ -1,0 +1,42 @@
+{
+  "name": "update-octobox-app",
+  "version": "1.1.0",
+  "description": "Octobox's updating CLI.",
+  "main": "bin/update-octobox-app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "update-octobox-app": "bin/update-octobox-app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-ricci/octobox.git"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "octobox",
+    "update",
+    "react",
+    "typescript",
+    "framework",
+    "tailwind",
+    "sass",
+    "routing",
+    "github",
+    "pages"
+  ],
+  "author": "Thomas Ricci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tom-ricci/octobox/issues"
+  },
+  "homepage": "https://github.com/tom-ricci/octobox#readme",
+  "dependencies": {
+    "jsdom": "^19.0.0",
+    "require-from-string": "^2.0.2",
+    "stringify-object": "^4.0.0"
+  }
+}

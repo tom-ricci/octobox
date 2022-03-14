@@ -1,0 +1,98 @@
+{
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^6.4.2",
+    "@testing-library/jest-dom": "^5.15.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.10",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-router-dom": "^5.3.2",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "autoprefixer": "^9.8.8",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^6.4.0",
+    "eslint": "^7.32.0",
+    "eslint-config-octobox": "^0.0.1",
+    "fast-glob": "^3.2.7",
+    "framer-motion": "^4.1.17",
+    "fs-extra": "^10.0.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^7.0.39",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.2",
+    "react-scripts": "4.0.3",
+    "replaceall": "^0.1.6",
+    "sass": "^1.43.5",
+    "stylelint": "^14.1.0",
+    "stylelint-config-octobox": "^0.0.1",
+    "stylelint-config-standard-scss": "^2.0.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
+    "typescript": "^4.5.2",
+    "web-vitals": "^2.1.2"
+  },
+  "scripts": {
+    "start": "npm-run-all -s -c start:*",
+    "build": "npm-run-all -s -c build:*",
+    "test": "npm-run-all -s -c test:*",
+    "eject": "npm-run-all -s -c eject:*",
+    "start:router": "node octobox.js add",
+    "start:eslint": "eslint --fix \"**/*.{js,ts,jsx,tsx}\"",
+    "start:stylelint": "npx --yes stylelint --fix \"**/*.scss\"",
+    "start:server": "concurrently \\\"chokidar --silent \\\"./src/pages/**/{Index.{tsx,jsx},[[]*.{tsx,jsx}}\\\" -c \\\"node octobox.js {event}\\\"\\\" \\\"sass --watch src/styles/main.scss src/styles/main.css\\\" \\\"craco start\\\"",
+    "test:craco": "craco test",
+    "build:router": "node octobox.js add",
+    "build:eslint": "eslint --fix \"**/*.{js,ts,jsx,tsx}\"",
+    "build:stylelint": "npx --yes stylelint --fix \"**/*.scss\"",
+    "build:styles": "sass src/styles/main.scss src/styles/main.css",
+    "build:craco": "craco build",
+    "eject:craco": "craco eject",
+    "serve": "npm-run-all -s -c serve:*",
+    "serve:serve": "npx --yes serve build",
+    "deploy": "npm-run-all -s -c deploy:*",
+    "deploy:build": "npm run build",
+    "deploy:serve": "npm run serve:serve"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      ".eslintrc.js"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "homepage": "/",
+  "description": "Octobox is a configuration-less Typescript framework for building React apps.",
+  "author": "Thomas Ricci",
+  "license": "MIT",
+  "keywords": [
+    "octobox",
+    " react",
+    " framework",
+    " typescript",
+    " type",
+    " script",
+    " javascript",
+    " java",
+    " ts",
+    " js"
+  ],
+  "stylelint": "\"extends\": [\"./stylelintrc.js\"]"
+}

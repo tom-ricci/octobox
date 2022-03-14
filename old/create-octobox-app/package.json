@@ -1,0 +1,36 @@
+{
+  "name": "create-octobox-app",
+  "version": "1.1.1",
+  "description": "Creates an Octobox app.",
+  "main": "bin/create-octobox-app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Ricci",
+  "license": "MIT",
+  "bin": {
+    "create-octobox-app": "bin/create-octobox-app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-ricci/octobox.git"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "octobox",
+    "create-octobox-app",
+    "react",
+    "typescript",
+    "framework",
+    "tailwind",
+    "sass",
+    "routing",
+    "github pages"
+  ],
+  "bugs": {
+    "url": "https://github.com/tom-ricci/octobox/issues"
+  },
+  "homepage": "https://www.octobox.thomasricci.dev"
+}
