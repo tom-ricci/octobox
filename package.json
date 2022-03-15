@@ -1,47 +1,25 @@
 {
   "name": "octobox",
-  "version": "1.0.0",
-  "description": "Octobox's parent utility package.",
+  "version": "2.0.0",
+  "description": "Octobox is a configuration-less Typescript framework for building React apps sporting features like routing, animations, linter support, SEO, and much more.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "publish": "npm run publish-major",
-    "publish-cra-patch": "cd old/cra-template-octobox && npm version patch && npm publish",
-    "publish-cli-patch": "cd old/create-octobox-app && npm version patch && npm publish && cd ../ && cd update-octobox-app && npm version patch && npm publish && cd ../ && cd octobox-scripts && npm version patch && npm publish && cd ../ && cd octobox-router && npm version patch && npm publish",
-    "publish-eslint-patch": "cd old/eslint-config-octobox && npm version patch && npm publish",
-    "publish-stylelint-patch": "cd old/stylelint-config-octobox && npm version patch && npm publish",
-    "publish-main-patch": "npm run publish-cra-patch && npm run publish-cli-patch",
-    "publish-linter-patch": "npm run publish-eslint-patch && npm run publish-stylelint-patch",
-    "publish-patch": "npm run publish-main-patch && npm run publish-linter-patch",
-    "publish-cra-minor": "cd old/cra-template-octobox && npm version minor && npm publish",
-    "publish-cli-minor": "cd old/create-octobox-app && npm version minor && npm publish && cd ../ && cd update-octobox-app && npm version minor && npm publish && cd ../ && cd octobox-scripts && npm version minor && npm publish && cd ../ && cd octobox-router && npm version minor && npm publish",
-    "publish-eslint-minor": "cd old/eslint-config-octobox && npm version minor && npm publish",
-    "publish-stylelint-minor": "cd old/stylelint-config-octobox && npm version minor && npm publish",
-    "publish-main-minor": "npm run publish-cra-minor && npm run publish-cli-minor",
-    "publish-linter-minor": "npm run publish-eslint-minor && npm run publish-stylelint-minor",
-    "publish-minor": "npm run publish-main-minor && npm run publish-linter-minor",
-    "publish-cra-major": "cd old/cra-template-octobox && npm version major && npm publish",
-    "publish-cli-major": "cd old/create-octobox-app && npm version major && npm publish && cd ../ && cd update-octobox-app && npm version major && npm publish && cd ../ && cd octobox-scripts && npm version major && npm publish && cd ../ && cd octobox-router && npm version major && npm publish",
-    "publish-eslint-major": "cd old/eslint-config-octobox && npm version major && npm publish",
-    "publish-stylelint-major": "cd old/stylelint-config-octobox && npm version major && npm publish",
-    "publish-main-major": "npm run publish-cra-major && npm run publish-cli-major",
-    "publish-linter-major": "npm run publish-eslint-major && npm run publish-stylelint-major",
-    "publish-major": "npm run publish-main-major && npm run publish-linter-major"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tom-ricci/octobox.git"
   },
-  "engines": {
-    "node": ">=16"
-  },
   "keywords": [
-    "octobox"
+    "Octobox"
   ],
   "author": "Thomas Ricci",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://www.octobox.thomasricci.dev"
+  "homepage": "https://github.com/tom-ricci/octobox#readme",
+  "dependencies": {
+    "typescript": "^4.6.2"
+  }
 }
