@@ -102,6 +102,9 @@ module.exports = {
     "@typescript-eslint/no-var-requires": [
       "off"
     ],
+    "@typescript-eslint/no-empty-interface": [
+      "off"
+    ],
     "template-curly-spacing": [
       "error",
       "always"
