@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -39,9 +39,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const args = {};
         // sanitize input
         let input = argv["path"];
-        input = replaceall("/", "_", input);
-        input = replaceall(":", "_", input);
-        input = replaceall("\\", "_", input);
+        input = replaceall("/", "==", input);
+        input = replaceall(":", "==", input);
+        input = replaceall("\\", "==", input);
         utils.path = input;
         yield bootstrap({});
     }
@@ -66,9 +66,9 @@ const setup = () => __awaiter(void 0, void 0, void 0, function* () {
         result: (input) => {
             // sanatize install dir
             if (input.indexOf("/") != -1 || input.indexOf("\\") != -1 && input.indexOf(":") != -1) {
-                input = replaceall("/", "_", input);
-                input = replaceall(":", "_", input);
-                input = replaceall("\\", "_", input);
+                input = replaceall("/", "==", input);
+                input = replaceall(":", "==", input);
+                input = replaceall("\\", "==", input);
                 sanitized = true;
                 return input;
             }
@@ -94,7 +94,7 @@ const bootstrap = (config) => __awaiter(void 0, void 0, void 0, function* () {
     utils.logSpeak("Bootstrapping...");
     // create vite app
     // install in dir (we can't use the execInPathParent utility here because the path doesn't exist yet)
-    execSync(`npm create vite@latest ${utils.path} -- --template react-ts`, { cwd: "./" });
+    execSync(`npm create vite@2.8.0 ${utils.path} -- --template react-ts`, { cwd: "./" });
     // now we can though, so we'll continue to do so
     utils.execInPath("npm i");
     // clean up the app
@@ -107,7 +107,7 @@ const bootstrap = (config) => __awaiter(void 0, void 0, void 0, function* () {
     // add our own versions of some removed files
     fs.writeFileSync(`${utils.path}/src/main.tsx`, `import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/main.scss"
+import "./styles/main.scss";
 import { App } from "./App";
 
 ReactDOM.render(
@@ -134,7 +134,7 @@ export const App: FC<Props> = (): ReactElement => {
     // install and set up sass
     utils.execInPath("npm i sass");
     fs.mkdirSync(`${utils.path}/src/styles/`);
-    fs.writeFileSync(`${utils.path}/src/styles/main.scss`, "\n");
+    fs.writeFileSync(`${utils.path}/src/styles/main.scss`, "");
     // tell the user were done here
     utils.logSpeak("App created!");
 });

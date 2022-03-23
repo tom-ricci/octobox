@@ -1,4 +1,6 @@
-#!/usr/bin/node
+#!/usr/bin/env node
+
+// TODO: refactor this whole mess to simply only allow ascii characters in app names
 
 // imports
 const Enquirer = require("enquirer");
@@ -11,30 +13,30 @@ const fs = require("fs");
 
 // utils
 const utils = {
-  logSpeak: (msg: string) => {
+  logSpeak: (msg: string): void => {
     utils.logSafely(`${ colors.bold.blue("➤") } ${ colors.bold(msg) }`);
   },
-  logSafely: (msg: string) => {
+  logSafely: (msg: string): void => {
     console.log(`${ msg }\u001b[0m`);
   },
   path: "./",
-  execInPath: (cmd: string) => {
+  execInPath: (cmd: string): void => {
     execSync(cmd, { cwd: utils.path });
   },
-  execInPathParent: (cmd: string) => {
+  execInPathParent: (cmd: string): void => {
     execSync(cmd, { cwd: `../${ utils.path }` });
   }
 };
 
-const main = async () => {
+const main = async (): Promise<void> => {
   // check if we're using argumented version of the command, in which case we skip the setup
   if(argv._.includes("argumented")) {
     const args = {};
     // sanitize input
     let input = argv["path"];
-    input = replaceall("/", "_", input);
-    input = replaceall(":", "_", input);
-    input = replaceall("\\", "_", input);
+    input = replaceall("/", "==", input);
+    input = replaceall(":", "==", input);
+    input = replaceall("\\", "==", input);
     utils.path = input;
     await bootstrap({});
   }else{
@@ -48,7 +50,7 @@ const main = async () => {
   }
 };
 
-const setup = async () => {
+const setup = async (): Promise<void> => {
   utils.logSpeak("Welcome to the Octobox installer!");
   // get install dir
   let sanitized = false;
@@ -59,9 +61,9 @@ const setup = async () => {
     result: (input: string) => {
       // sanatize install dir
       if(input.indexOf("/") != -1 || input.indexOf("\\") != -1 && input.indexOf(":") != -1) {
-        input = replaceall("/", "_", input);
-        input = replaceall(":", "_", input);
-        input = replaceall("\\", "_", input);
+        input = replaceall("/", "==", input);
+        input = replaceall(":", "==", input);
+        input = replaceall("\\", "==", input);
         sanitized = true;
         return input;
       }
@@ -84,11 +86,11 @@ const setup = async () => {
   await bootstrap({});
 };
 
-const bootstrap = async (config: object) => {
+const bootstrap = async (config: object): Promise<void> => {
   utils.logSpeak("Bootstrapping...");
   // create vite app
   // install in dir (we can't use the execInPathParent utility here because the path doesn't exist yet)
-  execSync(`npm create vite@latest ${ utils.path } -- --template react-ts`, { cwd: "./" });
+  execSync(`npm create vite@2.8.0 ${ utils.path } -- --template react-ts`, { cwd: "./" });
   // now we can though, so we'll continue to do so
   utils.execInPath("npm i");
   // clean up the app
