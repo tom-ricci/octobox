@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// TODO: refactor this whole mess to simply only allow ascii characters in app names
+// TODO: refactor this whole mess to simply only allow a-z characters
 
 // imports
 const Enquirer = require("enquirer");
