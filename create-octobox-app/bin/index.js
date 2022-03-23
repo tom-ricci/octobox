@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+// TODO: refactor this whole mess to simply only allow a-z characters
 // imports
 const Enquirer = require("enquirer");
 const colors = require("ansi-colors");
