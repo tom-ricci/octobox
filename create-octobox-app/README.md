@@ -5,12 +5,13 @@ You can use the default setup, which will bring you through a list of setup prom
 ```shell
 npm create octobox-app@latest
 ```
+> Note:\
+> On Windows, you may need to reassign your `.js` file association from JScript to Node.js
+
 You can also pass arguments to the command instead of using prompts, if you want. Replace each `$VARIABLE` with your input.
 ```shell
 npm create octobox-app@latest -- argumented --path $PATH_NAME
 ```
-> Note:\
-> You MUST include the space between the first `--` and `argumented`. They are meant to be two seperate arguments.
 
 ## Testing
-You can run create-octobox-app's tests by running `npm test` after cloning the repo and running `npm i`.
+To execute unit tests, make sure you have at least Node 16, npm 8, and git. Then, using any terminal besides cmd.exe, run `git clone https://github.com/tom-ricci/octobox.git && cd ./octobox/create-octobox-app && npm i && npm test`.

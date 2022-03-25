@@ -34,7 +34,7 @@ const main = async (): Promise<void> => {
     let input = argv["path"];
     input = input.replace(/[^a-zA-Z0-9]/gmi, "");
     utils.path = input;
-    await bootstrap({});
+    await bootstrap(args);
   }else{
     // set up enquirer instance
     styles.primary = colors.blue;
@@ -83,7 +83,7 @@ const setup = async (): Promise<void> => {
 const bootstrap = async (config: object): Promise<void> => {
   utils.logSpeak("Bootstrapping...");
   // create vite app
-  // install in dir (we can't use the execInPathParent utility here because the path doesn't exist yet)
+  // install in dir (we can't use the execInPath or execInPathParent utility here because the path doesn't exist yet)
   execSync(`npm create vite@2.8.0 ${ utils.path } -- --template react-ts`, { cwd: "./" });
   // now we can though, so we'll continue to do so
   utils.execInPath("npm i");

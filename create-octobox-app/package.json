@@ -4,8 +4,8 @@
   "description": "Make an Octobox app.",
   "main": "bin/index.js",
   "scripts": {
-    "test": "npm run build && npm link && node test/main.test.js && npm run clean",
-    "dev": "npm run build && npm link && npm create octobox-app && npm run clean",
+    "test": "npm run build && sudo npm link && node test/main.test.js && npm run clean",
+    "dev": "npm run build && sudo npm link && npm create octobox-app && npm run clean",
     "build": "tsc --project tsconfig.json && chmod u+x bin/index.js || exit 0",
     "clean": "sudo npm -g uninstall create-octobox-app || npm -g uninstall create-octobox-app"
   },

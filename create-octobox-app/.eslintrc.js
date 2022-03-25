@@ -102,6 +102,9 @@ module.exports = {
     "@typescript-eslint/no-var-requires": [
       "off"
     ],
+    "no-empty": [
+      "off"
+    ],
     "@typescript-eslint/no-empty-interface": [
       "off"
     ],

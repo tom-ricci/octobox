@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// TODO: refactor this whole mess to simply only allow a-z characters
 // imports
 const Enquirer = require("enquirer");
 const colors = require("ansi-colors");
@@ -42,7 +41,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         let input = argv["path"];
         input = input.replace(/[^a-zA-Z0-9]/gmi, "");
         utils.path = input;
-        yield bootstrap({});
+        yield bootstrap(args);
     }
     else {
         // set up enquirer instance
@@ -90,7 +89,7 @@ const setup = () => __awaiter(void 0, void 0, void 0, function* () {
 const bootstrap = (config) => __awaiter(void 0, void 0, void 0, function* () {
     utils.logSpeak("Bootstrapping...");
     // create vite app
-    // install in dir (we can't use the execInPathParent utility here because the path doesn't exist yet)
+    // install in dir (we can't use the execInPath or execInPathParent utility here because the path doesn't exist yet)
     execSync(`npm create vite@2.8.0 ${utils.path} -- --template react-ts`, { cwd: "./" });
     // now we can though, so we'll continue to do so
     utils.execInPath("npm i");
