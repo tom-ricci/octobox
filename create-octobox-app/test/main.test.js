@@ -2,7 +2,6 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 const colors = require("ansi-colors");
-const path = require("path");
 const { hashElement } = require("folder-hash");
 
 // misc utilities
