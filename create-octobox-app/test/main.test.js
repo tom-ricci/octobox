@@ -29,7 +29,7 @@ const main = async () => {
   // one valid directory
   execSync("npm create octobox-app -- argumented --path qwertyuiop0123456789");
   // one invalid directory, should be sanitized
-  execSync("npm create octobox-app -- argumented --path '/_+../][872345gdsef2__ gerygh'");
+  execSync("npm create octobox-app -- argumented --path '/_+../][872345gdsef2__gerygh'");
   const hashOptions = {
     folders: { exclude: [ ".*", "node_modules" ] },
     files: { exclude: [ "package.json", "package-lock.json" ] },
