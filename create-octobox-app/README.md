@@ -14,4 +14,4 @@ npm create octobox-app@latest -- argumented --path $PATH_NAME
 ```
 
 ## Testing
-To execute unit tests, make sure you have at least Node 16, npm 8, and git. Then, using any terminal besides cmd.exe, run `git clone https://github.com/tom-ricci/octobox.git && cd ./octobox/create-octobox-app && npm i && npm test`.
+To execute unit tests, make sure you have at least Node 16, npm 8, and git. Then, using any terminal besides cmd.exe, run `git clone https://github.com/tom-ricci/octobox.git -b v2 ; cd ./octobox/create-octobox-app ; npm i ; npm test ; cd ../../ ; npx --yes -p trash-cli trash ./octobox`.
