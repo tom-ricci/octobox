@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// TODO: refactor this whole mess to simply only allow a-z characters
-
 // imports
 const Enquirer = require("enquirer");
 const colors = require("ansi-colors");
@@ -34,9 +32,7 @@ const main = async (): Promise<void> => {
     const args = {};
     // sanitize input
     let input = argv["path"];
-    input = replaceall("/", "==", input);
-    input = replaceall(":", "==", input);
-    input = replaceall("\\", "==", input);
+    input = input.replace(/[^a-zA-Z0-9]/gmi, "");
     utils.path = input;
     await bootstrap({});
   }else{
@@ -60,10 +56,8 @@ const setup = async (): Promise<void> => {
     initial: "my-octobox-app",
     result: (input: string) => {
       // sanatize install dir
-      if(input.indexOf("/") != -1 || input.indexOf("\\") != -1 && input.indexOf(":") != -1) {
-        input = replaceall("/", "==", input);
-        input = replaceall(":", "==", input);
-        input = replaceall("\\", "==", input);
+      if(/[^a-zA-Z0-9]/gmi.test(input)) {
+        input = input.replace(/[^a-zA-Z0-9]/gmi, "");
         sanitized = true;
         return input;
       }
@@ -74,7 +68,7 @@ const setup = async (): Promise<void> => {
   if(sanitized) {
     const locConfirm = new Enquirer.Confirm({
       name: "loc_confirm",
-      message: `Octobox only supports installation in direct children of the CWD. Your app will be stored at ./${ utils.path }/ instead. Is this OK?`,
+      message: `Octobox only supports 0-9 and A-Z for bootstrapping locations. Your app will be stored at ./${ utils.path }/ instead. Is this OK?`,
     });
     // if its not ok, terminate, if it is ok, continue install
     if(!await locConfirm.run()) {
