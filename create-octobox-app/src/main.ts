@@ -53,7 +53,7 @@ const setup = async (): Promise<void> => {
   const loc = new Enquirer.Input({
     name: "loc",
     message: "Where should your app be bootstrapped?",
-    initial: "my-octobox-app",
+    initial: "app",
     result: (input: string) => {
       // sanatize install dir
       if(/[^a-zA-Z0-9]/gmi.test(input)) {

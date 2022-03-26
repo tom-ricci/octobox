@@ -5,7 +5,7 @@
   "main": "bin/index.js",
   "scripts": {
     "test": "npm run build && npm run install && node test/main.test.js && npm run clean",
-    "dev": "npm run build && npm run link && npm create octobox-app && npm run clean",
+    "dev": "npm run build && npm run install && npm create octobox-app && npm run clean",
     "build": "tsc --project tsconfig.json && chmod u+x bin/index.js || exit 0",
     "clean": "sudo npm -g uninstall create-octobox-app || npm -g uninstall create-octobox-app",
     "install": "sudo npm link || npm link"
