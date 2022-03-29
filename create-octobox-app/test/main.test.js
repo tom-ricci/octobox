@@ -1,7 +1,5 @@
 const utils = require("./testutils.js");
 const one = require("./one.test.js");
-const two = require("./two.test.js");
-const three = require("./three.test.js");
 
 const main = async () => {
   // start running our tests
@@ -13,5 +11,3 @@ const main = async () => {
 };
 
 main().catch(console.error);
-
-module.exports = utils;
