@@ -40,7 +40,7 @@ const main = async (): Promise<void> => {
     // sanitize input
     let input = argv["path"];
     input = input.replace(/[^a-zA-Z0-9]/gmi, "");
-    const twinput = argv["tailwind"].toUpperCase() === "TRUE";
+    args.tailwind = argv["tailwind"].toUpperCase() === "TRUE";
     utils.path = input;
     await bootstrap(args);
   }else{
