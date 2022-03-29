@@ -128,11 +128,11 @@ export const App: FC<Props> = (): ReactElement => {
 };
 `);
     // install and set up sass
-    utils.execInPath("npm i sass");
+    utils.execInPath("npm i -D sass");
     fs.mkdirSync(`${utils.path}/src/styles/`);
     fs.writeFileSync(`${utils.path}/src/styles/main.scss`, "");
     // add unit testing suite
-    utils.execInPath("npm i puppeteer ts-node");
+    utils.execInPath("npm i -D puppeteer ts-node");
     fs.mkdirSync(`${utils.path}/test/`);
     fs.writeFileSync(`${utils.path}/test/main.test.ts`, `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
@@ -161,7 +161,25 @@ const tests = async (tester: typeof Page) => {
     const pkg = JSON.parse(fs.readFileSync(`${utils.path}/package.json`));
     pkg.scripts.test = "ts-node --skipProject ./test/main.test.ts";
     fs.writeFileSync(`${utils.path}/package.json`, JSON.stringify(pkg, null, 2));
-    // tell the user were done here
+    // add tailwind
+    // first, install deps and run init command
+    utils.execInPath("npm i -D tailwindcss@latest postcss@latest autoprefixer@latest");
+    utils.execInPath("npx tailwindcss init -p");
+    // next, add a semicolon to postcss config
+    const postcss = fs.readFileSync(`${utils.path}/postcss.config.js`).toString();
+    fs.writeFileSync(`${utils.path}/postcss.config.json`, `${postcss};`);
+    // then, add our content array and a semicolon to tailwind config
+    const tailwindcss = JSON.parse(fs.readFileSync(`${utils.path}/tailwind.config.js`).toString().substring(18));
+    tailwindcss.content = ["./src/**/*.{js,jsx,ts,tsx}"];
+    fs.writeFileSync(`${utils.path}/tailwind.config.json`, `module.exports = ${JSON.stringify(tailwindcss, null, 2)};`);
+    // finally, add our tailwind directives in our main.scss file
+    fs.writeFileSync(`${utils.path}/src/styles/main.scss`, `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+`);
+    // quick npm i to make sure all deps are installed
+    utils.execInPath("npm i");
+    // tell the user we're done here
     utils.logSpeak("App created!");
 });
 main().catch(console.error);

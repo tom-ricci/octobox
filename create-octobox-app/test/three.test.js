@@ -1,3 +1,5 @@
+// TODO: edit this test to check if the element we're targeting actually has the correct style applied rather than just the class name. this is because the element will always have the class name, but may not have the style applied.
+
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
