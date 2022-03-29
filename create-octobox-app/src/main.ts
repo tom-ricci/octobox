@@ -157,15 +157,22 @@ const tests = async (tester: typeof Page) => {
   fs.writeFileSync(`${ utils.path }/package.json`, JSON.stringify(pkg, null, 2));
   // add tailwind
   // first, install deps and run init command
-  utils.execInPath("npm i -D tailwindcss@latest postcss@latest autoprefixer@latest");
+  utils.execInPath("npm i -D tailwindcss postcss autoprefixer");
   utils.execInPath("npx tailwindcss init -p");
   // next, add a semicolon to postcss config
-  const postcss = fs.readFileSync(`${ utils.path }/postcss.config.js`).toString();
-  fs.writeFileSync(`${ utils.path }/postcss.config.json`, `${ postcss };`);
-  // then, add our content array and a semicolon to tailwind config
-  const tailwindcss = JSON.parse(fs.readFileSync(`${ utils.path }/tailwind.config.js`).toString().substring(18));
-  tailwindcss.content = [ "./src/**/*.{js,jsx,ts,tsx}" ];
-  fs.writeFileSync(`${ utils.path }/tailwind.config.json`, `module.exports = ${ JSON.stringify(tailwindcss, null, 2) };`);
+  const postcss = fs.readFileSync(`${ utils.path }/postcss.config.js`).toString().trim();
+  fs.writeFileSync(`${ utils.path }/postcss.config.js`, `${ postcss };`);
+  // then, add our content array and a semicolon to tailwind config. it's easier to just overwrite the original config rather than add the content, so that's what we'll do.
+  fs.writeFileSync(`${ utils.path }/tailwind.config.js`, `module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+`);
   // finally, add our tailwind directives in our main.scss file
   fs.writeFileSync(`${ utils.path }/src/styles/main.scss`, `@tailwind base;
 @tailwind components;

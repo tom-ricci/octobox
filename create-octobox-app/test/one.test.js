@@ -18,8 +18,8 @@ const test = async () => {
     files: { exclude: [ "package.json", "package-lock.json" ] },
   };
   // make our checksums
-  const eHash1 = "BQahZfj8wXJOC0LRfzD3JQLvdpg=";
-  const eHash2 = "h4w/1AIs8JFO2o0UxrJq/HHvOSI=";
+  const eHash1 = "YiJUGoeWsxfpvy2G/Odvtjmtrfg=";
+  const eHash2 = "PxqQga//WX2avoNwbkmSBwxD7Ro=";
   let hash1 = await hashElement("./qwertyuiop0123456789", hashOptions);
   hash1 = hash1.toString();
   hash1 = hash1.substring(hash1.indexOf("', hash: '") + 10);
