@@ -9,6 +9,11 @@ const replaceall = require("replaceall");
 const argv = require("minimist")(process.argv.slice(2));
 const fs = require("fs");
 
+// config interface
+interface Config {
+  tailwind: boolean
+}
+
 // utils
 const utils = {
   logSpeak: (msg: string): void => {
@@ -29,10 +34,13 @@ const utils = {
 const main = async (): Promise<void> => {
   // check if we're using argumented version of the command, in which case we skip the setup
   if(argv._.includes("argumented")) {
-    const args = {};
+    const args: Config = {
+      tailwind: false
+    };
     // sanitize input
     let input = argv["path"];
     input = input.replace(/[^a-zA-Z0-9]/gmi, "");
+    const twinput = argv["tailwind"].toUpperCase() === "TRUE";
     utils.path = input;
     await bootstrap(args);
   }else{
@@ -47,6 +55,9 @@ const main = async (): Promise<void> => {
 };
 
 const setup = async (): Promise<void> => {
+  const config: Config = {
+    tailwind: false
+  };
   utils.logSpeak("Welcome to the Octobox installer!");
   // get install dir
   let sanitized = false;
@@ -76,11 +87,17 @@ const setup = async (): Promise<void> => {
       process.exit();
     }
   }
+  // ask if user wants tailwind added to their project
+  const tailwindQuery = new Enquirer.Confirm({
+    name: "tw",
+    message: "Do you want to use TailwindCSS in this app?",
+  });
+  config.tailwind = await tailwindQuery.run();
   // bootstrap because we have all the info we need now
-  await bootstrap({});
+  await bootstrap(config);
 };
 
-const bootstrap = async (config: object): Promise<void> => {
+const bootstrap = async (config: Config): Promise<void> => {
   utils.logSpeak("Bootstrapping...");
   // create vite app
   // install in dir (we can't use the execInPath or execInPathParent utility here because the path doesn't exist yet)
@@ -155,15 +172,16 @@ const tests = async (tester: typeof Page) => {
   const pkg = JSON.parse(fs.readFileSync(`${ utils.path }/package.json`));
   pkg.scripts.test = "ts-node --skipProject ./test/main.test.ts";
   fs.writeFileSync(`${ utils.path }/package.json`, JSON.stringify(pkg, null, 2));
-  // add tailwind
-  // first, install deps and run init command
-  utils.execInPath("npm i -D tailwindcss postcss autoprefixer");
-  utils.execInPath("npx tailwindcss init -p");
-  // next, add a semicolon to postcss config
-  const postcss = fs.readFileSync(`${ utils.path }/postcss.config.js`).toString().trim();
-  fs.writeFileSync(`${ utils.path }/postcss.config.js`, `${ postcss };`);
-  // then, add our content array and a semicolon to tailwind config. it's easier to just overwrite the original config rather than add the content, so that's what we'll do.
-  fs.writeFileSync(`${ utils.path }/tailwind.config.js`, `module.exports = {
+  // add tailwind if requested
+  if(config.tailwind) {
+    // first, install deps and run init command
+    utils.execInPath("npm i -D tailwindcss postcss autoprefixer");
+    utils.execInPath("npx tailwindcss init -p");
+    // next, add a semicolon to postcss config
+    const postcss = fs.readFileSync(`${ utils.path }/postcss.config.js`).toString().trim();
+    fs.writeFileSync(`${ utils.path }/postcss.config.js`, `${ postcss };`);
+    // then, add our content array and a semicolon to tailwind config. it's easier to just overwrite the original config rather than add the content, so that's what we'll do.
+    fs.writeFileSync(`${ utils.path }/tailwind.config.js`, `module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
@@ -173,11 +191,12 @@ const tests = async (tester: typeof Page) => {
   plugins: [],
 };
 `);
-  // finally, add our tailwind directives in our main.scss file
-  fs.writeFileSync(`${ utils.path }/src/styles/main.scss`, `@tailwind base;
+    // finally, add our tailwind directives in our main.scss file
+    fs.writeFileSync(`${ utils.path }/src/styles/main.scss`, `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 `);
+  }
   // quick npm i to make sure all deps are installed
   utils.execInPath("npm i");
   // tell the user we're done here
