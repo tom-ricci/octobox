@@ -131,6 +131,36 @@ export const App: FC<Props> = (): ReactElement => {
     utils.execInPath("npm i sass");
     fs.mkdirSync(`${utils.path}/src/styles/`);
     fs.writeFileSync(`${utils.path}/src/styles/main.scss`, "");
+    // add unit testing suite
+    utils.execInPath("npm i puppeteer ts-node");
+    fs.mkdirSync(`${utils.path}/test/`);
+    fs.writeFileSync(`${utils.path}/test/main.test.ts`, `const { createServer } = require("vite");
+const puppeteer = require("puppeteer");
+const { Page } = require("puppeteer");
+
+const tests = async (tester: typeof Page) => {
+  // add your tests here
+};
+
+(async (port: number, test: (tester: typeof Page) => Promise<void>) => {
+  const server = await createServer({
+    configFile: false,
+    root: "./",
+    server: {
+      port
+    }
+  });
+  await server.listen();
+  server.printUrls();
+  const tester: typeof Page = await (await puppeteer.launch()).newPage();
+  await tester.goto(\`http://localhost:\${port}\`);
+  await test(tester);
+  process.exit();
+})(4000, tests);
+`);
+    const pkg = JSON.parse(fs.readFileSync(`${utils.path}/package.json`));
+    pkg.scripts.test = "ts-node --skipProject ./test/main.test.ts";
+    fs.writeFileSync(`${utils.path}/package.json`, JSON.stringify(pkg, null, 2));
     // tell the user were done here
     utils.logSpeak("App created!");
 });
