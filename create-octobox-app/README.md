@@ -8,7 +8,7 @@ npm create octobox-app@latest
 > Note:\
 > On Windows, you may need to reassign your `.js` file association from JScript to Node.js
 
-You can also pass arguments to the command instead of using prompts, if you want. Replace each `$VARIABLE` with your input.
+You can also pass arguments to the command instead of using prompts, if you want. Replace each `$VARIABLE` with your input. All flags and their respective values must exist.
 ```shell
 npm create octobox-app@latest -- argumented --path $PATH_NAME --tailwind $TRUE_OR_FALSE
 ```

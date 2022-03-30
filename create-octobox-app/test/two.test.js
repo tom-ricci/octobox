@@ -9,7 +9,7 @@ const test = async () => {
   utils.log.info("In this test, some Octobox apps will be created and ran with different settings. If the test finds Octobox's default \"Hello world!\" in the correct spot in the DOM each time and does not encounter an error, it will pass.");
   await new Promise(r => setTimeout(r, 1000));
   // make our first app and our test since the test isnt a part of the framework itself
-  execSync("npm create octobox-app -- argumented --path octoboxtestapp");
+  execSync("npm create octobox-app -- argumented --path octoboxtestapp --tailwind FALSE");
   fs.writeFileSync("./octoboxtestapp/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");

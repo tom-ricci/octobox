@@ -10,7 +10,7 @@ const test = async () => {
   utils.log.info("In this test, some Octobox apps will be created. This is to ensure they can be created properly without any errors. If they're bootstraped smoothly, they will be compared against a checksum of what they should be, and the test will pass if this is true.");
   await new Promise(r => setTimeout(r, 1000));
   // one valid directory without tailwind
-  execSync("npm create octobox-app -- argumented --path qwertyuiop0123456789");
+  execSync("npm create octobox-app -- argumented --path qwertyuiop0123456789 --tailwind FALSE");
   // one invalid directory (sanitization required) with tailwind
   execSync("npm create octobox-app -- argumented --path '/_+../][872345gdsef2__gerygh' --tailwind TRUE");
   const hashOptions = {
