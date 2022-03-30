@@ -1,5 +1,3 @@
-// TODO: edit this test to check if the element we're targeting actually has the correct style applied rather than just the class name. this is because the element will always have the class name, but may not have the style applied.
-
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
@@ -17,7 +15,7 @@ const { ElementHandle, Page } = require("puppeteer");
 const tests = async (tester: typeof Page) => {
   const element: typeof ElementHandle = await tester.$("div#root > h1");
   const pass: boolean = await tester.evaluate((e: typeof ElementHandle) => {
-    return e.innerText === "Hello world!" && e.classList.contains("custom-sassy-red");
+    return e.innerText === "Hello world!" && window.getComputedStyle(e).getPropertyValue("color") === "#FF0000"
   }, element);
   await element.dispose();
   pass ? process.exit(0) : process.exit(1);
@@ -41,7 +39,7 @@ const tests = async (tester: typeof Page) => {
 `);
   // add our style and apply it to our element
   fs.writeFileSync("./sassyoctoboxtestapp/src/styles/main.scss", `.custom-sassy-red {
-  color: red;
+  color: #FF0000;
 }`);
   fs.writeFileSync("./sassyoctoboxtestapp/src/App.tsx", `import React, { FC, ReactElement } from "react";
 

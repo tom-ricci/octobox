@@ -9,9 +9,9 @@ const test = async () => {
   // for this we create a bunch of projects in our CWD, and compare them to functional projects via a checksum. we can probably assume people will be in the root directory of the project running this, so as long as we dont decide to make a directory named one of these we should be fine.
   utils.log.info("In this test, some Octobox apps will be created. This is to ensure they can be created properly without any errors. If they're bootstraped smoothly, they will be compared against a checksum of what they should be, and the test will pass if this is true.");
   await new Promise(r => setTimeout(r, 1000));
-  // one valid directory
-  execSync("npm create octobox-app -- argumented --path qwertyuiop0123456789 --tailwind TRUE");
-  // one invalid directory, should be sanitized
+  // one valid directory without tailwind
+  execSync("npm create octobox-app -- argumented --path qwertyuiop0123456789");
+  // one invalid directory (sanitization required) with tailwind
   execSync("npm create octobox-app -- argumented --path '/_+../][872345gdsef2__gerygh' --tailwind TRUE");
   const hashOptions = {
     folders: { exclude: [ ".*", "node_modules" ] },
