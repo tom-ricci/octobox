@@ -14,9 +14,10 @@ const { ElementHandle, Page } = require("puppeteer");
 
 const tests = async (tester: typeof Page) => {
   const element: typeof ElementHandle = await tester.$("div#root > h1");
-  const pass: boolean = await tester.evaluate((e: typeof ElementHandle) => {
-    return e.innerText === "Hello world!" && e.computedStyleMap().get("text-decoration-line").toUpperCase() === "UNDERLINE";
+  const pass: boolean = await tester.evaluate(async (e: typeof ElementHandle): Promise<boolean> => {
+    return Promise.resolve(e.innerText === "Hello world!" && e.computedStyleMap().get("text-decoration-line").toString().toUpperCase() === "UNDERLINE");
   }, element);
+  console.log(pass);
   await element.dispose();
   pass ? process.exit(0) : process.exit(1);
 };

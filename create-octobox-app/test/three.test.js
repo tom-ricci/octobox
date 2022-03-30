@@ -1,3 +1,5 @@
+// FIXME: tests 3 and 4 don't work, it's something to do with e#computedStyleMap#get. maybe log its output and see whats wrong?
+
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
@@ -15,9 +17,10 @@ const { ElementHandle, Page } = require("puppeteer");
 
 const tests = async (tester: typeof Page) => {
   const element: typeof ElementHandle = await tester.$("div#root > h1");
-  const pass: boolean = await tester.evaluate((e: typeof ElementHandle) => {
-    return e.innerText === "Hello world!" && e.computedStyleMap().get("color").toUpperCase() === "#FF0000";
+  const pass: boolean = await tester.evaluate(async (e: typeof ElementHandle): Promise<boolean> => {
+    return Promise.resolve(e.innerText === "Hello world!" && e.computedStyleMap().get("color").toString().toUpperCase() === "RGB(255, 0, 0)");
   }, element);
+  console.log(pass);
   await element.dispose();
   pass ? process.exit(0) : process.exit(1);
 };
