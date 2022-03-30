@@ -36,10 +36,13 @@ const utils = {
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     // check if we're using argumented version of the command, in which case we skip the setup
     if (argv._.includes("argumented")) {
-        const args = {};
+        const args = {
+            tailwind: false
+        };
         // sanitize input
         let input = argv["path"];
         input = input.replace(/[^a-zA-Z0-9]/gmi, "");
+        args.tailwind = argv["tailwind"].toUpperCase() === "TRUE";
         utils.path = input;
         yield bootstrap(args);
     }
@@ -54,6 +57,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const setup = () => __awaiter(void 0, void 0, void 0, function* () {
+    const config = {
+        tailwind: false
+    };
     utils.logSpeak("Welcome to the Octobox installer!");
     // get install dir
     let sanitized = false;
@@ -83,8 +89,14 @@ const setup = () => __awaiter(void 0, void 0, void 0, function* () {
             process.exit();
         }
     }
+    // ask if user wants tailwind added to their project
+    const tailwindQuery = new Enquirer.Confirm({
+        name: "tw",
+        message: "Do you want to use TailwindCSS in this app?",
+    });
+    config.tailwind = yield tailwindQuery.run();
     // bootstrap because we have all the info we need now
-    yield bootstrap({});
+    yield bootstrap(config);
 });
 const bootstrap = (config) => __awaiter(void 0, void 0, void 0, function* () {
     utils.logSpeak("Bootstrapping...");
@@ -161,15 +173,16 @@ const tests = async (tester: typeof Page) => {
     const pkg = JSON.parse(fs.readFileSync(`${utils.path}/package.json`));
     pkg.scripts.test = "ts-node --skipProject ./test/main.test.ts";
     fs.writeFileSync(`${utils.path}/package.json`, JSON.stringify(pkg, null, 2));
-    // add tailwind
-    // first, install deps and run init command
-    utils.execInPath("npm i -D tailwindcss postcss autoprefixer");
-    utils.execInPath("npx tailwindcss init -p");
-    // next, add a semicolon to postcss config
-    const postcss = fs.readFileSync(`${utils.path}/postcss.config.js`).toString().trim();
-    fs.writeFileSync(`${utils.path}/postcss.config.js`, `${postcss};`);
-    // then, add our content array and a semicolon to tailwind config. it's easier to just overwrite the original config rather than add the content, so that's what we'll do.
-    fs.writeFileSync(`${utils.path}/tailwind.config.js`, `module.exports = {
+    // add tailwind if requested
+    if (config.tailwind) {
+        // first, install deps and run init command
+        utils.execInPath("npm i -D tailwindcss postcss autoprefixer");
+        utils.execInPath("npx tailwindcss init -p");
+        // next, add a semicolon to postcss config
+        const postcss = fs.readFileSync(`${utils.path}/postcss.config.js`).toString().trim();
+        fs.writeFileSync(`${utils.path}/postcss.config.js`, `${postcss};`);
+        // then, add our content array and a semicolon to tailwind config. it's easier to just overwrite the original config rather than add the content, so that's what we'll do.
+        fs.writeFileSync(`${utils.path}/tailwind.config.js`, `module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
@@ -179,11 +192,12 @@ const tests = async (tester: typeof Page) => {
   plugins: [],
 };
 `);
-    // finally, add our tailwind directives in our main.scss file
-    fs.writeFileSync(`${utils.path}/src/styles/main.scss`, `@tailwind base;
+        // finally, add our tailwind directives in our main.scss file
+        fs.writeFileSync(`${utils.path}/src/styles/main.scss`, `@tailwind base;
 @tailwind components;
 @tailwind utilities;
 `);
+    }
     // quick npm i to make sure all deps are installed
     utils.execInPath("npm i");
     // tell the user we're done here
