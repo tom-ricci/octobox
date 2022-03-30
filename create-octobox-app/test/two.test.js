@@ -1,5 +1,3 @@
-// TODO: edit this test to have multiple apps for each possible combination of settings (currently tailwind/no tailwind)
-
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
