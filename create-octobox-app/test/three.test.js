@@ -1,5 +1,3 @@
-// FIXME: tests 3 and 4 don't work, it's something to do with e#computedStyleMap#get. maybe log its output and see whats wrong?
-
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
