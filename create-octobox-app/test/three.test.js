@@ -1,6 +1,7 @@
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
+const four = require("four.test.js");
 
 const test = async () => {
   // this test makes an app and checks if a style definition written in sass was applied to a specific element in the DOM. assuming test 2 didn't fail, this test will fail if and only if sass fails
@@ -68,7 +69,7 @@ export const App: FC<Props> = (): ReactElement => {
     await new Promise(r => setTimeout(r, 1000));
     // remove our app
     fs.rmSync("./sassyoctoboxtestapp", { recursive: true });
-    await utils.finish(3);
+    await utils.run(four, 4);
   });
 };
 
