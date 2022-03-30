@@ -18,7 +18,7 @@ const test = async () => {
     files: { exclude: [ "package.json", "package-lock.json" ] },
   };
   // make our checksums
-  const eHash1 = "YiJUGoeWsxfpvy2G/Odvtjmtrfg=";
+  const eHash1 = "BQahZfj8wXJOC0LRfzD3JQLvdpg=";
   const eHash2 = "PxqQga//WX2avoNwbkmSBwxD7Ro=";
   let hash1 = await hashElement("./qwertyuiop0123456789", hashOptions);
   hash1 = hash1.toString();
@@ -30,10 +30,10 @@ const test = async () => {
   hash2 = hash2.substring(0, hash2.indexOf("',"));
   utils.log.info("Checksum 1:");
   utils.log.info(`Expected: ${ eHash1 }`);
-  utils.log.info(`Actual: ${ hash1 }`);
+  utils.log.info(`Actual:   ${ hash1 }`);
   utils.log.info("Checksum 2:");
   utils.log.info(`Expected: ${ eHash2 }`);
-  utils.log.info(`Actual: ${ hash2 }`);
+  utils.log.info(`Actual:   ${ hash2 }`);
   // comparison time
   if(hash1 === eHash1 && hash2 === eHash2) {
     utils.log.pass("Test 1 passed!");

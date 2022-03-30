@@ -1,5 +1,5 @@
 const utils = require("./testutils.js");
-const {execSync, execAsync} = require("child_process");
+const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
 
 const test = async () => {
@@ -15,7 +15,7 @@ const { ElementHandle, Page } = require("puppeteer");
 const tests = async (tester: typeof Page) => {
   const element: typeof ElementHandle = await tester.$("div#root > h1");
   const pass: boolean = await tester.evaluate((e: typeof ElementHandle) => {
-    return e.innerText === "Hello world!" && e.computedStyleMap().get("text-decoration-line") === "underline";
+    return e.innerText === "Hello world!" && e.computedStyleMap().get("text-decoration-line").toUpperCase() === "UNDERLINE";
   }, element);
   await element.dispose();
   pass ? process.exit(0) : process.exit(1);

@@ -16,7 +16,7 @@ const { ElementHandle, Page } = require("puppeteer");
 const tests = async (tester: typeof Page) => {
   const element: typeof ElementHandle = await tester.$("div#root > h1");
   const pass: boolean = await tester.evaluate((e: typeof ElementHandle) => {
-    return e.innerText === "Hello world!" && e.computedStyleMap().get("color") === "#FF0000";
+    return e.innerText === "Hello world!" && e.computedStyleMap().get("color").toUpperCase() === "#FF0000";
   }, element);
   await element.dispose();
   pass ? process.exit(0) : process.exit(1);
