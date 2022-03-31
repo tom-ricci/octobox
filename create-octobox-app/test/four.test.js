@@ -1,7 +1,6 @@
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
-const five = require("./five.test.js");
 
 const test = async () => {
   // this test makes an app and checks if a tailwind style applied to the hello world element exists and the style is applied correctly
@@ -67,8 +66,8 @@ export const App: FC<Props> = (): ReactElement => {
     await new Promise(r => setTimeout(r, 1000));
     // remove our app
     fs.rmSync("./tailwindoctoboxapp", { recursive: true });
-    // run next test
-    await utils.run(five, 5);
+    // we're done
+    await utils.finish(4);
   });
 };
 
