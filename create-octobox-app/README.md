@@ -10,7 +10,7 @@ npm create octobox-app@latest
 
 You can also pass arguments to the command instead of using prompts, if you want. Replace each `$VARIABLE` with your input. All flags and their respective values must exist.
 ```shell
-npm create octobox-app@latest -- argumented --path $PATH_NAME --tailwind $TRUE_OR_FALSE
+npm create octobox-app@latest -- argumented --path $PATH_NAME --tailwind $TRUE_OR_FALSE --eslint $TRUE_OR_FALSE --stylelint $TRUE_OR_FALSE
 ```
 
 ## Testing

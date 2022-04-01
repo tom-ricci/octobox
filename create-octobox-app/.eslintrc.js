@@ -77,6 +77,9 @@ module.exports = {
     "prefer-template": [
       "warn"
     ],
+    "prefer-const": [
+      "warn"
+    ],
     "arrow-spacing": [
       "error",
       {"before": true, "after": true}

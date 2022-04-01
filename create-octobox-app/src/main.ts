@@ -12,6 +12,8 @@ const fs = require("fs");
 // config interface
 interface Config {
   tailwind: boolean
+  eslint: boolean
+  stylelint: boolean
 }
 
 // utils
@@ -35,12 +37,17 @@ const main = async (): Promise<void> => {
   // check if we're using argumented version of the command, in which case we skip the setup
   if(argv._.includes("argumented")) {
     const args: Config = {
-      tailwind: false
+      tailwind: false,
+      eslint: false,
+      stylelint: false
     };
     // sanitize input
     let input = argv["path"];
     input = input.replace(/[^a-zA-Z0-9]/gmi, "");
+    // setup our args
     args.tailwind = argv["tailwind"].toUpperCase() === "TRUE";
+    args.eslint = argv["eslint"].toUpperCase() === "TRUE";
+    args.stylelint = argv["stylelint"].toUpperCase() === "TRUE";
     utils.path = input;
     await bootstrap(args);
   }else{
@@ -56,7 +63,9 @@ const main = async (): Promise<void> => {
 
 const setup = async (): Promise<void> => {
   const config: Config = {
-    tailwind: false
+    tailwind: false,
+    eslint: false,
+    stylelint: false
   };
   utils.logSpeak("Welcome to the Octobox installer!");
   // get install dir
@@ -93,6 +102,17 @@ const setup = async (): Promise<void> => {
     message: "Do you want to use TailwindCSS in this app?",
   });
   config.tailwind = await tailwindQuery.run();
+  // ask if user wants any to use any linters
+  const eslintQuery = new Enquirer.Confirm({
+    name: "esl",
+    message: "Do you want to use ESLint in this app?",
+  });
+  config.eslint = await eslintQuery.run();
+  const stylelintQuery = new Enquirer.Confirm({
+    name: "stl",
+    message: "Do you want to use Stylelint in this app?",
+  });
+  config.stylelint = await stylelintQuery.run();
   // bootstrap because we have all the info we need now
   await bootstrap(config);
 };
@@ -195,6 +215,45 @@ const tests = async (tester: typeof Page) => {
     fs.writeFileSync(`${ utils.path }/src/styles/main.scss`, `@tailwind base;
 @tailwind components;
 @tailwind utilities;
+`);
+  }
+  // if the user wants any linters, install them
+  if(config.eslint) {
+    // install and add eslint to project
+    utils.execInPath("npm i -D @modyqyw/vite-plugin-eslint eslint eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest");
+    let viteConfig: string = fs.readFileSync(`${ utils.path }/vite.config.ts`).toString().trim();
+    const lines: string[] = viteConfig.split("\n");
+    lines.splice(2, 0, `import ESLintPlugin from "@modyqyw/vite-plugin-eslint";${ "" }`);
+    lines[6] = "  plugins: [ react(), ESLintPlugin() ]";
+    viteConfig = "";
+    for(const line of lines) {
+      viteConfig += `${ line }\n`;
+    }
+    fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
+    // make .eslintrc
+    fs.writeFileSync(`${ utils.path }/.eslintrc.js`, `module.exports = {
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
+}
 `);
   }
   // quick npm i to make sure all deps are installed
