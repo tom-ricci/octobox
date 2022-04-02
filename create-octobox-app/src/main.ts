@@ -256,6 +256,46 @@ const tests = async (tester: typeof Page) => {
 }
 `);
   }
+  if(config.stylelint) {
+    // install stylelint and add it to the vite config
+    utils.execInPath("npm i -D stylelint stylelint-config-standard-scss vite-plugin-stylelint");
+    let viteConfig: string = fs.readFileSync(`${ utils.path }/vite.config.ts`).toString().trim();
+    const lines: string[] = viteConfig.split("\n");
+    lines.splice(config.eslint ? 3 : 2, 0, `import StylelintPlugin from "vite-plugin-stylelint";${ "" }`);
+    if(config.eslint) {
+      lines[7] = "  plugins: [ react(), ESLintPlugin(), StylelintPlugin() ]";
+    }else{
+      lines[6] = "  plugins: [ react(), StylelintPlugin() ]";
+    }
+    viteConfig = "";
+    for(const line of lines) {
+      viteConfig += `${ line }\n`;
+    }
+    fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
+    // make our stylelint config
+    if(config.tailwind) {
+      fs.writeFileSync(`${ utils.path }/.stylelintrc.js`, `module.exports = {
+  "extends": [
+    "stylelint-config-standard-scss"
+  ],
+  "rules": {
+    "scss/at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [ "tailwind" ]
+      }
+    ]
+  }
+};`);
+    }else{
+      fs.writeFileSync(`${ utils.path }/.stylelintrc.js`, `module.exports = {
+  "extends": [
+    "stylelint-config-standard-scss"
+  ],
+  "rules": {}
+};`);
+    }
+  }
   // quick npm i to make sure all deps are installed
   utils.execInPath("npm i");
   // tell the user we're done here
