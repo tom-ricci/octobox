@@ -1,6 +1,7 @@
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
+const five = require("./five.test.js");
 
 const test = async () => {
   // this test makes an app and checks if a tailwind style applied to the hello world element exists and the style is applied correctly
@@ -54,7 +55,7 @@ export const App: FC<Props> = (): ReactElement => {
 };
 `);
   // run our app
-  let child = execAsync("npm run test", { cwd: "./tailwindoctoboxapp"});
+  const child = execAsync("npm run test", { cwd: "./tailwindoctoboxapp"});
   child.on("close", async (close) => {
     // log our success or failure
     if(close === 0) {
@@ -67,7 +68,7 @@ export const App: FC<Props> = (): ReactElement => {
     // remove our app
     fs.rmSync("./tailwindoctoboxapp", { recursive: true });
     // we're done
-    await utils.finish(4);
+    await utils.run(five, 5);
   });
 };
 

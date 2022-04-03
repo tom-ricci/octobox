@@ -1,3 +1,5 @@
+// TODO: always update this test
+
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
@@ -38,7 +40,7 @@ const tests = async (tester: typeof Page) => {
 })(4000, tests);
 `);
   // run our app
-  let child = execAsync("npm run test", { cwd: "./octoboxtestapp"});
+  const child = execAsync("npm run test", { cwd: "./octoboxtestapp"});
   child.on("close", async (close) => {
     // log our success or failure
     let status = close === 0;
@@ -83,7 +85,7 @@ const tests = async (tester: typeof Page) => {
 })(4000, tests);
 `);
     // run our app
-    let grandchild = execAsync("npm run test", { cwd: "./octoboxtestapptwo"});
+    const grandchild = execAsync("npm run test", { cwd: "./octoboxtestapptwo"});
     grandchild.on("close", async (close) => {
       // log our success or failure
       status = status && close === 0;
