@@ -1,5 +1,3 @@
-// TODO: add linter tests
-
 const utils = require("./testutils.js");
 const one = require("./one.test.js");
 
