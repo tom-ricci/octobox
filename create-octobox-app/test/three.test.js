@@ -8,7 +8,7 @@ const test = async () => {
   utils.log.info("In this test, an Octobox app will be created, a style will be written with Sass, and said style will be applied to an element in the DOM with some specified content. If the element is found in the DOM with its style and content, the test will pass.");
   await new Promise(r => setTimeout(r, 1000));
   // make our app and our test since the test isnt a part of the framework itself
-  execSync("npm create octobox-app -- argumented --path sassyoctoboxtestapp --tailwind FALSE");
+  execSync("npm create octobox-app -- argumented --path sassyoctoboxtestapp --tailwind FALSE --eslint FALSE --stylelint FALSE");
   fs.writeFileSync("./sassyoctoboxtestapp/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");
@@ -58,7 +58,7 @@ export const App: FC<Props> = (): ReactElement => {
 };
 `);
   // run our app
-  let child = execAsync("npm run test", { cwd: "./sassyoctoboxtestapp"});
+  const child = execAsync("npm run test", { cwd: "./sassyoctoboxtestapp"});
   child.on("close", async (close) => {
     // log our success or failure
     if(close === 0) {

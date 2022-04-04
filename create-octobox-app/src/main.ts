@@ -253,7 +253,12 @@ const tests = async (tester: typeof Page) => {
     "react",
     "@typescript-eslint"
   ],
-}
+  "rules": {
+    "@typescript-eslint/no-empty-interface": [
+      "off"
+    ]
+  }
+};
 `);
   }
   if(config.stylelint) {
