@@ -1,8 +1,9 @@
 const colors = require("ansi-colors");
 
+let successful = 0;
+
 // misc utilities
 const utils = {
-  successful: 0,
   log: {
     info: (msg) => {
       console.log(`${ colors.bold.yellow("➤") } ${ colors.bold(msg) }\u001b[0m`);
@@ -39,7 +40,7 @@ const utils = {
     process.exit();
   },
   success: () => {
-    this.successful++;
+    successful++;
   }
 };
 
