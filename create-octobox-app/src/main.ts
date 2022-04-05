@@ -232,6 +232,7 @@ const tests = async (tester: typeof Page) => {
     fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
     // make .eslintrc
     fs.writeFileSync(`${ utils.path }/.eslintrc.js`, `module.exports = {
+  "root": true,
   "env": {
     "browser": true,
     "es2021": true

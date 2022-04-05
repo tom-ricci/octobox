@@ -9,6 +9,7 @@ const test = async () => {
   // make app and linter configs. we're not actually messing with the app to make it "dirty", we're messing with the linter configs instead. its easier.
   execSync("npm create octobox-app -- argumented --path lintertest --tailwind TRUE --eslint TRUE --stylelint TRUE");
   fs.writeFileSync("./lintertest/.eslintrc.js", `module.exports = {
+  "root": true,
   "env": {
     "browser": true,
     "es2021": true
@@ -38,7 +39,7 @@ const test = async () => {
 };`);
   // run our configs
   let status;
-  const child = execAsync("eslint '**/*.{js,ts,jsx,tsx}'", { cwd: "./lintertest"});
+  const child = execAsync("eslint '**/*.{js,ts,jsx,tsx}' -c './.eslintrc.js'", { cwd: "./lintertest"});
   child.on("close", async (code) => {
     status = code !== 0;
     if(status) {
@@ -48,14 +49,15 @@ const test = async () => {
       utils.log.info("ESLint test unsuccessful!");
       utils.log.info("Running next...");
     }
-    const grandchild = execAsync("npx -y stylelint '**/*.scss'", { cwd: "./lintertest"});
+    const grandchild = execAsync("npx -y stylelint '**/*.scss' --config './.stylelintrc.js'", { cwd: "./lintertest"});
     grandchild.on("close", async (code) => {
       status = status && code !== 0;
       if(status) {
-        utils.log.pass("Stylelint test successful!");
+        utils.log.info("Stylelint test successful!");
       }else{
-        utils.log.fail("Stylelint test successful!");
+        utils.log.info("Stylelint test successful!");
       }
+      fs.rmSync("./lintertest", { recursive: true });
       // log final status
       if(status) {
         utils.log.pass("Test 5 passed!");
