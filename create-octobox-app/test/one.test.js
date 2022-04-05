@@ -7,7 +7,7 @@ const { hashElement } = require("folder-hash");
 const two = require("./two.test.js");
 
 // the status of the test - true if nothing in the test fails
-let status;
+let status = true;
 
 const test = async () => {
   // test 1
