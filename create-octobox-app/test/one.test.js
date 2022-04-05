@@ -1,3 +1,5 @@
+// TODO: always update this test
+
 const utils = require("./testutils.js");
 const { execSync } = require("child_process");
 const fs = require("fs");
@@ -54,7 +56,7 @@ const run = async (cmd, path, hash, index) => {
   utils.log.info(`Expected: ${ hash }`);
   utils.log.info(`Actual:   ${ ehash }`);
   // cleanup
-  fs.rmSync(path);
+  fs.rmSync(path, { recursive: true });
   status = !status ? false : ehash === hash;
 };
 
