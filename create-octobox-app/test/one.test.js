@@ -30,6 +30,7 @@ const test = async () => {
   await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE", "./octoboxapptestone", "Og3olVmEo1tGHgjH+aJkT58V5GE=", 5);
   // comparison time
   if(status) {
+    utils.success();
     utils.log.pass("Test 1 passed!");
   }else{
     utils.log.fail("Test 1 Failed!");
@@ -57,6 +58,7 @@ const run = async (cmd, path, hash, index) => {
   utils.log.info(`Actual:   ${ ehash }`);
   // cleanup
   fs.rmSync(path, { recursive: true });
+  utils.log.info(ehash === hash ? `App ${ index } equals its checksum!` : `App ${ index } does not equal its checksum!`);
   status = !status ? false : ehash === hash;
 };
 

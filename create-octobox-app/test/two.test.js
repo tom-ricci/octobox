@@ -98,6 +98,7 @@ const tests = async (tester: typeof Page) => {
       await new Promise(r => setTimeout(r, 138));
       // log the whole test's success or failure
       if(status) {
+        utils.success();
         utils.log.pass("Test 2 passed!");
       }else{
         utils.log.fail("Test 2 failed!");

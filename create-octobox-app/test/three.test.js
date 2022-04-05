@@ -62,6 +62,7 @@ export const App: FC<Props> = (): ReactElement => {
   child.on("close", async (close) => {
     // log our success or failure
     if(close === 0) {
+      utils.success();
       utils.log.pass("Test 3 passed!");
     }else{
       utils.log.fail("Test 3 failed!");

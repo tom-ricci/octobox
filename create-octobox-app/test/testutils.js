@@ -2,6 +2,7 @@ const colors = require("ansi-colors");
 
 // misc utilities
 const utils = {
+  successful: 0,
   log: {
     info: (msg) => {
       console.log(`${ colors.bold.yellow("➤") } ${ colors.bold(msg) }\u001b[0m`);
@@ -30,10 +31,15 @@ const utils = {
     utils.log.info("Wrapping up...");
     // tests complete, log and exit
     await new Promise(r => setTimeout(r, 550));
+    utils.log.info(`${ this.successful }/${ index } (${ Math.round(this.successful / index * 100) }%) tests were successful.`);
+    await new Promise(r => setTimeout(r, 59));
     utils.log.info("All tests complete.");
     await new Promise(r => setTimeout(r, 250));
     // we're done!
     process.exit();
+  },
+  success: () => {
+    this.successful++;
   }
 };
 

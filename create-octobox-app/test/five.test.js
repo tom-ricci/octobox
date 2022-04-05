@@ -60,6 +60,7 @@ const test = async () => {
       fs.rmSync("./lintertest", { recursive: true });
       // log final status
       if(status) {
+        utils.success();
         utils.log.pass("Test 5 passed!");
       }else{
         utils.log.fail("Test 5 failed!");
