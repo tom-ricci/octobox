@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// TODO: add stylelint recommended config, add parent-level build, dev, test scripts, make current create-octobox-app scripts link linter configs and other needed deps locally, go through linter configs and make sure they look all good and you like them
+// TODO: add parent-level build, dev, test scripts, make current create-octobox-app scripts link linter configs and other needed deps locally, go through linter configs and make sure they look all good and you like them
 
 // imports
 const Enquirer = require("enquirer");
@@ -313,10 +313,14 @@ const tests = async (tester: typeof Page) => {
     }
     fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
     // make our stylelint config
+    let stldconf = "";
+    if(config.stylelintRecommended) {
+      stldconf = ",\n    \"stylelint-config-octobox\"";
+    }
     if(config.tailwind) {
       fs.writeFileSync(`${ utils.path }/.stylelintrc.js`, `module.exports = {
   "extends": [
-    "stylelint-config-standard-scss"
+    "stylelint-config-standard-scss"${ stldconf }
   ],
   "rules": {
     "scss/at-rule-no-unknown": [
@@ -330,7 +334,7 @@ const tests = async (tester: typeof Page) => {
     }else{
       fs.writeFileSync(`${ utils.path }/.stylelintrc.js`, `module.exports = {
   "extends": [
-    "stylelint-config-standard-scss"
+    "stylelint-config-standard-scss"${ stldconf }
   ],
   "rules": {}
 };`);

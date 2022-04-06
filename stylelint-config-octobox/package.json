@@ -1,0 +1,29 @@
+{
+  "name": "stylelint-config-octobox",
+  "version": "2.0.0",
+  "description": "Octobox's stylelint config based on Thomas Ricci's styleguide.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo -e \"No unit tests here, run Octobox's parent package tests!\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tom-ricci/octobox.git"
+  },
+  "keywords": [
+    "octobox"
+  ],
+  "author": "Thomas Ricci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tom-ricci/octobox/issues"
+  },
+  "homepage": "https://github.com/tom-ricci/octobox#readme",
+  "devDependencies": {
+    "eslint": "^8.12.0"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  }
+}
