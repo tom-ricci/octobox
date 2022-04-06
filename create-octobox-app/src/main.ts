@@ -1,10 +1,13 @@
 #!/usr/bin/env node
 
+// TODO: add stylelint recommended config, add parent-level build, dev, test scripts, make current create-octobox-app scripts link linter configs and other needed deps locally, go through linter configs and make sure they look all good and you like them
+
 // imports
 const Enquirer = require("enquirer");
 const colors = require("ansi-colors");
 const styles = require("enquirer/lib/styles");
 const { execSync } = require("child_process");
+// FIXME: once octobox is complete if we don't need this remove it.
 const replaceall = require("replaceall");
 const argv = require("minimist")(process.argv.slice(2));
 const fs = require("fs");
@@ -14,6 +17,8 @@ interface Config {
   tailwind: boolean
   eslint: boolean
   stylelint: boolean
+  eslintRecommended: boolean
+  stylelintRecommended: boolean
 }
 
 // utils
@@ -39,7 +44,9 @@ const main = async (): Promise<void> => {
     const args: Config = {
       tailwind: false,
       eslint: false,
-      stylelint: false
+      stylelint: false,
+      eslintRecommended: false,
+      stylelintRecommended: false
     };
     // sanitize input
     let input = argv["path"];
@@ -48,6 +55,12 @@ const main = async (): Promise<void> => {
     args.tailwind = argv["tailwind"].toUpperCase() === "TRUE";
     args.eslint = argv["eslint"].toUpperCase() === "TRUE";
     args.stylelint = argv["stylelint"].toUpperCase() === "TRUE";
+    if(args.eslint) {
+      args.eslintRecommended = argv["recommended_eslint_config"].toUpperCase() === "TRUE";
+    }
+    if(args.stylelint) {
+      args.stylelintRecommended = argv["recommended_stylelint_config"].toUpperCase() === "TRUE";
+    }
     utils.path = input;
     await bootstrap(args);
   }else{
@@ -65,7 +78,9 @@ const setup = async (): Promise<void> => {
   const config: Config = {
     tailwind: false,
     eslint: false,
-    stylelint: false
+    stylelint: false,
+    eslintRecommended: false,
+    stylelintRecommended: false
   };
   utils.logSpeak("Welcome to the Octobox installer!");
   // get install dir
@@ -102,17 +117,32 @@ const setup = async (): Promise<void> => {
     message: "Do you want to use TailwindCSS in this app?",
   });
   config.tailwind = await tailwindQuery.run();
-  // ask if user wants any to use any linters
+  // ask if user wants to use any linters and their recommended configs
   const eslintQuery = new Enquirer.Confirm({
     name: "esl",
     message: "Do you want to use ESLint in this app?",
   });
   config.eslint = await eslintQuery.run();
+  if(config.eslint) {
+    const eslintRecommendedQuery = new Enquirer.Confirm({
+      name: "eslr",
+      message: "Do you want to use Octobox's recommended ESLint configuration?",
+    });
+    config.eslintRecommended = await eslintRecommendedQuery.run();
+  }
   const stylelintQuery = new Enquirer.Confirm({
     name: "stl",
     message: "Do you want to use Stylelint in this app?",
   });
   config.stylelint = await stylelintQuery.run();
+  if(config.stylelint) {
+    const stylelintRecommendedQuery = new Enquirer.Confirm({
+      name: "stlr",
+      message: "Do you want to use Octobox's recommended Stylelint configuration?",
+    });
+    config.stylelintRecommended = await stylelintRecommendedQuery.run();
+  }
+
   // bootstrap because we have all the info we need now
   await bootstrap(config);
 };
@@ -231,6 +261,10 @@ const tests = async (tester: typeof Page) => {
     }
     fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
     // make .eslintrc
+    let esldconf = "";
+    if(config.eslintRecommended) {
+      esldconf = ",\n    \"octobox\"";
+    }
     fs.writeFileSync(`${ utils.path }/.eslintrc.js`, `module.exports = {
   "root": true,
   "env": {
@@ -240,7 +274,7 @@ const tests = async (tester: typeof Page) => {
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended"${ esldconf }
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
