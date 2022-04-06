@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// TODO: make current create-octobox-app scripts link linter configs and other needed deps locally, go through linter configs and make sure they look all good and you like them
+// TODO: go through linter configs and make sure they look all good and you like them
 
 // imports
 const Enquirer = require("enquirer");
