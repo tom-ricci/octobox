@@ -32,7 +32,7 @@ const utils = {
     utils.log.info("Wrapping up...");
     // tests complete, log and exit
     await new Promise(r => setTimeout(r, 550));
-    utils.log.info(`${ successful }/${ index } (${ Math.round(successful / index * 100) }%) tests were successful.`);
+    utils.log.info(`${ successful }/${ index } tests were successful. (${ Math.round(successful / index * 100) }%)`);
     await new Promise(r => setTimeout(r, 59));
     utils.log.info("All tests complete.");
     await new Promise(r => setTimeout(r, 250));

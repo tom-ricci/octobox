@@ -14,11 +14,11 @@ npm create octobox-app@latest -- argumented --path $PATH_NAME --tailwind $TRUE_O
 ```
 
 ## Experimental Install
-If you want to install an unreleased version of Octobox, you can run this command in any terminal other than cmd.exe. Make sure you have git.
+If you want to install an unreleased version of Octobox, you can run this command in any terminal other than cmd.exe. Make sure you have git. You'll need to remove Octobox's installer from your trash or recycle bin afterwards.
 ```shell
-git clone https://github.com/tom-ricci/octobox.git $COMMIT_NAME ; cd ./octobox/create-octobox-app ; npm i ; npm run elevate ; npm run build ; npm run install ; cd ../../ ; npm create octobox-app ; cd ./octobox/create-octobox-app ; npm run clean ; cd ../../ ; npx --yes -p trash-cli trash ./octobox
+git clone https://github.com/tom-ricci/octobox.git $COMMIT_NAME ; cd ./octobox/create-octobox-app ; npm i ; npm run elevate ; npm run build ; npm run install ; cd ../../ ; npm create octobox-app ; cd ./octobox/create-octobox-app ; npm run uninstall ; cd ../../ ; npx --yes -p trash-cli trash ./octobox
 ```
-Afterwards, you'll need to remove Octobox's app creator from your trash or recycle bin.
+Keep in mind that this will not install unreleased versions of Octobox's packages, (I.e. `eslint-config-octobox`) but the newest version on the registry. If you need an unreleased version of an Octobox package, link the package manually.
 
 ## Testing
 To execute unit tests, run the following in any terminal other than cmd.exe. Make sure you have git.

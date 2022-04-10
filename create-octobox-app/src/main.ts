@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// TODO: go through linter configs and make sure they look all good and you like them
-
 // imports
 const Enquirer = require("enquirer");
 const colors = require("ansi-colors");
@@ -264,6 +262,7 @@ const tests = async (tester: typeof Page) => {
     let esldconf = "";
     if(config.eslintRecommended) {
       esldconf = ",\n    \"octobox\"";
+      utils.execInPath("npm i -D eslint-config-octobox");
     }
     fs.writeFileSync(`${ utils.path }/.eslintrc.js`, `module.exports = {
   "root": true,
@@ -316,6 +315,7 @@ const tests = async (tester: typeof Page) => {
     let stldconf = "";
     if(config.stylelintRecommended) {
       stldconf = ",\n    \"stylelint-config-octobox\"";
+      utils.execInPath("npm i -D stylelint-config-octobox");
     }
     if(config.tailwind) {
       fs.writeFileSync(`${ utils.path }/.stylelintrc.js`, `module.exports = {

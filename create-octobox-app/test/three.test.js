@@ -8,7 +8,7 @@ const test = async () => {
   utils.log.info("In this test, an Octobox app will be created, a style will be written with Sass, and said style will be applied to an element in the DOM with some specified content. If the element is found in the DOM with its style and content, the test will pass.");
   await new Promise(r => setTimeout(r, 1000));
   // make our app and our test since the test isnt a part of the framework itself
-  execSync("npm create octobox-app -- argumented --path sassyoctoboxtestapp --tailwind FALSE --eslint FALSE --stylelint FALSE");
+  execSync("npm create octobox-app -- argumented --path sassyoctoboxtestapp --tailwind FALSE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE");
   fs.writeFileSync("./sassyoctoboxtestapp/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");

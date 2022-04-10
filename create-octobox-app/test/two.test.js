@@ -11,7 +11,7 @@ const test = async () => {
   utils.log.info("In this test, some Octobox apps will be created and ran with different settings. If the test finds Octobox's default \"Hello world!\" in the correct spot in the DOM each time and does not encounter an error, it will pass.");
   await new Promise(r => setTimeout(r, 1000));
   // make our first app and test, this will be default
-  execSync("npm create octobox-app -- argumented --path octoboxtestapp --tailwind FALSE --eslint FALSE --stylelint FALSE");
+  execSync("npm create octobox-app -- argumented --path octoboxtestapp --tailwind FALSE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE");
   fs.writeFileSync("./octoboxtestapp/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");
@@ -56,7 +56,8 @@ const tests = async (tester: typeof Page) => {
     // remove our app
     fs.rmSync("./octoboxtestapp", { recursive: true });
     // make our second app and test, this will be as custom as possible
-    execSync("npm create octobox-app -- argumented --path octoboxtestapptwo --tailwind TRUE --eslint TRUE --stylelint TRUE");
+    // we wont use the recommended linter configs here though because thats just a mess (eslint doesn't like getting packages from the system's global npm package list, which is where we install all our octobox packages during testing. thus, its a pain to get linter configs working)
+    execSync("npm create octobox-app -- argumented --path octoboxtestapptwo --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE");
     fs.writeFileSync("./octoboxtestapptwo/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");

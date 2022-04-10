@@ -16,18 +16,23 @@ const test = async () => {
   await new Promise(r => setTimeout(r, 1000));
   // path resolution tests:
   // one valid directory with defaults
-  await run("npm create octobox-app -- argumented --path qwertyuiop0123456789 --tailwind FALSE --eslint FALSE --stylelint FALSE", "./qwertyuiop0123456789", "BQahZfj8wXJOC0LRfzD3JQLvdpg=", 1);
+  await run("npm create octobox-app -- argumented --path qwertyuiop0123456789 --tailwind FALSE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./qwertyuiop0123456789", "BQahZfj8wXJOC0LRfzD3JQLvdpg=", 1);
   // one invalid directory (sanitization required) with defaults
-  await run("npm create octobox-app -- argumented --path '/_+../][872345gdsef2__gerygh' --tailwind FALSE --eslint FALSE --stylelint FALSE", "./872345gdsef2gerygh", "h4w/1AIs8JFO2o0UxrJq/HHvOSI=", 2);
+  await run("npm create octobox-app -- argumented --path '/_+../][872345gdsef2__gerygh' --tailwind FALSE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./872345gdsef2gerygh", "h4w/1AIs8JFO2o0UxrJq/HHvOSI=", 2);
   // plugin tests:
   // tailwind
-  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind TRUE --eslint FALSE --stylelint FALSE", "./octoboxapptestone", "ngPQ3H2Vo+jb8fz0Y00UZCQF8e8=", 3);
+  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind TRUE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "ngPQ3H2Vo+jb8fz0Y00UZCQF8e8=", 3);
   // eslint
-  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint FALSE", "./octoboxapptestone", "ZKKHB1CayZPgofGqOyf4hXDHYPk=", 4);
+  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "ZKKHB1CayZPgofGqOyf4hXDHYPk=", 4);
   // stylelint
-  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint TRUE", "./octoboxapptestone", "pZnDcnO9MSyUMawTBV4CAbjezdA=", 5);
+  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "pZnDcnO9MSyUMawTBV4CAbjezdA=", 5);
   // eslint, stylelint
-  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE", "./octoboxapptestone", "GsJxynWG5sUxwP1S+dktvZGHOcY=", 6);
+  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "GsJxynWG5sUxwP1S+dktvZGHOcY=", 6);
+  // eslint, stylelint, recommended eslint config, recommended stylelint config
+  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE --recommended_eslint_config TRUE --recommended_stylelint_config TRUE", "./octoboxapptestone", "7nTCXEWFt3WXjirTKtfrZ07h0o4=", 7);
+  // final test:
+  // all of it
+  await run("npm create octobox-app -- argumented --path octoboxapptestone --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config TRUE --recommended_stylelint_config TRUE", "./octoboxapptestone", "orG9YUnDz3UoUx9OZHz7w2bNkUA=", 8);
   // comparison time
   if(status) {
     utils.success();
