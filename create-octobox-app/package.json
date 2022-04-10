@@ -5,7 +5,7 @@
   "main": "bin/index.js",
   "scripts": {
     "elevate": "sudo echo '' || exit 0",
-    "test": "npm run elevate && npm run build && npm run install && node test/main.test.js && npm run uninstall",
+    "test": "npm run elevate && npm run build && npm run install && node test/main.test.js && npm run uninstall && echo 'Done.'",
     "dev": "npm run elevate && npm run build && npm run install && npm create octobox-app && npm run uninstall",
     "build": "tsc --project tsconfig.json && minify bin/index.max.js > bin/index.js && rimraf bin/index.max.js && chmod u+x bin/index.js || exit 0",
     "install": "npm run uninstall && npm run app:install && npm run plugins:eslint:install && npm run plugins:stylelint:install",
