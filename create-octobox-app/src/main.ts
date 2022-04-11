@@ -17,6 +17,7 @@ interface Config {
   stylelint: boolean
   eslintRecommended: boolean
   stylelintRecommended: boolean
+  internal: boolean
 }
 
 // utils
@@ -44,7 +45,8 @@ const main = async (): Promise<void> => {
       eslint: false,
       stylelint: false,
       eslintRecommended: false,
-      stylelintRecommended: false
+      stylelintRecommended: false,
+      internal: false
     };
     // sanitize input
     let input = argv["path"];
@@ -53,6 +55,7 @@ const main = async (): Promise<void> => {
     args.tailwind = argv["tailwind"].toUpperCase() === "TRUE";
     args.eslint = argv["eslint"].toUpperCase() === "TRUE";
     args.stylelint = argv["stylelint"].toUpperCase() === "TRUE";
+    args.internal = argv._.includes("internal");
     if(args.eslint) {
       args.eslintRecommended = argv["recommended_eslint_config"].toUpperCase() === "TRUE";
     }
@@ -78,7 +81,8 @@ const setup = async (): Promise<void> => {
     eslint: false,
     stylelint: false,
     eslintRecommended: false,
-    stylelintRecommended: false
+    stylelintRecommended: false,
+    internal: argv._.includes("internal")
   };
   utils.logSpeak("Welcome to the Octobox installer!");
   // get install dir
@@ -262,7 +266,11 @@ const tests = async (tester: typeof Page) => {
     let esldconf = "";
     if(config.eslintRecommended) {
       esldconf = ",\n    \"octobox\"";
-      utils.execInPath("npm i -D eslint-config-octobox");
+      if(config.internal) {
+        utils.execInPath("npm link eslint-config-octobox");
+      }else{
+        utils.execInPath("npm i -D eslint-config-octobox");
+      }
     }
     fs.writeFileSync(`${ utils.path }/.eslintrc.js`, `module.exports = {
   "root": true,
@@ -315,7 +323,11 @@ const tests = async (tester: typeof Page) => {
     let stldconf = "";
     if(config.stylelintRecommended) {
       stldconf = ",\n    \"stylelint-config-octobox\"";
-      utils.execInPath("npm i -D stylelint-config-octobox");
+      if(config.internal) {
+        utils.execInPath("npm link stylelint-config-octobox");
+      }else{
+        utils.execInPath("npm i -D stylelint-config-octobox");
+      }
     }
     if(config.tailwind) {
       fs.writeFileSync(`${ utils.path }/.stylelintrc.js`, `module.exports = {

@@ -29,3 +29,13 @@ It's fully self-contained, and will put itself in the trash when complete if you
 
 > Note:\
 > At the time of writing, setting `$COMMIT_NAME` to `-b v2` will clone the latest version.
+
+## Contributing
+To contribute to Octobox, clone the repo and install the dependencies. Then, work on any package. When you're done, run `npm run uninstall` inside `create-octobox-app`.
+
+> Note:\
+> Make sure to use the `internal` argument in app or unit test development. For example:
+> ```shell
+> npm create octobox-app@latest -- argumented internal ... your flags
+> ```
+> Use this regardless of whether you're using `argumented` or not.
