@@ -1,7 +1,7 @@
 {
-  "name": "stylelint-config-octobox",
+  "name": "octobox-utils",
   "version": "2.0.0",
-  "description": "Octobox's Stylelint config based on Thomas Ricci's styleguide.",
+  "description": "Octobox's utilities, including React components and hooks.",
   "main": "index.js",
   "scripts": {
     "test": "echo -e \"No unit tests here, run Octobox's parent package tests!\""
@@ -19,16 +19,17 @@
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
   "homepage": "https://github.com/tom-ricci/octobox#readme",
-  "devDependencies": {
-    "eslint": "^8.12.0"
-  },
-  "peerDependencies": {
-    "stylelint": ">= 14.6.1",
-    "stylelint-config-standard-scss": ">= 3.0.0",
-    "vite-plugin-stylelint": ">= 2.1.0"
-  },
   "engines": {
     "npm": ">=8.0.0",
     "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "eslint": "^8.13.0",
+    "eslint-plugin-react": "^7.29.4",
+    "react": "^18.0.0",
+    "typescript": "^4.6.3"
   }
 }

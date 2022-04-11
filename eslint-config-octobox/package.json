@@ -1,7 +1,7 @@
 {
   "name": "eslint-config-octobox",
   "version": "2.0.0",
-  "description": "Octobox's eslint config based on Thomas Ricci's styleguide.",
+  "description": "Octobox's ESLint config based on Thomas Ricci's styleguide.",
   "main": "index.js",
   "scripts": {
     "test": "echo -e \"No unit tests here, run Octobox's parent package tests!\""
