@@ -1,7 +1,14 @@
-/// <reference types="react" />
-interface ButtonProps {
-    label: string;
-}
-declare const Button: (props: ButtonProps) => JSX.Element;
+/**
+ * Waits until a certain number of milliseconds has passed. This is no different than resolving a promise of a timeout, and actually uses that method under the hood.
+ * @param ms
+ */
+declare const useSleep: (ms: number) => Promise<void>;
 
-export { Button };
+/**
+ * Scrolls window to specified coordinates or (0,0) if blank
+ * @param x
+ * @param y
+ */
+declare const useScrollRestoration: (x?: number | undefined, y?: number | undefined) => void;
+
+export { useScrollRestoration, useSleep };
