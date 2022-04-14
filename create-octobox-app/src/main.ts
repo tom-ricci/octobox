@@ -267,7 +267,8 @@ const tests = async (tester: typeof Page) => {
     if(config.eslintRecommended) {
       esldconf = ",\n    \"octobox\"";
       if(config.internal) {
-        utils.execInPath("npm link eslint-config-octobox");
+        // random bit of information: if we dont explicitly tell npm to save the linked package in the package.json, it wont even though the documentation for npm link says it will. totally didnt waste hours of my life dealing with that headache. yes, this is the same for stylelint and utils.
+        utils.execInPath("npm link -D eslint-config-octobox");
       }else{
         utils.execInPath("npm i -D eslint-config-octobox");
       }
@@ -324,7 +325,7 @@ const tests = async (tester: typeof Page) => {
     if(config.stylelintRecommended) {
       stldconf = ",\n    \"stylelint-config-octobox\"";
       if(config.internal) {
-        utils.execInPath("npm link stylelint-config-octobox");
+        utils.execInPath("npm link -D stylelint-config-octobox");
       }else{
         utils.execInPath("npm i -D stylelint-config-octobox");
       }
