@@ -353,6 +353,12 @@ const tests = async (tester: typeof Page) => {
 };`);
     }
   }
+  // install octobox-utils
+  if(config.internal) {
+    utils.execInPath("npm link -D octobox-utils");
+  }else{
+    utils.execInPath("npm i -D octobox-utils");
+  }
   // quick npm i to make sure all deps are installed
   utils.execInPath("npm i");
   // tell the user we're done here
