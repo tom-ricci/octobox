@@ -128,7 +128,7 @@ const setup = async (): Promise<void> => {
   if(config.eslint) {
     const eslintRecommendedQuery = new Enquirer.Confirm({
       name: "eslr",
-      message: "Do you want to use Octobox's recommended ESLint configuration?",
+      message: "With Octobox's recommended ESLint configuration?",
     });
     config.eslintRecommended = await eslintRecommendedQuery.run();
   }
@@ -140,7 +140,7 @@ const setup = async (): Promise<void> => {
   if(config.stylelint) {
     const stylelintRecommendedQuery = new Enquirer.Confirm({
       name: "stlr",
-      message: "Do you want to use Octobox's recommended Stylelint configuration?",
+      message: "With Octobox's recommended Stylelint configuration?",
     });
     config.stylelintRecommended = await stylelintRecommendedQuery.run();
   }
