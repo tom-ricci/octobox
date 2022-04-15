@@ -19,7 +19,7 @@ npm create octobox-app@latest -- argumented --path $PATH_NAME --tailwind $TRUE_O
 ### Local Install
 If you want to install a local copy of Octobox, just run this command in the parent directory of your app. Alternatively, you can just run the `dev` npm script.
 ```shell
-git clone https://github.com/tom-ricci/octobox.git $COMMIT_NAME ; cd ./octobox/create-octobox-app ; npm i ; npm run dev
+git clone https://github.com/tom-ricci/octobox.git $COMMIT_NAME ; cd ./octobox/create-octobox-app ; npm i ; npm run dev ; cd ../../
 ```
 
 ### Testing
