@@ -1,9 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { BrowserRouter, Route, RouteObject, Routes, useRoutes } from "react-router-dom";
-import { v4 } from "uuid";
-import * as Win from "../windows/bucket/$liquid/Window";
-import { default as Bucket } from "../windows/bucket/Window";
-import { default as Default } from "../windows/bucket/default/Window";
+import { BrowserRouter, RouteObject, useRoutes } from "react-router-dom";
 
 interface Props {
 
@@ -17,10 +13,6 @@ interface Tree {
   root: any[]
 }
 
-interface Segment {
-  obj: any
-}
-
 /**
  * A Filesystem is a filesystem-based router. Filesystems consider their root point to be /src/windows/ (relative to the project root). For example, /src/windows/about/Window.tsx will be routed as /about. Filesystems will route all legal page components. A Filesystem must contain a Window.tsx file inside /src/windows/
  * @constructor
@@ -30,7 +22,7 @@ export const Filesystem: FC<Props> = (): ReactElement => {
   const imports = import.meta.globEager("/src/windows/**/Window.tsx");
   const routes: any[][] = [];
   for(const property in imports) {
-    routes.push([ property, imports[property].default() ]);
+    routes.push([ property, React.createElement(imports[property].default) ]);
   }
   // convert them into our weird mix between a multidimensional array and a tree
   const absolutes: any[] = [];
@@ -141,47 +133,21 @@ const removeEmptyArrays = (obj: any): object => {
 
 // build a tree of routes based on a merged route array
 const RoutingTree: FC<TreeProps> = ({ tree }): ReactElement => {
+  // if the app has no starting point, throw an error, otherwise build the route tree
   if(tree.root[0].value !== "Window.tsx") {
     throw new Error("No root Window.tsx (/src/windows/Window.tsx) file in the Filesystem!");
   }else{
+    // first off we need to make the root, then we recurse through the app and make all the other routes
     const routeObj: RouteObject = {
-      path: "/",
+      path: "",
       element: tree.root[0].element,
       children: tree.root.slice(1).map(value => {
         return buildSegment(value);
       })
     };
-    console.log(tree.root);
-    const customRouteObj: RouteObject = {
-      path: "/",
-      element: tree.root[0].element,
-      children: [
-        {
-          path: "bucket",
-          element: tree.root[2].element,
-          children: [
-            {
-              path: ":liquid",
-              element: tree.root[2].children[0].element
-              // element: Win.default()
-            }
-          ]
-        }
-      ]
-    };
-    console.log("AAAAA");
-    console.log(tree.root[2].children[0].element);
-    console.log(Win.default);
-    console.log("BBBBB");
-    const routes = useRoutes([customRouteObj]);
-    console.log(routes);
-    console.log(routeObj);
-    console.log("CCC");
-    const imports = import.meta.globEager("/src/windows/**/Window.tsx");
-    console.log(imports["/src/windows/bucket/$liquid/Window.tsx"].default());
-    console.log(<Win.default/>);
-    console.log("CCC");
-
+    // finally we grab the route to render
+    const routes = useRoutes([routeObj]);
+    // and render it
     return (
       <React.Fragment>
         {routes}
