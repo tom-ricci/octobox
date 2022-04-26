@@ -153,7 +153,7 @@ const bootstrap = async (config: Config): Promise<void> => {
   utils.logSpeak("Bootstrapping...");
   // create vite app
   // install in dir (we can't use the execInPath or execInPathParent utility here because the path doesn't exist yet)
-  execSync(`npm create vite@2.8.0 ${ utils.path } -- --template react-ts`, { cwd: "./" });
+  execSync(`npm create vite@2.9.2 ${ utils.path } -- --template react-ts`, { cwd: "./" });
   // now we can though, so we'll continue to do so
   utils.execInPath("npm i");
   // clean up the app
@@ -169,11 +169,10 @@ import ReactDOM from "react-dom";
 import "./styles/main.scss";
 import { App } from "./App";
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App/>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
 `);
   fs.writeFileSync(`${ utils.path }/src/App.tsx`, `import React, { FC, ReactElement } from "react";
