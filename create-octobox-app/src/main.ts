@@ -165,7 +165,7 @@ const bootstrap = async (config: Config): Promise<void> => {
   fs.unlinkSync(`${ utils.path }/src/favicon.svg`);
   // add our own versions of some removed files
   fs.writeFileSync(`${ utils.path }/src/main.tsx`, `import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./styles/main.scss";
 import { App } from "./App";
 
