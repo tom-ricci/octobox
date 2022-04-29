@@ -1,10 +1,9 @@
 TODOs for dynamic routing.
 
-TODO: npm install react-router-dom -D
+TODO: npm install react-router-dom history -D (lock RR and history to latest and the version used by RR, respectively)
 TODO: add Filesystem component to octobox-utils
 TODO: add Window.txt inside src/windows
 TODO: change src/pages to be src/windows
 TODO: add <Filesystem/> to App.tsx
 TODO: add option to have src/windows/Window.txt to have an Outlet and a default and wildcard
-TODO: npm install react-uuid -D @types/uuid in octobox-utils
-TODO: maybe make react-router a peer of octobox-utils?
+TODO: maybe make react-router a peer of octobox-utils
