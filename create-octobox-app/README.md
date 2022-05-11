@@ -35,6 +35,11 @@ Make sure to use the `internal` argument in app or unit test development. For ex
 npm create octobox-app@latest -- internal $ARGS
 ```
 
+You can install Octobox and its dependencies locally using `npm run install` if for whatever reason they're uninstalled, overwritten, etc.
+
 You can clean up your environment with `npm run uninstall`.
 
-At the time of writing, setting `$COMMIT_NAME` to `-b v2` will clone the latest version.
+At the time of writing, setting `$COMMIT_NAME` to `-b v2` will clone the latest version when installing locally. For example, in Bash:
+```shell
+export COMMIT_NAME="b -v2"
+```

@@ -1,14 +1,16 @@
 import React, { FC, ReactElement } from "react";
-import { Filesystem } from "./components/Filesystem";
+import { OldFilesystem } from "./components/OldFilesystem";
+import { WindowManager } from "./components/routing/WindowManager";
 
 interface Props {
 
 }
 
 export const App: FC<Props> = (): ReactElement => {
+  new WindowManager().renderable();
   return (
     <React.Fragment>
-      <Filesystem/>
+      {/*<OldFilesystem basename={""}/>*/}
     </React.Fragment>
   );
 };
