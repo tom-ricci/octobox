@@ -30,14 +30,14 @@ git clone https://github.com/tom-ricci/octobox.git $COMMIT_NAME ; cd ./octobox/c
 It's fully self-contained, and will delete all test artifacts (including the repo if you're using the command above).
 
 ### Useful Info
-* You can install Octobox and its dependencies locally using `npm run install` if for whatever reason they're uninstalled, overwritten, etc.
-* You can clean up your environment with `npm run uninstall`.
+* You can install Octobox and its dependencies locally using `npm run dev:install` if for whatever reason they're uninstalled, overwritten, etc.
+* You can clean up your environment with `npm run dev:uninstall`.
 * At the time of writing, setting `$COMMIT_NAME` to `-b v2` will clone the latest version when installing locally. For example, in Bash:
 ```shell
  export COMMIT_NAME="-b v2"
 ```
 * Octobox requires git, Node 16, npm 8, and supports Bash and Powershell. It *should* also run fine on zsh or other \*nix terminals.
-* Make sure to use the `internal` argument in app or unit test development. This tells Octobox to *link* any Octobox packages being depended on rather than *install* them. This allows you to use local copies of Octobox's packages rather than the published ones on npm, which may be useful for a variety of reasons. You will need to have Ocobox's packages locally linked for this to work, but Octobox takes care of that for you before executing tests and when you execute `npm run install`.\
+* Make sure to use the `internal` argument in app or unit test development. This tells Octobox to *link* any Octobox packages being depended on rather than *install* them. This allows you to use local copies of Octobox's packages rather than the published ones on npm, which may be useful for a variety of reasons. You will need to have Ocobox's packages locally linked for this to work, but Octobox takes care of that for you before executing tests and when you execute `npm run dev:install`.\
 For example:
 ```shell
 npm create octobox-app@latest -- internal $ARGS
