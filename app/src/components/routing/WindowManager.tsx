@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
 import { LoaderFn, UnloaderFn } from "@tanstack/react-location";
 import { MetaTags } from "./MetaTags";
+import { DefaultError } from "./DefaultError";
+import { DefaultPending } from "./DefaultPending";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
 
@@ -75,6 +77,9 @@ export class WindowManager {
     // sort our tree by route importance. (first index, then static, then parameterized, then wild)
     this._tree = this._branch;
     this.sort(this._tree);
+    // finally, make the error and pending components cascade (this means that all children without an error or pending element will inherit the ones of their parent or the default if they don't have a parent)
+    this.cascade(this._tree, <DefaultError/>, <DefaultPending/>);
+    console.log(this._tree);
   }
 
   /**
@@ -243,6 +248,38 @@ export class WindowManager {
             return 0;
           }
         });
+      }
+    }
+  }
+
+  /**
+   * Makes error and pending elements cascade down a sorted tree.
+   * @param tree
+   * @param err
+   * @param pend
+   * @private
+   */
+  private cascade(tree: Tree, err: ReactNode, pend: ReactNode) {
+    if(Array.isArray(tree)) {
+      for(const child of tree) {
+        // for every child, check if it has an error or pending element. if it doesnt, set it to the one passed by the method, which will always either be the default element or the element of the parent.
+        if("error" in child && child.error !== undefined) {
+          err = child.error;
+        }else if(err !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          child.error = err;
+        }
+        if("pending" in child && child.pending !== undefined) {
+          pend = child.pending;
+        }else if(pend !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          child.pending = pend;
+        }
+        if("children" in child) {
+          this.cascade(child.children, err, pend);
+        }
       }
     }
   }
