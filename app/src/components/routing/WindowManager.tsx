@@ -19,14 +19,29 @@ type Leaf = [{
 // Just exists so I know where a branch becomes a tree.
 type Tree = Branch | Leaf | undefined;
 
+/**
+ * The Config interface represents a route config Octobox provides. As Octobox uses React Location under the hood this is not the <em>actual</em> config, but it contains all relevant data about routes.
+ */
+export interface Config {
+  path: string;
+  component?: () => Promise<any>;
+  tags?: Promise<MetaTags>;
+  loader?: Promise<LoaderFn<any>>;
+  unloader?: Promise<UnloaderFn<any>>;
+  error?: ReactNode;
+  pending?: ReactNode;
+  children?: [Config];
+}
+
 export class WindowManager {
 
   private _basename;
   private _branch: Branch | undefined;
   private _tree: Tree | undefined;
+  private _config: Config | null = null;
 
-  get tree() {
-    return this._tree;
+  get configuration() {
+    return this._config;
   }
 
   constructor(basename?: string) {
@@ -79,7 +94,7 @@ export class WindowManager {
     this.sort(this._tree);
     // finally, make the error and pending components cascade (this means that all children without an error or pending element will inherit the ones of their parent or the default if they don't have a parent)
     this.cascade(this._tree, <DefaultError/>, <DefaultPending/>);
-    console.log(this._tree);
+    this._config = this.configure(this._tree);
   }
 
   /**
@@ -252,6 +267,12 @@ export class WindowManager {
     }
   }
 
+  /*
+  *
+  * Quick note: Yeah, I know the increased use of disabling TS down here kinda defeats the purpose of using TS, but it makes it much easier to deal with. Once in a while types aren't that helpful.
+  *
+  * */
+
   /**
    * Makes error and pending elements cascade down a sorted tree.
    * @param tree
@@ -280,6 +301,93 @@ export class WindowManager {
         if("children" in child) {
           this.cascade(child.children, err, pend);
         }
+      }
+    }
+  }
+
+  /**
+   * Builds an Octobox route configuration from the tree which can be used to render a RL route configuration.
+   * @param tree
+   * @private
+   */
+  private configure(tree: Tree): Config | null {
+    // we dont actually have the root file yet because that's not considered a route by RL and therefore it doesn't logically make sense to deal with it earlier on. we need to do it here.
+    // glob for one file here here because its easier to handle nonexistent files this way rather than using dynamic imports
+    const glob = import.meta.glob("/src/windows/Window.tsx");
+    let comp: undefined | (() => Promise<{[p: string]: any}>) = undefined;
+    for(const property in glob) {
+      comp = glob[property];
+    }
+    // assuming the file exists and the tree is undefined (which it *should* always be but its worth checking anyway), add the component, meta, and loaders for the file (if they exist too)
+    if(comp !== undefined && tree !== undefined) {
+      if(!("component" in tree[0])) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        tree[0].component = () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>));
+      }
+      if(!("tags" in tree[0])) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        tree[0].tags = comp().then((mod) => {
+          if("Tags" in mod) {
+            return mod["Tags"];
+          }else{
+            return undefined;
+          }
+        });
+      }
+      if(!("loader" in tree[0])) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        tree[0].loader = comp().then((mod) => {
+          if("Loader" in mod) {
+            return mod["Loader"];
+          }else{
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            return async () => {};
+          }
+        });
+      }
+      if(!("unloader" in tree[0])) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        tree[0].unloader = comp().then((mod) => {
+          if("Unloader" in mod) {
+            return mod["Unloader"];
+          }else{
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            return async () => {};
+          }
+        });
+      }
+    }
+    // convert the tree to a config if it exists
+    if(tree !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const config: Config = tree[0];
+      this.finalize(config);
+      return config;
+    }else{
+      return null;
+    }
+  }
+
+  /**
+   * Finalizes the config, which in this context just means changing node.value to node.path.
+   * @private
+   */
+  private finalize(config: Config) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const val = config.value;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    delete config.value;
+    config.path = val;
+    if(config.children !== undefined) {
+      for(const child of config.children) {
+        this.finalize(child);
       }
     }
   }

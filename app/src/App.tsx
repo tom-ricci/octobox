@@ -7,7 +7,9 @@ interface Props {
 }
 
 export const App: FC<Props> = (): ReactElement => {
-  new WindowManager().renderable();
+  const wm = new WindowManager();
+  wm.renderable();
+  console.log(wm.configuration);
   return (
     <React.Fragment>
       {/*<OldFilesystem basename={""}/>*/}
