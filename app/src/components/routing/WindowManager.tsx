@@ -93,7 +93,24 @@ export class WindowManager {
     this._tree = this._branch;
     this.sort(this._tree);
     // finally, make the error and pending components cascade (this means that all children without an error or pending element will inherit the ones of their parent or the default if they don't have a parent)
-    this.cascade(this._tree, <DefaultError/>, <DefaultPending/>);
+    // since we never resolved the root route (and will do it in the configure method), we also never resolved the root pending and error elements. we need to do that here.
+    // we're also using glob for easier handling of nonexistent files
+    const rerror = import.meta.globEager("/src/windows/$error/Window.tsx");
+    const rpending = import.meta.globEager("/src/windows/$pending/Window.tsx");
+    let rerrorElement = <DefaultError/>;
+    let rpendingElement = <DefaultPending/>;
+    // these loops only result in 0 or 1 runs, so its fine to use them
+    for(const property in rerror) {
+      const mod = rerror[property].default;
+      rerrorElement = mod ? React.createElement(mod) : <DefaultError/>;
+    }
+    for(const property in rpending) {
+      const mod = rpending[property].default;
+      rpendingElement = mod ? React.createElement(mod) : <DefaultPending/>;
+    }
+    // now cascade
+    this.cascade(this._tree, rerrorElement, rpendingElement);
+    // convert it into a configuration. this imports the root component and converts it into a proper nb tree
     this._config = this.configure(this._tree);
   }
 

@@ -7,7 +7,7 @@ interface Props {
 const Window: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
-
+      <p>root error!</p>
     </React.Fragment>
   );
 };
