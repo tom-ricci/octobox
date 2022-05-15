@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import { LoaderFn, UnloaderFn } from "@tanstack/react-location";
 import { MetaTags } from "./MetaTags";
-import { DefaultError } from "./DefaultError";
-import { DefaultPending } from "./DefaultPending";
+import { DefaultError } from "./defaults/DefaultError";
+import { DefaultPending } from "./defaults/DefaultPending";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
 
@@ -49,10 +49,10 @@ export class WindowManager {
   }
 
   /**
-   * Returns a router the user can render in the DOM.
+   * Creates a routing configuration.
    */
-  public renderable() {
-    return this.find();
+  public create() {
+    this.find();
   }
 
   /**
@@ -410,4 +410,3 @@ export class WindowManager {
   }
 
 }
-

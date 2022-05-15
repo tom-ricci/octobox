@@ -21,4 +21,6 @@ TODO: abstract and organize all the routing code
 
 NEW TODOS:
 
-TODO: in octobox-utils, npm i @tanstack/react-location-devtools
+TODO: in octobox-utils, npm i @tanstack/react-location
+TODO: put our components in octobox-utils
+TODO: export RL
