@@ -36,7 +36,7 @@ export const OldAnchor: FC<Props> = ({ children, to, prefetch, ...props }): Reac
           }
         }
       }
-      // TODO: we need to rethink how routes will be defined. this must encompass rendering, meta, preloading, data fetching, data mutation, and dx
+      // NOLONGERTODO( this is now being worked on in the RL integration): we need to rethink how routes will be defined. this must encompass rendering, meta, preloading, data fetching, data mutation, and dx
       console.log(resolution);
       const elem = renderMatches(resolution);
       // if(!dir.startsWith("/")) {

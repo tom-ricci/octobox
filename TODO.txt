@@ -1,24 +1,3 @@
-TODOs for dynamic routing.
-
-TODO: npm install react-router-dom -D
-TODO: add Window.txt inside src/windows
-TODO: change src/pages to be src/windows
-TODO: add <OldFilesystem/> to App.tsx
-TODO: make src/windows/Window.txt have an Outlet and a default and wildcard
-TODO: maybe make react-router a peer of octobox-utils
-TODO: ask for custom basename, and if so add the basename prop to OldFilesystem
-TODO: make loading spinner fallback
-TODO: attempt adding a timeout to the fallback
-
-TODOs in the octobox-utils package
-
-TODO: npm install react-router-dom@6.3.0 -- maybe we'll also need to install history? hopefully not
-TODO: add OldFilesystem to package
-TODO: add OldAnchor to package
-TODO: add StaticAnchor (Link reload={true} wrapper), add SmartAnchor (NavLink wrapper)
-TODO: abstract and organize all the routing code
-
-
 NEW TODOS:
 
 TODO: in octobox-utils, npm i @tanstack/react-location

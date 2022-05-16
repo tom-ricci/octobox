@@ -1,17 +1,24 @@
+/**
+ *
+ * Quick disclaimer about this code: Sure it can definetely be optimized, but its not very expensive given
+ *
+ */
+
 import React, { ReactNode } from "react";
 import { LoaderFn, UnloaderFn } from "@tanstack/react-location";
-import { MetaTags } from "./MetaTags";
+import { MetaTags } from "./api/MetaTags";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
+import { Loader, Unloader } from "./api/Loaders";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
 
 type Leaf = [{
   value: string,
-  component: () => Promise<any>,
-  tags?: Promise<MetaTags>,
-  loader?: Promise<LoaderFn<any>>,
-  unloader?: Promise<UnloaderFn<any>>,
+  component: () => Promise<ReactNode>,
+  tags?: () => Promise<Promise<MetaTags>> | undefined,
+  loader?: () => Promise<Promise<Loader> | undefined>
+  unloader?: () => Promise<Promise<Unloader> | undefined>
   error?: ReactNode,
   pending?: ReactNode
 }];
@@ -24,13 +31,13 @@ type Tree = Branch | Leaf | undefined;
  */
 export interface Config {
   path: string;
-  component?: () => Promise<any>;
-  tags?: Promise<MetaTags>;
-  loader?: Promise<LoaderFn<any>>;
-  unloader?: Promise<UnloaderFn<any>>;
+  component?: () => Promise<ReactNode>;
+  tags?: () => Promise<Promise<MetaTags>>,
+  loader?: () => Promise<Promise<Loader> | undefined>
+  unloader?: () => Promise<Promise<Unloader> | undefined>
   error?: ReactNode;
   pending?: ReactNode;
-  children?: [Config];
+  children?: Config[];
 }
 
 export class WindowManager {
@@ -203,29 +210,34 @@ export class WindowManager {
           component: () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>)),
           pending: extras.pending,
           error: extras.error,
-          tags: comp().then((mod) => {
+          tags: async (): Promise<Promise<MetaTags>> => {
+            const mod = await comp();
             if("Tags" in mod) {
               return mod["Tags"];
             }else{
-              return undefined;
+              return {};
             }
-          }),
-          loader: comp().then((mod) => {
+          },
+          loader: async (): Promise<Promise<Loader> | undefined> => {
+            const mod = comp();
             if("Loader" in mod) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               return mod["Loader"];
             }else{
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              return async () => {};
+              return undefined;
             }
-          }),
-          unloader: comp().then((mod) => {
+          },
+          unloader: async (): Promise<Promise<Unloader> | undefined> => {
+            const mod = comp();
             if("Unloader" in mod) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               return mod["Unloader"];
             }else{
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              return async () => {};
+              return undefined;
             }
-          })
+          }
         };
       }
     }
@@ -328,14 +340,14 @@ export class WindowManager {
    * @private
    */
   private configure(tree: Tree): Config | null {
-    // we dont actually have the root file yet because that's not considered a route by RL and therefore it doesn't logically make sense to deal with it earlier on. we need to do it here.
+    // we dont actually have the root file yet because that's not really considered a route by my standards. since it always resolves, it doesn't logically make sense to deal with it earlier on imo. we need to do it here.
     // glob for one file here here because its easier to handle nonexistent files this way rather than using dynamic imports
     const glob = import.meta.glob("/src/windows/Window.tsx");
     let comp: undefined | (() => Promise<{[p: string]: any}>) = undefined;
     for(const property in glob) {
       comp = glob[property];
     }
-    // assuming the file exists and the tree is undefined (which it *should* always be but its worth checking anyway), add the component, meta, and loaders for the file (if they exist too)
+    // assuming the file exists and the tree isnt undefined (which it *should* always be but its worth checking anyway) add the component, meta, and loaders (if they exist)
     if(comp !== undefined && tree !== undefined) {
       if(!("component" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -345,37 +357,52 @@ export class WindowManager {
       if(!("tags" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tree[0].tags = comp().then((mod) => {
-          if("Tags" in mod) {
-            return mod["Tags"];
+        tree[0].tags = async (): Promise<Promise<MetaTags>> => {
+          if(comp !== undefined) {
+            const mod = await comp();
+            if("Tags" in mod) {
+              return mod["Tags"];
+            }else{
+              return {};
+            }
           }else{
-            return undefined;
+            return {};
           }
-        });
+        };
       }
       if(!("loader" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tree[0].loader = comp().then((mod) => {
-          if("Loader" in mod) {
-            return mod["Loader"];
-          }else{
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            return async () => {};
+        tree[0].loader = async (): Promise<Promise<Loader> | undefined> => {
+          if(comp !== undefined) {
+            const mod = comp();
+            if("Loader" in mod) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              return mod["Loader"];
+            }else{
+              return undefined;
+            }
           }
-        });
+          return undefined;
+        };
       }
       if(!("unloader" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tree[0].unloader = comp().then((mod) => {
-          if("Unloader" in mod) {
-            return mod["Unloader"];
-          }else{
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            return async () => {};
+        tree[0].unloader = async (): Promise<Promise<Unloader> | undefined> => {
+          if(comp !== undefined) {
+            const mod = comp();
+            if("Unloader" in mod) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              return mod["Unloader"];
+            }else{
+              return undefined;
+            }
           }
-        });
+          return undefined;
+        };
       }
     }
     // convert the tree to a config if it exists
