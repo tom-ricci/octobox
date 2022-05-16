@@ -1,15 +1,9 @@
-/**
- *
- * Quick disclaimer about this code: Sure it can definetely be optimized, but its not very expensive given
- *
- */
-
 import React, { ReactNode } from "react";
-import { LoaderFn, UnloaderFn } from "@tanstack/react-location";
 import { MetaTags } from "./api/MetaTags";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { Loader, Unloader } from "./api/Loaders";
+import { useRouter } from "@tanstack/react-location";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
 
@@ -27,7 +21,7 @@ type Leaf = [{
 type Tree = Branch | Leaf | undefined;
 
 /**
- * The Config interface represents a route config Octobox provides. As Octobox uses React Location under the hood this is not the <em>actual</em> config, but it contains all relevant data about routes.
+ * The Config interface represents a route config Octobox provides. As Octobox uses React Location under the hood, this is not the <em>actual</em> config (see {@link useRouter} for that), but it contains all relevant data about routes.
  */
 export interface Config {
   path: string;
@@ -40,6 +34,9 @@ export interface Config {
   children?: Config[];
 }
 
+/**
+ * Manages the logic of defining this apps {@link Config}.
+ */
 export class WindowManager {
 
   private _basename;

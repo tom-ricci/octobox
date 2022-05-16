@@ -1,12 +1,12 @@
 import { Config, WindowManager } from "./WindowManager";
-import { DefaultGenerics, Outlet, ReactLocation, Route, Router } from "@tanstack/react-location";
+import { DefaultGenerics, ReactLocation, Route, Router } from "@tanstack/react-location";
 import React, { ReactNode } from "react";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { PermissiveObject } from "./api/PermissiveObject";
 
 /**
- * Manages this app's isntance of ReactLocation.
+ * Manages this app's instance of ReactLocation.
  */
 export class LocationManager {
 
@@ -32,6 +32,7 @@ export class LocationManager {
     this.maxAge = maxAgeMs;
     this.minPending = minUnresponsiveMs;
     this.minPendingTimeout = minLoadingMs;
+    // setup rl instance
     this.rl = new ReactLocation<DefaultGenerics>();
   }
 
@@ -39,43 +40,63 @@ export class LocationManager {
    * Recreates the RL router to be exposed by this.router.
    */
   public update() {
+    // get route object
     this.windowManager.create();
     this.config = this.windowManager.configuration;
+    // if the object exists, build a config
     if(this.config !== null) {
+      // grab the default error and pending components
       const err = this.config.error ?? <DefaultError/>;
       const pend = this.config.error ?? <DefaultPending/>;
       const router = (<React.Fragment>
         <Router
+          // this is the rl instance, not the basename
           location={this.rl}
+          // this is the basename :)
           basepath={this.basename}
-          defaultLinkPreloadMaxAge={this.maxAge}
-          defaultLoaderMaxAge={this.maxAge}
           defaultErrorElement={err}
           defaultPendingElement={pend}
+          // we're only using one max age, unresponsive time, and pending time for everything for simplicity, so set that up here
+          defaultLinkPreloadMaxAge={this.maxAge}
+          defaultLoaderMaxAge={this.maxAge}
+          // this is the unresponsive timeout -- yes the name is weird
           defaultPendingMs={this.minPending}
+          // and this is the pending timeout
           defaultPendingMinMs={this.minPendingTimeout}
           useErrorBoundary={true}
+          // build our routes
           routes={[this.buildChild(this.config)]}/>
       </React.Fragment>);
+      // finally make it accessable to the user
       this._router = router;
     }
     // TODO: TESTING!!!
   }
 
+  /**
+   * Builds our router recursively.
+   * @param config
+   * @private
+   */
   private buildChild(config: Config): Route {
     const route: Route = {};
+    // first of all we're gonna be starting with the root, so if it is the root dont add a path
     if(config.path !== "$") {
       route.path = config.path;
     }
     route.caseSensitive = false;
+    // now the loaders. to prevent routes being imported by the window manager and thus not using the advantages of code splitting, we have a 2d promise. yes, a 2d promise. why does that sound so funny
     if(config.loader !== undefined) {
       route.loader = async (match, opts): Promise<PermissiveObject> => {
         if(config.loader !== undefined) {
+          // import it
           const loader = await config.loader();
           if(loader !== undefined) {
+            // if its async, load it now
             if(loader.constructor.name === "AsyncFunction") {
               return await loader();
             }else{
+              // otherwise, wait for its parent and load
               const loadedData = await opts.parentMatch?.loaderPromise?.then(data => loader(data));
               return loadedData ?? {};
             }
@@ -87,12 +108,15 @@ export class LocationManager {
         }
       };
     }
+    // the unloader is also a 2d promise, so we just need to dig for it
     if(config.unloader !== undefined) {
       route.unloader = async () => {
         // i dont know if its just me, but i really like the absurdity of this one liner
+        // anyway here we're just checking to make sure the unloader exists, and if so import it (and if that import exists), run it
         config.unloader !== undefined && await (await config.unloader())?.();
       };
     }
+    // now for the component, error, and pending, check if they exist and set them if so
     if(config.component !== undefined) {
       route.element = config.component;
     }
@@ -102,20 +126,24 @@ export class LocationManager {
     if(config.pending !== undefined) {
       route.pendingElement = config.pending;
     }
+    // get our meta tags (as another 2d promise)
+    // well use these later to set our meta.
+    if(config.tags !== undefined) {
+      route.meta = { tags: config.tags };
+    }
+    // recurse through the children and do the same thing
     if(config.children !== undefined) {
       route.children = [];
       for(const child of config.children) {
         route.children.push(this.buildChild(child));
       }
     }
-    if(config.tags !== undefined) {
-      route.meta = { tags: config.tags };
-    }
+    // we're done!
     return route;
   }
 
   /**
-   * Gets the most up-to-date RL router.
+   * Gets the current RL router. Note that this does not update the router.
    */
   get router() {
     return this._router;

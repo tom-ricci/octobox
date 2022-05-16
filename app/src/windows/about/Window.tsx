@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useMemo } from "react";
+import React, { FC, ReactElement } from "react";
 import { Outlet } from "@tanstack/react-location";
 
 interface Props {
