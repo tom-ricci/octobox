@@ -22,14 +22,14 @@ export interface StaticAnchorProps extends React.DetailedHTMLProps<React.AnchorH
   to: string;
 }
 
-export type Props = DynamicAnchorProps | StaticAnchorProps;
+export type AnchorProps = DynamicAnchorProps | StaticAnchorProps;
 
 /**
  * An Anchor is a link or anchor tag. It supports both client-side JavaScript routing and static routing if the "static" prop is passed. The "to" prop is the equavilent of the "href" attribute in HTML anchor tags; it's your link's destination. Preloading is set to happen at render by default, but this can be changed with the "preload" prop.
  * @param props
  * @constructor
  */
-export const Anchor: FC<Props> = (props): ReactElement => {
+export const Anchor: FC<AnchorProps> = (props): ReactElement => {
   if("static" in props && props.static) {
     // just render a normal anchor tag and tell it to reload on click. this is required for static routing
     return (
