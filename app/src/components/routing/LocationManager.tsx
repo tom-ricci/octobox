@@ -10,6 +10,16 @@ import { PermissiveObject } from "./api/PermissiveObject";
  */
 export class LocationManager {
 
+  private static age = Infinity;
+
+  static set maxage(maxage: number) {
+    this.age = maxage;
+  }
+
+  static get maxage() {
+    return this.age;
+  }
+
   private config: Config | null = null;
   private windowManager: WindowManager;
   private rl: ReactLocation;
@@ -30,6 +40,7 @@ export class LocationManager {
     this.basename = basename;
     this.windowManager = new WindowManager(basename);
     this.maxAge = maxAgeMs;
+    LocationManager.maxage = this.maxAge;
     this.minPending = minUnresponsiveMs;
     this.minPendingTimeout = minLoadingMs;
     // setup rl instance

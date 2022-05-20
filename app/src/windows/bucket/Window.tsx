@@ -1,5 +1,6 @@
 import React, { FC, ReactElement } from "react";
 import { Outlet } from "@tanstack/react-location";
+import { Anchor, Preload } from "../../components/routing/api/Anchor";
 
 interface Props {
 
