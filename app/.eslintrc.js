@@ -30,6 +30,9 @@ module.exports = {
   "rules": {
     "@typescript-eslint/no-empty-interface": [
       "off"
+    ],
+    "react/no-unescaped-entities": [
+      "off"
     ]
   }
 };

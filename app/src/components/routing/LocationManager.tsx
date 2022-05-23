@@ -122,9 +122,10 @@ export class LocationManager {
     // the unloader is also a 2d promise, so we just need to dig for it
     if(config.unloader !== undefined) {
       route.unloader = async () => {
-        // i dont know if its just me, but i really like the absurdity of this one liner
-        // anyway here we're just checking to make sure the unloader exists, and if so import it (and if that import exists), run it
-        config.unloader !== undefined && await (await config.unloader())?.();
+        // here we're just checking to make sure the unloader exists, and if so import it (and if that import exists), run it
+        if(config.unloader !== undefined) {
+          await (await config.unloader())?.();
+        }
       };
     }
     // now for the component, error, and pending, check if they exist and set them if so

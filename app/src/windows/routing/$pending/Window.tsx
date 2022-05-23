@@ -7,7 +7,9 @@ interface Props {
 const Window: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
-      <p>root error!</p>
+      <div className={"loader-container"}>
+        <div className={"loader m-auto"}/>
+      </div>
     </React.Fragment>
   );
 };

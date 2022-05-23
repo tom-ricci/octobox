@@ -1,16 +1,14 @@
 import React, { FC, ReactElement } from "react";
-import { Outlet } from "@tanstack/react-location";
 
 interface Props {
 
 }
 
 const Window: FC<Props> = (): ReactElement => {
-
   return (
     <React.Fragment>
-      <h1>about</h1>
-      <Outlet/>
+      <p className={"font-mono pb-3"}>/</p>
+      <p>Welcome to Octobox's routing demo! Click on one of the links to the side and see what happens.</p>
     </React.Fragment>
   );
 };

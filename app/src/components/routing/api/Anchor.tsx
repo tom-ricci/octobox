@@ -32,9 +32,19 @@ export type AnchorProps = DynamicAnchorProps | StaticAnchorProps;
 export const Anchor: FC<AnchorProps> = (props): ReactElement => {
   if("static" in props && props.static) {
     // just render a normal anchor tag and tell it to reload on click. this is required for static routing
+    const wprops = { ...props };
+    if("href" in wprops) {
+      delete wprops.href;
+    }
+    if("onClick" in wprops) {
+      delete wprops.onClick;
+    }
+    if("static" in wprops) {
+      delete wprops.static;
+    }
     return (
       <React.Fragment>
-        <a href={props.to} onClick={useReload}>
+        <a href={wprops.to} onClick={useReload} {...wprops}>
           {props.children}
         </a>
       </React.Fragment>

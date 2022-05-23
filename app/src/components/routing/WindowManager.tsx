@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { MetaTags } from "./api/MetaTags";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
-import { Loader, Unloader } from "./api/Loaders";
+import { WindowLoader, WindowUnloader } from "./api/Loaders";
 import { useRouter } from "@tanstack/react-location";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
@@ -11,8 +11,8 @@ type Leaf = [{
   value: string,
   component: () => Promise<ReactNode>,
   tags?: () => Promise<Promise<MetaTags>> | undefined,
-  loader?: () => Promise<Promise<Loader> | undefined>
-  unloader?: () => Promise<Promise<Unloader> | undefined>
+  loader?: () => Promise<Promise<WindowLoader> | undefined>
+  unloader?: () => Promise<Promise<WindowUnloader> | undefined>
   error?: ReactNode,
   pending?: ReactNode
 }];
@@ -27,8 +27,8 @@ export interface Config {
   path: string;
   component?: () => Promise<ReactNode>;
   tags?: () => Promise<Promise<MetaTags>>,
-  loader?: () => Promise<Promise<Loader> | undefined>
-  unloader?: () => Promise<Promise<Unloader> | undefined>
+  loader?: () => Promise<Promise<WindowLoader> | undefined>
+  unloader?: () => Promise<Promise<WindowUnloader> | undefined>
   error?: ReactNode;
   pending?: ReactNode;
   children?: Config[];
@@ -215,8 +215,8 @@ export class WindowManager {
               return {};
             }
           },
-          loader: async (): Promise<Promise<Loader> | undefined> => {
-            const mod = comp();
+          loader: async (): Promise<Promise<WindowLoader> | undefined> => {
+            const mod = await comp();
             if("Loader" in mod) {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -225,8 +225,8 @@ export class WindowManager {
               return undefined;
             }
           },
-          unloader: async (): Promise<Promise<Unloader> | undefined> => {
-            const mod = comp();
+          unloader: async (): Promise<Promise<WindowUnloader> | undefined> => {
+            const mod = await comp();
             if("Unloader" in mod) {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -370,9 +370,9 @@ export class WindowManager {
       if(!("loader" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tree[0].loader = async (): Promise<Promise<Loader> | undefined> => {
+        tree[0].loader = async (): Promise<Promise<WindowLoader> | undefined> => {
           if(comp !== undefined) {
-            const mod = comp();
+            const mod = await comp();
             if("Loader" in mod) {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
@@ -387,9 +387,9 @@ export class WindowManager {
       if(!("unloader" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        tree[0].unloader = async (): Promise<Promise<Unloader> | undefined> => {
+        tree[0].unloader = async (): Promise<Promise<WindowUnloader> | undefined> => {
           if(comp !== undefined) {
-            const mod = comp();
+            const mod = await comp();
             if("Unloader" in mod) {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore

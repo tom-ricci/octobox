@@ -8,9 +8,9 @@ import { LoaderData } from "@tanstack/react-location";
  *
  * If the loader is an async function, the loader won't wait for its parent loader and execute immediately. The data argument will be undefined.
  */
-export type Loader = (data?: Partial<LoaderData<unknown>>) => PermissiveObject | Promise<PermissiveObject>;
+export type WindowLoader = (data?: Partial<LoaderData<unknown>>) => PermissiveObject | Promise<PermissiveObject>;
 
 /**
  * An Unloader defines a Window's unloader function. When a user transitions to another Window, the previous Window's unloader function will be called asynchronously. This is useful if you need to clean up anything after leaving a Window.
  */
-export type Unloader = () => Promise<void>;
+export type WindowUnloader = () => Promise<void>;
