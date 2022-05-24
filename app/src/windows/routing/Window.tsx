@@ -29,9 +29,11 @@ const Window: FC<Props> = (): ReactElement => {
               <Anchor to={"render"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/render</Anchor>
               <Anchor to={"hover"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/hover</Anchor>
               <Anchor to={"never"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/never</Anchor>
-              <Anchor to={"sync/child"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/sync/child</Anchor>
+              <Anchor to={"nested/octotest"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/:variable</Anchor>
+              <Anchor to={"nested/sync"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/child</Anchor>
               <Anchor to={"expensive"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/expensive</Anchor>
-              <Anchor to={"notfound"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/notfound</Anchor>
+              <Anchor to={"notfound"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/notfound</Anchor>
+              <Anchor to={"error"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/error</Anchor>
             </div>
             <div className={"flex-grow border-l-2 border-gray-300 p-3"}>
               <Outlet/>

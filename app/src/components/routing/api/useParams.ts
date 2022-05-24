@@ -9,7 +9,7 @@ export const useParams = (...params: string[]): PermissiveObject => {
   const loaded: PermissiveObject = {};
   const match = useMatch();
   for(const arg of params) {
-    loaded[arg] = match.data[arg];
+    loaded[arg] = match.params[arg];
   }
   return loaded;
 };

@@ -11,7 +11,7 @@ const Window: FC<Props> = (): ReactElement => {
   const { sync } = useLoader("sync");
   return (
     <React.Fragment>
-      <p className={"font-mono pb-3"}>/sync</p>
+      <p className={"font-mono pb-3"}>/nested</p>
       <p className={"pb-3"}>This component is the parent of the component below. It has a data loader returning the value { sync as number }.</p>
       <hr className={"pb-3"}/>
       <Outlet/>
