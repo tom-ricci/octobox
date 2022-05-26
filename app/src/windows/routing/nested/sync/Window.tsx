@@ -16,7 +16,7 @@ const Window: FC<Props> = (): ReactElement => {
   );
 };
 
-export const Loader: WindowLoader = (data) => {
+export const Loader: WindowLoader = async (data) => {
   return { parent: data?.sync, child: Date.now() };
 };
 

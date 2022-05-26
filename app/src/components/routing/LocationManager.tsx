@@ -4,6 +4,7 @@ import React, { ReactNode } from "react";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { PermissiveObject } from "./api/PermissiveObject";
+import { data } from "autoprefixer";
 
 /**
  * Manages this app's instance of ReactLocation.
@@ -104,11 +105,11 @@ export class LocationManager {
           const loader = await config.loader();
           if(loader !== undefined) {
             // if its async, load it now
-            if(loader.constructor.name === "AsyncFunction") {
+            if(loader.length === 0) {
               return await loader();
             }else{
               // otherwise, wait for its parent and load
-              const loadedData = await opts.parentMatch?.loaderPromise?.then(data => loader(data));
+              const loadedData = await loader(await opts.parentMatch?.loaderPromise);
               return loadedData ?? {};
             }
           }else{
