@@ -1,7 +1,8 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC, ReactElement, useContext } from "react";
 import { Outlet } from "@tanstack/react-location";
 import { Spacer } from "octobox-utils";
-import { Anchor, Preload } from "../../components/routing/api/Anchor";
+import { Anchor, AnchorContext, Preload } from "../../components/routing/api/Anchor";
+import { AnchorState, useAnchorState } from "../../components/routing/api/AnchorState";
 
 interface Props {
 
@@ -28,7 +29,13 @@ const Window: FC<Props> = (): ReactElement => {
               <Anchor to={"./"} className={"font-mono block text-fuchsia-600 pb-1"}>/</Anchor>
               <Anchor to={"render"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/render</Anchor>
               <Anchor to={"hover"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/hover</Anchor>
-              <Anchor to={"never"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/never</Anchor>
+              <Anchor to={"never"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>
+                <AnchorState>
+                  {state => {
+                    return state ? <span className={"text-blue-500"}>/never</span> : <span>/never</span>;
+                  }}
+                </AnchorState>
+              </Anchor>
               <Anchor to={"nested/octotest"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/:variable</Anchor>
               <Anchor to={"nested/sync"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/child</Anchor>
               <Anchor to={"expensive"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/expensive</Anchor>

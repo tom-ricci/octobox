@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from "react";
+import React, { FC, ReactElement, ReactNode } from "react";
 import { LinkProps, useLoadRoute, Link } from "@tanstack/react-location";
 import { useCheckUrl } from "../useCheckUrl";
 import { LocationManager } from "../LocationManager";
@@ -15,6 +15,7 @@ export enum Preload {
 
 export interface DynamicAnchorProps extends LinkProps {
   preload?: Preload;
+  children?: ReactNode;
 }
 
 export interface StaticAnchorProps extends React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> {
@@ -44,9 +45,11 @@ export const Anchor: FC<AnchorProps> = (props): ReactElement => {
     }
     return (
       <React.Fragment>
-        <a href={wprops.to} onClick={useReload} {...wprops}>
-          {props.children}
-        </a>
+        <AnchorContext.Provider value={false}>
+          <a href={wprops.to} onClick={useReload} {...wprops}>
+            {props.children}
+          </a>
+        </AnchorContext.Provider>
       </React.Fragment>
     );
   }else if(typeof props.to === "string" && useCheckUrl(props.to)) {
@@ -93,18 +96,40 @@ export const Anchor: FC<AnchorProps> = (props): ReactElement => {
     }
     return (
       <React.Fragment>
-        {/*render our link, either preloading on hover or not preloading at all*/}
+        {/*render our link, either preloading on hover or not preloading at all
+           we also need to pass the state for the useAnchorState hook to work, so do that too*/}
         {preloadOnHover
           ?
           <Link {...wprops} preload={LocationManager.maxage}>
-            {props.children}
+            { (state) => makeParentallyAwareLinkChild(state.isActive, props.children)}
           </Link>
           :
           <Link {...wprops} preload={0}>
-            {props.children}
+            { (state) => makeParentallyAwareLinkChild(state.isActive, props.children)}
           </Link>
         }
       </React.Fragment>
     );
   }
 };
+
+/**
+ * Makes a child of a RL Link element which has the current state of the parent Link (active or not) in context.
+ * @param active The state of the Link's activity.
+ * @param children The children of the Link.
+ * @constructor
+ */
+const makeParentallyAwareLinkChild = (active: boolean, children: ReactNode): ReactNode => {
+  return (
+    <React.Fragment>
+      <AnchorContext.Provider value={active}>
+        {children}
+      </AnchorContext.Provider>
+    </React.Fragment>
+  );
+};
+
+/**
+ * The context of Link activity used by parentally aware children.
+ */
+export const AnchorContext = React.createContext(false);
