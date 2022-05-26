@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Window: FC<Props> = (): ReactElement => {
-  const { time } = useLoader("time");
+  const { time } = useLoader();
   return (
     <React.Fragment>
       <p className={"font-mono pb-3"}>/render</p>

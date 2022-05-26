@@ -8,7 +8,7 @@ interface Props {
 }
 
 const Window: FC<Props> = (): ReactElement => {
-  const { data } = useLoader("data");
+  const { data } = useLoader();
   return (
     <React.Fragment>
       <p className={"font-mono pb-3"}>/expensive</p>

@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Window: FC<Props> = (): ReactElement => {
-  const { variable } = useParams("variable");
+  const { variable } = useParams();
   console.log(variable);
   return (
     <React.Fragment>

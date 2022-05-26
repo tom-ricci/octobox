@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Window: FC<Props> = (): ReactElement => {
-  const { parent, child } = useLoader("parent", "child");
+  const { parent, child } = useLoader();
   return (
     <React.Fragment>
       <p className={"font-mono pb-3"}>/sync</p>
