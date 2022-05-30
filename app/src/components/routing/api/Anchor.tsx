@@ -3,15 +3,7 @@ import { LinkProps, useLoadRoute, Link } from "@tanstack/react-location";
 import { useCheckUrl } from "../useCheckUrl";
 import { LocationManager } from "../LocationManager";
 import { useReload } from "./useReload";
-
-/**
- * The Preload enumerator determines when an Anchor will preload its
- */
-export enum Preload {
-  RENDER,
-  HOVER,
-  NEVER
-}
+import { Preload } from "./Preload";
 
 export interface DynamicAnchorProps extends LinkProps {
   preload?: Preload;
@@ -26,7 +18,7 @@ export interface StaticAnchorProps extends React.DetailedHTMLProps<React.AnchorH
 export type AnchorProps = DynamicAnchorProps | StaticAnchorProps;
 
 /**
- * An Anchor is a link or anchor tag. It supports both client-side JavaScript routing and static routing if the "static" prop is passed. The "to" prop is the equavilent of the "href" attribute in HTML anchor tags; it's your link's destination. Preloading is set to happen at render by default, but this can be changed with the "preload" prop.
+ * An Anchor is a link or anchor tag. It supports both client-side JavaScript routing and static routing if the "static" prop is passed. The "to" prop is the equavilent of the "href" attribute in HTML anchor tags; it's your anchor's destination. Preloading is set to happen at render by default, but this can be changed with the "preload" prop. For other props, see <a href="https://react-location.tanstack.com/docs/api#link">this</a>.
  * @param props
  * @constructor
  */

@@ -1,8 +1,9 @@
-import React, { FC, ReactElement, useContext } from "react";
+import React, { FC, ReactElement } from "react";
 import { Outlet } from "@tanstack/react-location";
 import { Spacer } from "octobox-utils";
-import { Anchor, AnchorContext, Preload } from "../../components/routing/api/Anchor";
-import { AnchorState, useAnchorState } from "../../components/routing/api/AnchorState";
+import { Anchor } from "../../components/routing/api/Anchor";
+import { Preload } from "../../components/routing/api/Preload";
+import { ActiveChild, InactiveChild } from "../../components/routing/api/AnchorChildren";
 
 interface Props {
 
@@ -29,16 +30,19 @@ const Window: FC<Props> = (): ReactElement => {
               <Anchor to={"./"} className={"font-mono block text-fuchsia-600 pb-1"}>/</Anchor>
               <Anchor to={"render"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/render</Anchor>
               <Anchor to={"hover"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/hover</Anchor>
-              <Anchor to={"never"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>
-                <AnchorState>
-                  {state => {
-                    return state ? <span className={"text-blue-500"}>/never</span> : <span>/never</span>;
-                  }}
-                </AnchorState>
-              </Anchor>
+              <Anchor to={"never"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/never</Anchor>
               <Anchor to={"nested/octotest"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/:variable</Anchor>
               <Anchor to={"nested/sync"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/child</Anchor>
               <Anchor to={"expensive"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/expensive</Anchor>
+              <Anchor to={"stateful"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>
+                <ActiveChild>
+                  <span className={"text-white bg-fuchsia-500 rounded px-1"}>/stateful</span>
+                </ActiveChild>
+                <InactiveChild>
+                  <span>/stateful</span>
+                </InactiveChild>
+              </Anchor>
+              <Anchor to={"redirect"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/redirect</Anchor>
               <Anchor to={"notfound"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/notfound</Anchor>
               <Anchor to={"error"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/error</Anchor>
             </div>

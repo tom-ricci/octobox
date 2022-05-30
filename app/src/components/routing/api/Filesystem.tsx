@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import { LocationManager } from "../LocationManager";
 
-interface Props {
+export interface FilesystemProps {
   basename?: string;
   maxAge?: number;
   unresponsiveMs?: number;
@@ -27,7 +27,7 @@ interface Props {
  * </ul>
  * @constructor
  */
-export const Filesystem: FC<Props> = ({ basename, unresponsiveMs, pendingMs, maxAge }): ReactElement => {
+export const Filesystem: FC<FilesystemProps> = ({ basename, unresponsiveMs, pendingMs, maxAge }): ReactElement => {
   const loc = new LocationManager(basename, maxAge, unresponsiveMs, pendingMs);
   loc.update();
   return (
