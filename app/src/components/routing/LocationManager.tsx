@@ -4,7 +4,8 @@ import React, { ReactNode } from "react";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { PermissiveObject } from "./api/PermissiveObject";
-import { data } from "autoprefixer";
+import { makeMetaHandlers } from "./meta_old/makeMetaHandlers";
+import { LocationInstance } from "./LocationInstance";
 
 /**
  * Manages this app's instance of ReactLocation.
@@ -38,6 +39,7 @@ export class LocationManager {
    * @param minLoadingMs The minimum time a loading screen can be shown from the click of a link. This helps prevent the pending route from flickering if the requested route loads quickly. The pending route will be forced to be shown for at least as long as this value, therefore letting the user see your pending UI long enough to understand what's happening before the route loads. Since this time is measured from the time a link is clicked, the pending UI will only actually be shown for <em>minUnresponsiveMs - minLoadingMs</em>, which is 500 milliseconds by default.
    */
   constructor(basename?: string, maxAgeMs = Infinity, minUnresponsiveMs = 500, minLoadingMs = 1000) {
+    // set settings
     this.basename = basename;
     this.windowManager = new WindowManager(basename);
     this.maxAge = maxAgeMs;
@@ -46,12 +48,15 @@ export class LocationManager {
     this.minPendingTimeout = minLoadingMs;
     // setup rl instance
     this.rl = new ReactLocation<DefaultGenerics>();
+    LocationInstance.setLocation(this.rl);
   }
 
   /**
    * Recreates the RL router to be exposed by this.router.
    */
   public update() {
+    // setup our meta handlers
+    makeMetaHandlers();
     // get route object
     this.windowManager.create();
     this.config = this.windowManager.configuration;
@@ -77,12 +82,20 @@ export class LocationManager {
           defaultPendingMinMs={this.minPendingTimeout}
           useErrorBoundary={true}
           // build our routes
-          routes={[this.buildChild(this.config)]}/>
+          routes={[this.build(this.config)]}>
+        </Router>
       </React.Fragment>);
       // finally make it accessable to the user
       this._router = router;
     }
-    // TODO: TESTING!!!
+  }
+
+  /**
+   * Builds the routes.
+   * @private
+   */
+  private build(config: Config): Route {
+    return this.buildChild(config);
   }
 
   /**
@@ -98,28 +111,28 @@ export class LocationManager {
     }
     route.caseSensitive = false;
     // now the loaders. to prevent routes being imported by the window manager and thus not using the advantages of code splitting, we have a 2d promise. yes, a 2d promise. why does that sound so funny
-    if(config.loader !== undefined) {
-      route.loader = async (match, opts): Promise<PermissiveObject> => {
-        if(config.loader !== undefined) {
-          // import it
-          const loader = await config.loader();
-          if(loader !== undefined) {
-            // if its async, load it now
-            if(loader.length === 0) {
-              return await loader();
-            }else{
-              // otherwise, wait for its parent and load
-              const loadedData = await loader(await opts.parentMatch?.loaderPromise);
-              return loadedData ?? {};
-            }
+    route.loader = async (match, opts): Promise<PermissiveObject> => {
+      if(config.loader !== undefined) {
+        // import it
+        const loader = await config.loader();
+        if(loader !== undefined) {
+          // if its async, load it now
+          if(loader.length === 0) {
+            return await loader();
           }else{
-            return {};
+            // otherwise, wait for its parent and load
+            const loadedData = await loader(await opts.parentMatch?.loaderPromise);
+            const meta = loadedData.meta;
+            delete loadedData.meta;
+            return loadedData ?? {};
           }
         }else{
           return {};
         }
-      };
-    }
+      }else{
+        return {};
+      }
+    };
     // the unloader is also a 2d promise, so we just need to dig for it
     if(config.unloader !== undefined) {
       route.unloader = async () => {
@@ -138,11 +151,6 @@ export class LocationManager {
     }
     if(config.pending !== undefined) {
       route.pendingElement = config.pending;
-    }
-    // get our meta tags (as another 2d promise)
-    // well use these later to set our meta.
-    if(config.tags !== undefined) {
-      route.meta = { tags: config.tags };
     }
     // recurse through the children and do the same thing
     if(config.children !== undefined) {

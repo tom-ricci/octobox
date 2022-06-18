@@ -7,7 +7,6 @@ interface Props {
 
 const Window: FC<Props> = (): ReactElement => {
   const { variable } = useParams();
-  console.log(variable);
   return (
     <React.Fragment>
       <p className={"font-mono pb-3"}>/:variable</p>

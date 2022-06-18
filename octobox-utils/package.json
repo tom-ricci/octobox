@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.0.1",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
     "eslint": "^8.13.0",
@@ -35,5 +36,8 @@
   },
   "peerDependencies": {
     "react": "^18.0.0"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
   }
 }

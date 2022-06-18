@@ -4,6 +4,7 @@ import { Spacer } from "octobox-utils";
 import { Anchor } from "../../components/routing/api/Anchor";
 import { Preload } from "../../components/routing/api/Preload";
 import { ActiveChild, InactiveChild } from "../../components/routing/api/AnchorChildren";
+import { MetaTags } from "../../components/routing/api/MetaTags";
 
 interface Props {
 
@@ -32,7 +33,7 @@ const Window: FC<Props> = (): ReactElement => {
               <Anchor to={"hover"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/hover</Anchor>
               <Anchor to={"never"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/never</Anchor>
               <Anchor to={"nested/octotest"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/:variable</Anchor>
-              <Anchor to={"nested/sync"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/child</Anchor>
+              <Anchor to={"nested/sync"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/nested/sync</Anchor>
               <Anchor to={"expensive"} preload={Preload.NEVER} className={"font-mono block text-fuchsia-600 pb-1"}>/expensive</Anchor>
               <Anchor to={"stateful"} preload={Preload.HOVER} className={"font-mono block text-fuchsia-600 pb-1"}>
                 <ActiveChild>
@@ -43,6 +44,7 @@ const Window: FC<Props> = (): ReactElement => {
                 </InactiveChild>
               </Anchor>
               <Anchor to={"redirect"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/redirect</Anchor>
+              <Anchor to={"meta"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/meta</Anchor>
               <Anchor to={"notfound"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/notfound</Anchor>
               <Anchor to={"error"} preload={Preload.RENDER} className={"font-mono block text-fuchsia-600 pb-1"}>/error</Anchor>
             </div>
