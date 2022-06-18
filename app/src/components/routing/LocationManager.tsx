@@ -123,6 +123,7 @@ export class LocationManager {
             // otherwise, wait for its parent and load
             const loadedData = await loader(await opts.parentMatch?.loaderPromise);
             const meta = loadedData.meta;
+            // TODO: meta
             delete loadedData.meta;
             return loadedData ?? {};
           }
