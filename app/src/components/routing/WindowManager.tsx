@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { MetaTags } from "./api/MetaTags";
 import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { WindowLoader, WindowUnloader } from "./api/Loaders";
@@ -10,7 +9,6 @@ type Branch = [{ value: string, children?: Branch | Leaf }];
 type Leaf = [{
   value: string,
   component: () => Promise<ReactNode>,
-  tags?: () => Promise<Promise<MetaTags>> | undefined,
   loader?: () => Promise<Promise<WindowLoader> | undefined>
   unloader?: () => Promise<Promise<WindowUnloader> | undefined>
   error?: ReactNode,
@@ -26,7 +24,6 @@ type Tree = Branch | Leaf | undefined;
 export interface Config {
   path: string;
   component?: () => Promise<ReactNode>;
-  tags?: () => Promise<Promise<MetaTags>>,
   loader?: () => Promise<Promise<WindowLoader> | undefined>
   unloader?: () => Promise<Promise<WindowUnloader> | undefined>
   error?: ReactNode;
@@ -201,20 +198,12 @@ export class WindowManager {
       if("children" in route[0]) {
         this.fill(route[0].children, comp, extras);
       }else{
-        // tell the branch what component it refers to, its pending and error components, its meta tags, and its data loaders
+        // tell the branch what component it refers to, its pending and error components, and its data loaders
         route[0] = {
           value: route[0].value,
           component: () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>)),
           pending: extras.pending,
           error: extras.error,
-          tags: async (): Promise<Promise<MetaTags>> => {
-            const mod = await comp();
-            if("Tags" in mod) {
-              return mod["Tags"];
-            }else{
-              return {};
-            }
-          },
           loader: async (): Promise<Promise<WindowLoader> | undefined> => {
             const mod = await comp();
             if("Loader" in mod) {
@@ -344,28 +333,12 @@ export class WindowManager {
     for(const property in glob) {
       comp = glob[property];
     }
-    // assuming the file exists and the tree isnt undefined (which it *should* always be but its worth checking anyway) add the component, meta, and loaders (if they exist)
+    // assuming the file exists and the tree isnt undefined (which it *should* always be but its worth checking anyway) add the component and loaders (if they exist)
     if(comp !== undefined && tree !== undefined) {
       if(!("component" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         tree[0].component = () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>));
-      }
-      if(!("tags" in tree[0])) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        tree[0].tags = async (): Promise<Promise<MetaTags>> => {
-          if(comp !== undefined) {
-            const mod = await comp();
-            if("Tags" in mod) {
-              return mod["Tags"];
-            }else{
-              return {};
-            }
-          }else{
-            return {};
-          }
-        };
       }
       if(!("loader" in tree[0])) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
