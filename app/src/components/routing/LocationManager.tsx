@@ -55,22 +55,11 @@ export class LocationManager {
    * Recreates the RL router to be exposed by this.router.
    */
   public update() {
-    // setup history listener
-    // this updates a variable representing the current history API location on every navigation. it's used to tell the metadata manager what metadata to use when its ready to edit the DOM
-    this.rl.history.listen((update) => {
-      if(update.location.pathname === "/") {
-        MetadataManager.path = "$";
-      }else{
-        MetadataManager.path = `$${update.location.pathname}`;
-      }
-    });
     // get route object
     this.windowManager.create();
     this.config = this.windowManager.configuration;
     // if the object exists, build a config
     if(this.config !== null) {
-      // setup meta
-      MetadataManager.manager = new MetadataManager(this.config);
       // grab the default error and pending components
       const err = this.config.error ?? <DefaultError/>;
       const pend = this.config.error ?? <DefaultPending/>;
@@ -92,6 +81,7 @@ export class LocationManager {
           useErrorBoundary={true}
           // build our routes
           routes={[this.build(this.config)]}>
+          <MetadataManager.VHead/>
         </Router>
       </React.Fragment>);
       // finally make it accessable to the user
@@ -118,6 +108,7 @@ export class LocationManager {
     if(config.path !== "$") {
       route.path = config.path;
     }
+    route.meta = { head: undefined };
     route.caseSensitive = false;
     // now the loaders. to prevent routes being imported by the window manager and thus not using the advantages of code splitting, we have a 2d promise. yes, a 2d promise. why does that sound so funny
     route.loader = async (match, opts): Promise<PermissiveObject> => {
@@ -132,10 +123,8 @@ export class LocationManager {
             // otherwise, wait for its parent and load
             const loadedData = await loader(await opts.parentMatch?.loaderPromise);
             const meta = loadedData.meta;
-            if(meta !== undefined && route.path !== undefined) {
-              MetadataManager.manager.update(route.path, meta);
-            }else if(route.path !== undefined) {
-              MetadataManager.manager.excuse(route.path);
+            if(meta !== undefined) {
+              route.meta!.head = MetadataManager.compile(meta);
             }
             delete loadedData.meta;
             return loadedData ?? {};

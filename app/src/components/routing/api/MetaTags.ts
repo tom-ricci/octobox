@@ -30,6 +30,7 @@ export type Link = {
   sizes?: string;
   title?: string
   type?: string;
+  key: never;
   [x: string]: string | undefined;
 }
 
@@ -43,5 +44,6 @@ export type Meta = {
   property?: string;
   scheme?: string;
   url?: string;
+  key: never;
   [x: string]: string | undefined;
 };
