@@ -1,6 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import { Outlet } from "@tanstack/react-location";
 import { Anchor } from "../components/routing/api/Anchor";
+import { WindowLoader } from "../components/routing/api/Loaders";
 
 interface Props {
 
@@ -19,6 +20,39 @@ const Window: FC<Props> = (): ReactElement => {
       </div>
     </React.Fragment>
   );
+};
+
+export const Loader: WindowLoader = async () => {
+  return {
+    metadata: {
+      title: "title1",
+      links: {
+        foo: {
+          href: "https://google.com"
+        },
+        bar: {
+          href: "https://bing.com"
+        },
+        baz: {
+          href: "https://duck.com"
+        }
+      },
+      meta: {
+        foo: {
+          name: "description",
+          content: "a really cool description"
+        },
+        bar: {
+          name: "author",
+          content: "me"
+        },
+        baz: {
+          name: "keywords",
+          content: "yes i am a man not a cow want to go skateboards"
+        }
+      }
+    }
+  };
 };
 
 export default Window;

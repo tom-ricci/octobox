@@ -5,6 +5,7 @@ import { Anchor } from "../../components/routing/api/Anchor";
 import { Preload } from "../../components/routing/api/Preload";
 import { ActiveChild, InactiveChild } from "../../components/routing/api/AnchorChildren";
 import { MetaTags } from "../../components/routing/api/MetaTags";
+import { WindowLoader } from "../../components/routing/api/Loaders";
 
 interface Props {
 
@@ -56,6 +57,39 @@ const Window: FC<Props> = (): ReactElement => {
       </div>
     </React.Fragment>
   );
+};
+
+export const Loader: WindowLoader = async () => {
+  return {
+    metadata: {
+      title: "title2",
+      links: {
+        foo: {
+          href: "https://twitter.com"
+        },
+        bar: {
+          href: "https://facebook.com"
+        },
+        qux: {
+          href: "https://instagram.com"
+        }
+      },
+      meta: {
+        foo: {
+          name: "description",
+          content: "an even cooler description"
+        },
+        bar: {
+          name: "author",
+          content: "you"
+        },
+        qux: {
+          name: "publisher",
+          content: "quackers"
+        }
+      }
+    }
+  };
 };
 
 export default Window;

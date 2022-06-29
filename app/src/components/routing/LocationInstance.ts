@@ -1,7 +1,7 @@
 import { ReactLocation } from "@tanstack/react-location";
 
 /**
- * Manages one ReactLocation instance. Useful for {@link useRouterInternals}.
+ * Manages one ReactLocation instance. Useful for {@link useRoutingInternals}.
  */
 export class LocationInstance {
 

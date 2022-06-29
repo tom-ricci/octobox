@@ -3,11 +3,11 @@
  */
 export interface MetaTags {
   title?: Title;
-  links: {
+  links?: {
     [x: string]: Link;
   };
-  meta: {
-    [x: string]: Meta;
+  meta?: {
+    [a: string]: Meta;
   }
 }
 
@@ -30,7 +30,7 @@ export type Link = {
   sizes?: string;
   title?: string
   type?: string;
-  key: never;
+  key?: never;
   [x: string]: string | undefined;
 }
 
@@ -44,6 +44,6 @@ export type Meta = {
   property?: string;
   scheme?: string;
   url?: string;
-  key: never;
+  key?: never;
   [x: string]: string | undefined;
 };

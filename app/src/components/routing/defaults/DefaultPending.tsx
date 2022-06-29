@@ -1,10 +1,6 @@
 import React, { FC, ReactElement } from "react";
 
-interface Props {
-
-}
-
-export const DefaultPending: FC<Props> = (): ReactElement => {
+export const DefaultPending: FC = (): ReactElement => {
   return (
     <React.Fragment>
       <p>Loading...</p>

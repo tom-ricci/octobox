@@ -5,7 +5,7 @@ import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { PermissiveObject } from "./api/PermissiveObject";
 import { LocationInstance } from "./LocationInstance";
-import { MetadataManager } from "./meta/MetadataManager";
+import { MetadataManager } from "./MetadataManager";
 
 /**
  * Manages this app's instance of ReactLocation.
@@ -116,19 +116,20 @@ export class LocationManager {
         // import it
         const loader = await config.loader();
         if(loader !== undefined) {
+          let loadedData;
           // if its async, load it now
           if(loader.length === 0) {
-            return await loader();
+            loadedData = await loader();
           }else{
             // otherwise, wait for its parent and load
-            const loadedData = await loader(await opts.parentMatch?.loaderPromise);
-            const meta = loadedData.meta;
-            if(meta !== undefined) {
-              route.meta!.head = MetadataManager.compile(meta);
-            }
-            delete loadedData.meta;
-            return loadedData ?? {};
+            loadedData = await loader(await opts.parentMatch?.loaderPromise);
           }
+          const meta = loadedData.metadata;
+          if(meta !== undefined) {
+            route.meta!.head = MetadataManager.compile(meta);
+          }
+          delete loadedData.metadata;
+          return loadedData ?? {};
         }else{
           return {};
         }

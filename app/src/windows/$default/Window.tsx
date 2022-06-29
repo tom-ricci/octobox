@@ -1,7 +1,6 @@
 import React, { FC, ReactElement } from "react";
 import { Spacer } from "octobox-utils";
 import { Anchor } from "../../components/routing/api/Anchor";
-import { Preload } from "../../components/routing/api/Preload";
 
 interface Props {
 
