@@ -27,7 +27,9 @@ module.exports = {
     "declaration-bang-space-after": "never",
     "declaration-bang-space-before": "always",
     "block-opening-brace-space-before": "always",
-    "rule-empty-line-before": "always",
+    "rule-empty-line-before": ["always", {
+      "except": ["after-single-line-comment", "first-nested"]
+    }],
     "comment-whitespace-inside": "always",
     "indentation": 4,
     "no-eol-whitespace": true,
