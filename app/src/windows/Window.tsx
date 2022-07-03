@@ -1,7 +1,7 @@
 import React, { FC, ReactElement } from "react";
 import { Outlet } from "@tanstack/react-location";
-import { Anchor } from "../components/routing/api/Anchor";
-import { WindowLoader } from "../components/routing/api/Loaders";
+import { Anchor } from "octobox-utils";
+import { WindowLoader } from "octobox-utils";
 
 interface Props {
 

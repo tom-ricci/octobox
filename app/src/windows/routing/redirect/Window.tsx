@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Redirect } from "../../../components/routing/api/Redirect";
+import { Redirect } from "octobox-utils";
 
 interface Props {
 

@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { useParams } from "../../../../components/routing/api/useParams";
+import { useParams } from "octobox-utils";
 
 interface Props {
 

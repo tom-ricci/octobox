@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from "react";
-import { WindowLoader } from "../../../components/routing/api/Loaders";
-import { Anchor } from "../../../components/routing/api/Anchor";
+import { WindowLoader } from "octobox-utils";
+import { Anchor } from "octobox-utils";
 
 interface Props {
 

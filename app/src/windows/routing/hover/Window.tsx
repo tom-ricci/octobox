@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from "react";
-import { WindowLoader, WindowUnloader } from "../../../components/routing/api/Loaders";
-import { useLoader } from "../../../components/routing/api/useLoader";
+import { WindowLoader, WindowUnloader } from "octobox-utils";
+import { useLoader } from "octobox-utils";
 
 interface Props {
 
