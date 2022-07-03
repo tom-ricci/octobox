@@ -64,8 +64,6 @@ export class MetadataManager {
       data.meta = Object.assign({}, ...meta);
     }
     return data;
-    // update with new data
-    // TODO: meta
   }
 
   /**

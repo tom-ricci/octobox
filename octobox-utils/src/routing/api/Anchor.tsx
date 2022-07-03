@@ -5,7 +5,7 @@ import { LocationManager } from "../LocationManager";
 import { useReload } from "./useReload";
 import { Preload } from "./Preload";
 
-export interface DynamicAnchorProps extends LinkProps {
+export interface DynamicAnchorProps extends Omit<LinkProps, "preload"> {
   preload?: Preload;
   children?: ReactNode;
 }
@@ -54,27 +54,27 @@ export const Anchor: FC<AnchorProps> = (props): ReactElement => {
     let preloadOnHover = false;
     if("preload" in wprops) {
       switch(wprops.preload) {
-        // if the user wants to preload on render, do that. preloading on render basically just preloads the component when this link is added to the DOM. we also preload on hover here too just in case.
-        case Preload.RENDER: {
-          useLoadRoute()({ to: wprops.to, search: wprops.search, hash: wprops.hash }, { maxAge: LocationManager.maxage });
-          preloadOnHover = true;
-          break;
-        }
-        // if user wants hover, turn preloading on
-        case Preload.HOVER: {
-          preloadOnHover = true;
-          break;
-        }
-        // just make sure we're setting it to false here, since the default is render
-        case Preload.NEVER: {
-          preloadOnHover = false;
-          break;
-        }
-        // preload on render if nothing is specified
-        default: {
-          useLoadRoute()({ to: wprops.to, search: wprops.search, hash: wprops.hash }, { maxAge: LocationManager.maxage });
-          preloadOnHover = true;
-        }
+      // if the user wants to preload on render, do that. preloading on render basically just preloads the component when this link is added to the DOM. we also preload on hover here too just in case.
+      case"render": {
+        useLoadRoute()({ to: wprops.to, search: wprops.search, hash: wprops.hash }, { maxAge: LocationManager.maxage });
+        preloadOnHover = true;
+        break;
+      }
+      // if user wants hover, turn preloading on
+      case"hover": {
+        preloadOnHover = true;
+        break;
+      }
+      // just make sure we're setting it to false here, since the default is render
+      case"never": {
+        preloadOnHover = false;
+        break;
+      }
+      // preload on render if nothing is specified
+      default: {
+        useLoadRoute()({ to: wprops.to, search: wprops.search, hash: wprops.hash }, { maxAge: LocationManager.maxage });
+        preloadOnHover = true;
+      }
       }
       // remove our preload prop so we can pass in one of our own. react should prioritize the final preload prop which is ours, but this is a good idea for safety
       delete wprops.preload;

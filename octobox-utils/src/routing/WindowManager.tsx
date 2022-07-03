@@ -73,11 +73,11 @@ export class WindowManager {
       }
       let err: ReactNode | undefined;
       let pend: ReactNode | undefined;
-      if(`${property.substring(0, property.lastIndexOf("/Window.tsx"))}/$error/Window.tsx` in error) {
-        err = React.createElement(error[`${property.substring(0, property.lastIndexOf("/Window.tsx"))}/$error/Window.tsx`].default);
+      if(`${ property.substring(0, property.lastIndexOf("/Window.tsx")) }/$error/Window.tsx` in error) {
+        err = React.createElement(error[`${ property.substring(0, property.lastIndexOf("/Window.tsx")) }/$error/Window.tsx`].default);
       }
-      if(`${property.substring(0, property.lastIndexOf("/Window.tsx"))}/$pending/Window.tsx` in pending) {
-        pend = React.createElement(pending[`${property.substring(0, property.lastIndexOf("/Window.tsx"))}/$pending/Window.tsx`].default);
+      if(`${ property.substring(0, property.lastIndexOf("/Window.tsx")) }/$pending/Window.tsx` in pending) {
+        pend = React.createElement(pending[`${ property.substring(0, property.lastIndexOf("/Window.tsx")) }/$pending/Window.tsx`].default);
       }
       // build our route branches
       const branch = this.routify([ property, imports[property], err, pend ]);
@@ -171,12 +171,12 @@ export class WindowManager {
   private sanitize(route: Branch) {
     // convert indexes and wildcards to their respective identifiers
     switch(route[0].value) {
-      case "$default":
-        route[0].value = "/";
-        break;
-      case "$wildcard":
-        route[0].value = "*";
-        break;
+    case"$default":
+      route[0].value = "/";
+      break;
+    case"$wildcard":
+      route[0].value = "*";
+      break;
     }
     // convert all $variable_names to :variable_names
     route[0].value = route[0].value.replaceAll("$", ":");
