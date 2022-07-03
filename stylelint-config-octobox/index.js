@@ -3,6 +3,8 @@ module.exports = {
     "color-no-invalid-hex": true,
     "font-family-no-missing-generic-family-keyword": true,
     "declaration-block-no-duplicate-custom-properties": true,
+    "custom-property-empty-line-before": null,
+    "max-line-length": null,
     "declaration-block-no-duplicate-properties": true,
     "block-no-empty": true,
     "comment-no-empty": true,
