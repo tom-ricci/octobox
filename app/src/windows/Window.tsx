@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Outlet } from "@tanstack/react-location";
+import { Outlet } from "octobox-utils";
 import { Anchor } from "octobox-utils";
 import { WindowLoader } from "octobox-utils";
 
