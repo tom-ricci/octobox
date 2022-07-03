@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Filesystem } from "./components/routing/api/Filesystem";
+import { Filesystem } from "octobox-utils";
 
 interface Props {
 
