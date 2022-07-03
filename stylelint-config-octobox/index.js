@@ -12,7 +12,7 @@ module.exports = {
     "color-function-notation": true,
     "shorthand-property-no-redundant-values": true,
     "declaration-block-single-line-max-declarations": 2,
-    "color-hex-case": "upper",
+    "color-hex-case": null,
     "function-comma-space-before": false,
     "function-comma-space-after": true,
     "function-name-case": "lower",
