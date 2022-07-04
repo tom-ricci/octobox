@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Redirect } from "octobox-utils";
+import { RedirectComponent } from "octobox-utils";
 
 interface Props {
 
@@ -9,7 +9,7 @@ const Window: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
       <p>Redirecting...</p>
-      <Redirect to={"../awholenewworld"}/>
+      <RedirectComponent to={"../awholenewworld"}/>
     </React.Fragment>
   );
 };

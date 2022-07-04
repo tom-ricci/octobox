@@ -1,5 +1,7 @@
+import { useNavigate } from "@tanstack/react-location";
 import React, { FC, ReactElement } from "react";
 import { LocationManager } from "../LocationManager";
+import { NavigationInstance } from "../NavigationInstance";
 
 export interface FilesystemProps {
   basename?: string;
@@ -9,7 +11,7 @@ export interface FilesystemProps {
 }
 
 /**
- * A Filesystem is Octobox's router. It's root is /src/windows/. Read the docs for more information.
+ * A Filesystem is Octobox's router. It's root is /src/windows/. There should only be one Filesystem in an app. Read the docs for more information.
  *
  * @param basename <ul>
  *   <li>
@@ -28,6 +30,7 @@ export interface FilesystemProps {
  * @constructor
  */
 export const Filesystem: FC<FilesystemProps> = ({ basename, unresponsiveMs, pendingMs, maxAge }): ReactElement => {
+  NavigationInstance.nav = useNavigate();
   const loc = new LocationManager(basename, maxAge, unresponsiveMs, pendingMs);
   loc.update();
   return (
