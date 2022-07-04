@@ -1,8 +1,9 @@
 import { MetaTags } from "./api/MetaTags";
 import React, { FC, ReactElement, ReactNode, useMemo } from "react";
-import { Outlet, TransitionState, useMatches, useRouter } from "@tanstack/react-location";
+import { Outlet, TransitionState, useMatches, useNavigate, useRouter } from "@tanstack/react-location";
 import * as ReactDOM from "react-dom";
 import { useUUID } from "octobox-utils";
+import { NavigationInstance } from "./NavigationInstance";
 
 /**
  * Represents a compiled version of {@link MetaTags}.
@@ -71,6 +72,8 @@ export class MetadataManager {
    * @constructor
    */
   public static readonly VHead: FC = (): ReactElement => {
+    // this isnt related to metadata at all, but it needs to be called here for logical reasons.
+    NavigationInstance.nav = useNavigate();
     return (
       <React.Fragment>
         <MetadataManager.RenderingStatusProvider/>

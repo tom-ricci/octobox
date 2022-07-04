@@ -1,7 +1,5 @@
-import { useNavigate } from "@tanstack/react-location";
 import React, { FC, ReactElement } from "react";
 import { LocationManager } from "../LocationManager";
-import { NavigationInstance } from "../NavigationInstance";
 
 export interface FilesystemProps {
   basename?: string;
@@ -30,7 +28,6 @@ export interface FilesystemProps {
  * @constructor
  */
 export const Filesystem: FC<FilesystemProps> = ({ basename, unresponsiveMs, pendingMs, maxAge }): ReactElement => {
-  NavigationInstance.nav = useNavigate();
   const loc = new LocationManager(basename, maxAge, unresponsiveMs, pendingMs);
   loc.update();
   return (
