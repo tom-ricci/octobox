@@ -81,7 +81,6 @@ export const Anchor: FC<AnchorProps> = (props): ReactElement => {
     }else{
       // preload on render if nothing is specified--again
       // sadly we need to use ts-ignore here because typescript wants them to be sure they're not undefined. they can be undefined though, so disabling typescript here is okayish
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       useLoadRoute()({ to: wprops.to, search: wprops.search, hash: wprops.hash }, { maxAge: LocationManager.maxage });
       preloadOnHover = true;

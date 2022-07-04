@@ -207,7 +207,6 @@ export class WindowManager {
           loader: async (): Promise<Promise<WindowLoader> | undefined> => {
             const mod = await comp();
             if("Loader" in mod) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               return mod["Loader"];
             }else{
@@ -217,7 +216,6 @@ export class WindowManager {
           unloader: async (): Promise<Promise<WindowUnloader> | undefined> => {
             const mod = await comp();
             if("Unloader" in mod) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               return mod["Unloader"];
             }else{
@@ -302,14 +300,12 @@ export class WindowManager {
         if("error" in child && child.error !== undefined) {
           err = child.error;
         }else if(err !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           child.error = err;
         }
         if("pending" in child && child.pending !== undefined) {
           pend = child.pending;
         }else if(pend !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           child.pending = pend;
         }
@@ -336,18 +332,15 @@ export class WindowManager {
     // assuming the file exists and the tree isnt undefined (which it *should* always be but its worth checking anyway) add the component and loaders (if they exist)
     if(comp !== undefined && tree !== undefined) {
       if(!("component" in tree[0])) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         tree[0].component = () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>));
       }
       if(!("loader" in tree[0])) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         tree[0].loader = async (): Promise<Promise<WindowLoader> | undefined> => {
           if(comp !== undefined) {
             const mod = await comp();
             if("Loader" in mod) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               return mod["Loader"];
             }else{
@@ -358,13 +351,11 @@ export class WindowManager {
         };
       }
       if(!("unloader" in tree[0])) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         tree[0].unloader = async (): Promise<Promise<WindowUnloader> | undefined> => {
           if(comp !== undefined) {
             const mod = await comp();
             if("Unloader" in mod) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               return mod["Unloader"];
             }else{
@@ -377,7 +368,6 @@ export class WindowManager {
     }
     // convert the tree to a config if it exists
     if(tree !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const config: Config = tree[0];
       this.finalize(config);
@@ -392,10 +382,8 @@ export class WindowManager {
    * @private
    */
   private finalize(config: Config) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const val = config.value;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     delete config.value;
     config.path = val;
