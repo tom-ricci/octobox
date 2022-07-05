@@ -21,8 +21,6 @@ export type FormHandler = (results: Results) => Promise<void>;
 
 /**
  * A <code>&#60;Form/></code> is an HTML form which sends its data to a callback when submitted. Do not render a <code>&#60;form/></code> inside a <code>&#60;Form/></code>.
- * @param handler
- * @param children
  * @constructor
  */
 export const Form: FC<FormProps> = ({ handler, children }): ReactElement => {
