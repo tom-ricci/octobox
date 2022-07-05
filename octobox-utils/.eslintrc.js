@@ -93,10 +93,7 @@ module.exports = {
     "no-empty": [
       "off"
     ],
-    "template-curly-spacing": [
-      "error",
-      "always"
-    ],
+    "template-curly-spacing": "off",
     "indent": [
       "error",
       2
@@ -109,6 +106,6 @@ module.exports = {
       "error",
       "always"
     ],
-    "@typescript-eslint/ban-ts-comment": "off"
+    "@typescript-eslint/ban-ts-comment": "off",
   }
 };

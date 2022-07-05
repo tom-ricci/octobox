@@ -4,6 +4,7 @@ import { useCheckUrl } from "../useCheckUrl";
 import { LocationManager } from "../LocationManager";
 import { useReload } from "./useReload";
 import { Preload } from "./Preload";
+import { useDevelopmentModeStatus } from "../../mode/useDevelopmentModeStatus";
 
 export interface DynamicAnchorProps extends Omit<LinkProps, "preload"> {
   preload?: Preload;
@@ -35,6 +36,10 @@ export const Anchor: FC<AnchorProps> = (props): ReactElement => {
     if("static" in wprops) {
       delete wprops.static;
     }
+    // this is commented out because it seems like vite can't access static pages in development mode. if i find a way to do this ill uncomment it
+    // if(useDevelopmentModeStatus()) {
+    //   wprops.to = wprops.to.startsWith("/") ? `/static${wprops.to}` : `/static/${wprops.to}`;
+    // }
     return (
       <React.Fragment>
         <AnchorContext.Provider value={false}>
