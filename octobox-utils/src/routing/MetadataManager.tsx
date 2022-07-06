@@ -103,7 +103,7 @@ export class MetadataManager {
    */
   public static readonly RenderingStatusConsumer: FC<{pending: TransitionState<any> | undefined}> = ({ pending }): ReactElement => {
     const matches = useMatches();
-    const data = useMemo(() => {
+    let data = useMemo(() => {
       if(pending === undefined) {
         // get data
         let title: ReactNode;
@@ -141,6 +141,7 @@ export class MetadataManager {
         return MetadataManager.old;
       }
     }, [pending]);
+    data = data ?? MetadataManager.old ?? { title: "Octobox App" };
     return <React.Fragment>
       <MetadataManager.HeadPortal data={data}/>
     </React.Fragment>;
