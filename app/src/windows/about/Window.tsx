@@ -10,11 +10,11 @@ const Window: FC<Props> = (): ReactElement => {
     <React.Fragment>
       <div className={"p-5"}>
         <Spacer height={"2rem"}/>
-        <h2 className={"text-5xl"}>QOL</h2>
+        <h2 className={"text-5xl"}>About</h2>
         <Spacer height={"1rem"}/>
         <hr/>
         <Spacer height={"1rem"}/>
-        <p>Octobox has a lot of Quality-Of-Life features besides routing.</p>
+        <p>Octobox is a React meta framework.</p>
       </div>
     </React.Fragment>
   );
@@ -23,7 +23,7 @@ const Window: FC<Props> = (): ReactElement => {
 export const Loader: WindowLoader = async () => {
   return {
     metadata: {
-      title: "QOL",
+      title: "About",
     }
   };
 };

@@ -28,4 +28,5 @@ export * from "./api/useParams";
 export * from "./api/useRedirect";
 export * from "./api/useReload";
 export * from "./api/useRoutingInternals";
+export * from "./api/useSearch";
 export { ReactLocation, Outlet };

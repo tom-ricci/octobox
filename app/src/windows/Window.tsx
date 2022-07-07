@@ -25,30 +25,15 @@ const Window: FC<Props> = (): ReactElement => {
 export const Loader: WindowLoader = async () => {
   return {
     metadata: {
-      title: "title1",
-      links: {
-        foo: {
-          href: "https://google.com"
-        },
-        bar: {
-          href: "https://bing.com"
-        },
-        baz: {
-          href: "https://duck.com"
-        }
-      },
+      title: "Octotest",
       meta: {
-        foo: {
+        description: {
           name: "description",
-          content: "a really cool description"
+          content: "Octotest is Octobox's test application."
         },
-        bar: {
+        author: {
           name: "author",
-          content: "me"
-        },
-        baz: {
-          name: "keywords",
-          content: "yes i am a man not a cow want to go skateboards"
+          content: "Thomas Ricci"
         }
       }
     }

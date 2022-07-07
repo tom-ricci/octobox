@@ -44,6 +44,7 @@ const Window: FC<Props> = (): ReactElement => {
               </Anchor>
               <Anchor to={"redirect"} preload={"render"} className={"font-mono block text-fuchsia-600 pb-1"}>/redirect</Anchor>
               <Anchor to={"meta"} preload={"render"} className={"font-mono block text-fuchsia-600 pb-1"}>/meta</Anchor>
+              <Anchor to={"input"} preload={"render"} className={"font-mono block text-fuchsia-600 pb-1"}>/input</Anchor>
               <Anchor to={"notfound"} preload={"render"} className={"font-mono block text-fuchsia-600 pb-1"}>/notfound</Anchor>
               <Anchor to={"error"} preload={"render"} className={"font-mono block text-fuchsia-600 pb-1"}>/error</Anchor>
             </div>
@@ -60,32 +61,7 @@ const Window: FC<Props> = (): ReactElement => {
 export const Loader: WindowLoader = async () => {
   return {
     metadata: {
-      title: "title2",
-      links: {
-        foo: {
-          href: "https://twitter.com"
-        },
-        bar: {
-          href: "https://facebook.com"
-        },
-        qux: {
-          href: "https://instagram.com"
-        }
-      },
-      meta: {
-        foo: {
-          name: "description",
-          content: "an even cooler description"
-        },
-        bar: {
-          name: "author",
-          content: "you"
-        },
-        qux: {
-          name: "publisher",
-          content: "quackers"
-        }
-      }
+      title: "Routing",
     }
   };
 };
