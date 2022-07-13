@@ -18,6 +18,11 @@ interface Config {
   eslintRecommended: boolean
   stylelintRecommended: boolean
   internal: boolean
+  routing: boolean
+  basename?: string
+  unresponsiveMs?: number
+  pendingMs?: number
+  maxAge?: number
 }
 
 // utils
@@ -46,7 +51,8 @@ const main = async (): Promise<void> => {
       stylelint: false,
       eslintRecommended: false,
       stylelintRecommended: false,
-      internal: false
+      internal: false,
+      routing: false
     };
     // sanitize input
     let input = argv["path"];
@@ -61,6 +67,21 @@ const main = async (): Promise<void> => {
     }
     if(args.stylelint) {
       args.stylelintRecommended = argv["recommended_stylelint_config"].toUpperCase() === "TRUE";
+    }
+    args.routing = argv["routing"].toUpperCase() === "TRUE";
+    if(args.routing) {
+      if("basename" in argv) {
+        args.basename = argv["basename"];
+      }
+      if("unresponsive_ms" in argv && !Number.isNaN(parseInt(argv["unresponsive_ms"]))) {
+        args.unresponsiveMs = parseInt(argv["unresponsive_ms"]);
+      }
+      if("pending_ms" in argv && !Number.isNaN(parseInt(argv["pending_ms"]))) {
+        args.pendingMs = parseInt(argv["pending_ms"]);
+      }
+      if("max_age" in argv && !Number.isNaN(parseInt(argv["max_age"]))) {
+        args.maxAge = parseInt(argv["max_age"]);
+      }
     }
     utils.path = input;
     await bootstrap(args);
@@ -82,7 +103,8 @@ const setup = async (): Promise<void> => {
     stylelint: false,
     eslintRecommended: false,
     stylelintRecommended: false,
-    internal: argv._.includes("internal")
+    internal: argv._.includes("internal"),
+    routing: false
   };
   utils.logSpeak("Welcome to the Octobox installer!");
   // get install dir
@@ -109,7 +131,7 @@ const setup = async (): Promise<void> => {
     });
     // if its not ok, terminate, if it is ok, continue install
     if(!await locConfirm.run()) {
-      utils.logSpeak("Octobox will now exit. Bye!");
+      utils.logSpeak("Okay, you can restart. Octobox will now exit. Bye!");
       process.exit();
     }
   }
@@ -144,13 +166,107 @@ const setup = async (): Promise<void> => {
     });
     config.stylelintRecommended = await stylelintRecommendedQuery.run();
   }
+  // ask if user wants routing and set it up if so
+  config.routing = await new Enquirer.Confirm({
+    name: "routing",
+    message: "Do you want to use Octobox's router in this app?",
+  }).run();
+  if(config.routing) {
+    if(await new Enquirer.Confirm({
+      name: "routingBasename",
+      message: "Is your app going to be hosted on a nested directory?"
+    }).run()) {
+      config.basename = await new Enquirer.Input({
+        name: "basename",
+        message: "What will this directory be?",
+        initial: "",
+      }).run();
+    }
+    if(await new Enquirer.Confirm({
+      name: "routingUnresponsive",
+      message: "Do you want to set the router's unresponsive time or use the default?"
+    }).run()) {
+      let val = await new Enquirer.NumberPrompt({
+        name: "unresponsive",
+        message: "How long, in milliseconds, should this be?",
+        result: (input: any) => {
+          if(!Number.isNaN(parseInt(input))) {
+            return input;
+          }else{
+            return undefined;
+          }
+        }
+      }).run();
+      if(val !== undefined) {
+        val = parseInt(val);
+        config.unresponsiveMs = val;
+      }
+    }
+    if(await new Enquirer.Confirm({
+      name: "routingPending",
+      message: "Do you want to set the router's pending time or use the default?"
+    }).run()) {
+      let val = await new Enquirer.NumberPrompt({
+        name: "pending",
+        message: "How long, in milliseconds, should this be?",
+        result: (input: any) => {
+          if(!Number.isNaN(parseInt(input))) {
+            return input;
+          }else{
+            return undefined;
+          }
+        }
+      }).run();
+      if(val !== undefined) {
+        val = parseInt(val);
+        config.pendingMs = val;
+      }
+    }
+    if(await new Enquirer.Confirm({
+      name: "routingAge",
+      message: "Do you want to set the router's maximum cache age or use the default?"
+    }).run()) {
+      let val = await new Enquirer.NumberPrompt({
+        name: "age",
+        message: "How long, in milliseconds, should this be?",
+        result: (input: any) => {
+          if(!Number.isNaN(parseInt(input))) {
+            return input;
+          }else{
+            return undefined;
+          }
+        }
+      }).run();
+      if(val !== undefined) {
+        val = parseInt(val);
+        config.maxAge = val;
+      }
+    }
+  }
 
-  // bootstrap because we have all the info we need now
-  await bootstrap(config);
+  // confirm with user and bootstrap
+  let opts = "";
+  for(const arg in config) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    opts += `\n${ arg }: ${ config[arg] }`;
+  }
+  utils.logSpeak(`Your app's settings are:\n------------------------\n${ opts }\n------------------------\n`);
+  const final = await new Enquirer.Confirm({
+    name: "final_confirm",
+    message: "Is all of this information correct?",
+  }).run();
+  if(final) {
+    await bootstrap(config);
+  }else{
+    utils.logSpeak("Okay, you can restart. Octobox will now exit. Bye!");
+    process.exit();
+  }
 };
 
 const bootstrap = async (config: Config): Promise<void> => {
   utils.logSpeak("Bootstrapping...");
+
   // create vite app
   // install in dir (we can't use the execInPath or execInPathParent utility here because the path doesn't exist yet)
   execSync(`npm create vite@2.9.2 ${ utils.path } -- --template react-ts`, { cwd: "./" });
@@ -163,6 +279,7 @@ const bootstrap = async (config: Config): Promise<void> => {
   fs.unlinkSync(`${ utils.path }/src/logo.svg`);
   fs.unlinkSync(`${ utils.path }/src/main.tsx`);
   fs.unlinkSync(`${ utils.path }/src/favicon.svg`);
+
   // add our own versions of some removed files
   fs.writeFileSync(`${ utils.path }/src/main.tsx`, `import React from "react";
 import ReactDOM from "react-dom/client";
@@ -190,10 +307,12 @@ export const App: FC<Props> = (): ReactElement => {
   );
 };
 `);
+
   // install and set up sass
   utils.execInPath("npm i -D sass");
   fs.mkdirSync(`${ utils.path }/src/styles/`);
   fs.writeFileSync(`${ utils.path }/src/styles/main.scss`, "");
+
   // add unit testing suite
   utils.execInPath("npm i -D puppeteer ts-node");
   fs.mkdirSync(`${ utils.path }/test/`);
@@ -224,6 +343,7 @@ const tests = async (tester: typeof Page) => {
   const pkg = JSON.parse(fs.readFileSync(`${ utils.path }/package.json`));
   pkg.scripts.test = "ts-node --skipProject ./test/main.test.ts";
   fs.writeFileSync(`${ utils.path }/package.json`, JSON.stringify(pkg, null, 2));
+
   // add tailwind if requested
   if(config.tailwind) {
     // first, install deps and run init command
@@ -249,6 +369,7 @@ const tests = async (tester: typeof Page) => {
 @tailwind utilities;
 `);
   }
+
   // if the user wants any linters, install them
   if(config.eslint) {
     // install and add eslint to project
@@ -304,6 +425,7 @@ const tests = async (tester: typeof Page) => {
 };
 `);
   }
+
   if(config.stylelint) {
     // install stylelint and add it to the vite config
     utils.execInPath("npm i -D stylelint stylelint-config-standard-scss vite-plugin-stylelint");
@@ -353,14 +475,17 @@ const tests = async (tester: typeof Page) => {
 };`);
     }
   }
+
   // install octobox-utils
   if(config.internal) {
     utils.execInPath("npm link -D octobox-utils");
   }else{
     utils.execInPath("npm i -D octobox-utils");
   }
+
   // quick npm i to make sure all deps are installed
   utils.execInPath("npm i");
+
   // tell the user we're done here
   utils.logSpeak("App created!");
 };
