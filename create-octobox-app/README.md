@@ -6,7 +6,7 @@ You can use the default setup, which will bring you through a list of setup prom
 ```shell
 npm create octobox-app@latest
 ```
-> Note:\
+> **Note**
 > On Windows, you may need to reassign your `.js` file association from JScript to Node.js
 
 You can also pass arguments to the command instead of using prompts, if you want.
