@@ -19,6 +19,8 @@ interface Config {
   stylelintRecommended: boolean
   internal: boolean
   routing: boolean
+  recommendedWindows?: boolean
+  customFallbacks?: boolean
   basename?: string
   unresponsiveMs?: number
   pendingMs?: number
@@ -70,6 +72,8 @@ const main = async (): Promise<void> => {
     }
     args.routing = argv["routing"].toUpperCase() === "TRUE";
     if(args.routing) {
+      args.recommendedWindows = argv["recommended_windows"].toUpperCase() === "TRUE";
+      args.customFallbacks = argv["custom_fallbacks"].toUpperCase() === "TRUE";
       if("basename" in argv) {
         args.basename = argv["basename"];
       }
@@ -172,6 +176,14 @@ const setup = async (): Promise<void> => {
     message: "Do you want to use Octobox's router in this app?",
   }).run();
   if(config.routing) {
+    config.recommendedWindows = await new Enquirer.Confirm({
+      name: "recommendedWindows",
+      message: "Do you want to automatically create top-level \"$default\" and \"$wildcard\" windows?"
+    }).run();
+    config.customFallbacks = await new Enquirer.Confirm({
+      name: "customFallbacks",
+      message: "Do you want to use custom pending and error elements?"
+    }).run();
     if(await new Enquirer.Confirm({
       name: "routingBasename",
       message: "Is your app going to be hosted on a nested directory?"
@@ -184,7 +196,7 @@ const setup = async (): Promise<void> => {
     }
     if(await new Enquirer.Confirm({
       name: "routingUnresponsive",
-      message: "Do you want to set the router's unresponsive time or use the default?"
+      message: "Do you want to set a custom unresponsive time for the router?"
     }).run()) {
       let val = await new Enquirer.NumberPrompt({
         name: "unresponsive",
@@ -204,7 +216,7 @@ const setup = async (): Promise<void> => {
     }
     if(await new Enquirer.Confirm({
       name: "routingPending",
-      message: "Do you want to set the router's pending time or use the default?"
+      message: "Do you want to set a custom pending time for the router?"
     }).run()) {
       let val = await new Enquirer.NumberPrompt({
         name: "pending",
@@ -224,7 +236,7 @@ const setup = async (): Promise<void> => {
     }
     if(await new Enquirer.Confirm({
       name: "routingAge",
-      message: "Do you want to set the router's maximum cache age or use the default?"
+      message: "Do you want to set a custom maximum cache age for the router?"
     }).run()) {
       let val = await new Enquirer.NumberPrompt({
         name: "age",
@@ -249,9 +261,9 @@ const setup = async (): Promise<void> => {
   for(const arg in config) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    opts += `\n${ arg }: ${ config[arg] }`;
+    opts += `\n  ${ arg }: ${ config[arg] }`;
   }
-  utils.logSpeak(`Your app's settings are:\n------------------------\n${ opts }\n------------------------\n`);
+  utils.logSpeak(`Your app's settings are:${ opts }`);
   const final = await new Enquirer.Confirm({
     name: "final_confirm",
     message: "Is all of this information correct?",
@@ -273,6 +285,7 @@ const bootstrap = async (config: Config): Promise<void> => {
   // now we can though, so we'll continue to do so
   utils.execInPath("npm i");
   // clean up the app
+  fs.unlinkSync(`${ utils.path }/index.html`);
   fs.unlinkSync(`${ utils.path }/src/App.css`);
   fs.unlinkSync(`${ utils.path }/src/App.tsx`);
   fs.unlinkSync(`${ utils.path }/src/index.css`);
@@ -280,20 +293,51 @@ const bootstrap = async (config: Config): Promise<void> => {
   fs.unlinkSync(`${ utils.path }/src/main.tsx`);
   fs.unlinkSync(`${ utils.path }/src/favicon.svg`);
 
+
+
   // add our own versions of some removed files
+  if(!config.routing) {
+    fs.writeFileSync(`${ utils.path }/index.html`, `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Octobox App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+`);
+  }else{
+    fs.writeFileSync(`${ utils.path }/index.html`, `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+`);
+  }
   fs.writeFileSync(`${ utils.path }/src/main.tsx`, `import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/main.scss";
 import { App } from "./App";
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App/>
   </React.StrictMode>
 );
 `);
-  fs.writeFileSync(`${ utils.path }/src/App.tsx`, `import React, { FC, ReactElement } from "react";
+  if(!config.routing) {
+    fs.writeFileSync(`${ utils.path }/src/App.tsx`, `import React, { FC, ReactElement } from "react";
 
 interface Props {
 
@@ -307,6 +351,37 @@ export const App: FC<Props> = (): ReactElement => {
   );
 };
 `);
+  }else{
+    let filesystem = "<Filesystem";
+    if(config.basename !== undefined) {
+      filesystem += ` basename={"${ config.basename }"}`;
+    }
+    if(config.unresponsiveMs !== undefined) {
+      filesystem += ` unresponsiveMs={${ config.unresponsiveMs }}`;
+    }
+    if(config.pendingMs !== undefined) {
+      filesystem += ` pendingMs={${ config.pendingMs }}`;
+    }
+    if(config.maxAge !== undefined) {
+      filesystem += ` maxAge={${ config.maxAge }}`;
+    }
+    filesystem += "/>";
+    fs.writeFileSync(`${ utils.path }/src/App.tsx`, `import React, { FC, ReactElement } from "react";
+import { Filesystem } from "octobox-utils";
+
+interface Props {
+
+}
+
+export const App: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+      ${ filesystem }
+    </React.Fragment>
+  );
+};
+`);
+  }
 
   // install and set up sass
   utils.execInPath("npm i -D sass");
@@ -377,7 +452,7 @@ const tests = async (tester: typeof Page) => {
     let viteConfig: string = fs.readFileSync(`${ utils.path }/vite.config.ts`).toString().trim();
     const lines: string[] = viteConfig.split("\n");
     lines.splice(2, 0, `import ESLintPlugin from "@modyqyw/vite-plugin-eslint";${ "" }`);
-    lines[6] = "  plugins: [ react(), ESLintPlugin() ]";
+    lines[6] = "  plugins: [ react(), ESLintPlugin() ],";
     viteConfig = "";
     for(const line of lines) {
       viteConfig += `${ line }\n`;
@@ -433,9 +508,9 @@ const tests = async (tester: typeof Page) => {
     const lines: string[] = viteConfig.split("\n");
     lines.splice(config.eslint ? 3 : 2, 0, `import StylelintPlugin from "vite-plugin-stylelint";${ "" }`);
     if(config.eslint) {
-      lines[7] = "  plugins: [ react(), ESLintPlugin(), StylelintPlugin() ]";
+      lines[7] = "  plugins: [ react(), ESLintPlugin(), StylelintPlugin() ],";
     }else{
-      lines[6] = "  plugins: [ react(), StylelintPlugin() ]";
+      lines[6] = "  plugins: [ react(), StylelintPlugin() ],";
     }
     viteConfig = "";
     for(const line of lines) {
@@ -481,6 +556,177 @@ const tests = async (tester: typeof Page) => {
     utils.execInPath("npm link -D octobox-utils");
   }else{
     utils.execInPath("npm i -D octobox-utils");
+  }
+
+  // add routing
+  // the only thing we need to do here is make the actual file structure (and edit the vite config to add our basename if we have one), the rest is dealt with earlier on in the required file creation
+  if(config.routing) {
+    // we need a window directory, so its added
+    fs.mkdirSync(`${ utils.path }/src/windows/`);
+    if(config.recommendedWindows) {
+      // we need to have an outlet in this window so it can render the default
+      fs.writeFileSync(`${ utils.path }/src/windows/Window.tsx`, `import React, { FC, ReactElement } from "react";
+import { Outlet } from "octobox-utils";
+import { WindowLoader } from "octobox-utils";
+
+interface Props {
+
+}
+
+const Window: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+      <Outlet/>
+    </React.Fragment>
+  );
+};
+
+export const Loader: WindowLoader = async () => {
+  return {
+    metadata: {
+      title: "Octobox App",
+    }
+  };
+};
+
+export default Window;
+`);
+      // we also need to make the default and wildcard elements, so we do that here
+      fs.mkdirSync(`${ utils.path }/src/windows/$default/`);
+      fs.mkdirSync(`${ utils.path }/src/windows/$wildcard/`);
+      fs.writeFileSync(`${ utils.path }/src/windows/$default/Window.tsx`, `import React, { FC, ReactElement } from "react";
+
+interface Props {
+
+}
+
+const Window: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+      <h1>Hello world!</h1>
+    </React.Fragment>
+  );
+};
+
+export default Window;
+`);
+      fs.writeFileSync(`${ utils.path }/src/windows/$wildcard/Window.tsx`, `import React, { FC, ReactElement } from "react";
+
+interface Props {
+
+}
+
+const Window: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+      
+    </React.Fragment>
+  );
+};
+
+export default Window;
+`);
+    }else{
+      // make the initial window -- no outlet this time since we're not doing that for the user here
+      fs.writeFileSync(`${ utils.path }/src/windows/Window.tsx`, `import React, { FC, ReactElement } from "react";
+import { WindowLoader } from "octobox-utils";
+
+interface Props {
+
+}
+
+const Window: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+      
+    </React.Fragment>
+  );
+};
+
+export const Loader: WindowLoader = async () => {
+  return {
+    metadata: {
+      title: "Octobox App",
+    }
+  };
+};
+
+export default Window;
+`);
+    }
+    if(config.customFallbacks) {
+      // since the user wanted to customize their err/pend elements, let them do that here -- we'll provide blank elements for them to work with
+      fs.mkdirSync(`${ utils.path }/src/windows/$error/`);
+      fs.mkdirSync(`${ utils.path }/src/windows/$pending/`);
+      fs.writeFileSync(`${ utils.path }/src/windows/$error/Window.tsx`, `import React, { FC, ReactElement } from "react";
+
+interface Props {
+
+}
+
+const Window: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+
+    </React.Fragment>
+  );
+};
+
+export default Window;
+`);
+      fs.writeFileSync(`${ utils.path }/src/windows/$pending/Window.tsx`, `import React, { FC, ReactElement } from "react";
+
+interface Props {
+
+}
+
+const Window: FC<Props> = (): ReactElement => {
+  return (
+    <React.Fragment>
+
+    </React.Fragment>
+  );
+};
+
+export default Window;
+`);
+    }
+    if(config.basename !== undefined) {
+      // add basename to the vite config so it compiles correctly
+      let basename = config.basename;
+      let viteConfig: string = fs.readFileSync(`${ utils.path }/vite.config.ts`).toString().trim();
+      const lines: string[] = viteConfig.split("\n");
+
+      // we need to check if the basename is a url because vite allows url basenames
+      const checkUrl = (url: string): boolean => {
+        try {
+          const u = new URL(url);
+        } catch(e) {
+          return false;
+        }
+        return true;
+      };
+
+      // we need to check if the basename is legal vite config syntax as per https://v2.vitejs.dev/config/#base -- if its not legal, we need to make it legal. we're going to assume that if its illegal it should be converted into an absolute path (since this is what the basename is supposed to be anyway) and we'll prefix and suffix it with "/"
+      if(basename.length > 0) {
+        if(!basename.startsWith("/") || !basename.startsWith("./") || !checkUrl(basename)) {
+          basename = `/${ basename }`;
+        }
+      }
+      if(!basename.endsWith("/")) {
+        basename += "/";
+      }
+
+      // find the last line of the config and insert the basename before it
+      lines.splice(lines.length - 1, 0, `  base: "${ basename }",`);
+
+      // finally, save the config
+      viteConfig = "";
+      for(const line of lines) {
+        viteConfig += `${ line }\n`;
+      }
+      fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
+    }
   }
 
   // quick npm i to make sure all deps are installed
