@@ -56,7 +56,7 @@ const tests = async (tester: typeof Page) => {
     fs.rmSync("./octoboxtestapp", { recursive: true });
     // make our second app and test, this will be as custom as possible
     // we wont use the recommended linter configs here though because thats just a mess (eslint doesn't like getting packages from the system's global npm package list, which is where we install all our octobox packages during testing. thus, its a pain to get linter configs working)
-    // we wont use a custom basename here either because vite#createServer() really doesnt seem to like custom basenames for some reason. it works in manual testing and im probably not gonna mess with it at all anyway, so probably not a big deal...
+    // we're using a 3 second delay before checking if the app loaded correctly because the router may take some time to boot up. keep in mind that this may make this test unreliable if the router takes exceedingly long for some reason
     execSync("npm create octobox-app -- argumented internal --path octoboxtestapptwo --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE --routing TRUE --recommended_windows TRUE --custom_fallbacks TRUE --basename custom --unresponsive_ms 250 --pending_ms 500 --max_age_ms 10000");
     fs.writeFileSync("./octoboxtestapptwo/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
