@@ -28,7 +28,7 @@ npm create octobox-app@latest -- argumented $ARGS
 | `--basename`                     | URI Pathname            | Optional                      | The path your app will be hosted on, or nothing if `/`.                |
 | `--unresponsive_ms`              | Number                  | Optional                      | The amount of time the router will wait before loading pending UI.     |
 | `--pending_ms`                   | Number                  | Optional                      | The minimum amount of time the router may pend plus unresponsive time. |
-| `--max_age`                      | Number                  | Optional                      | The maximum amount of time the router will cache routes and data.      |
+| `--max_age_ms`                   | Number                  | Optional                      | The maximum amount of time the router will cache routes and data.      |
 
 ## Development
 
@@ -58,3 +58,4 @@ For example:
 ```shell
 npm create octobox-app@latest -- internal $ARGS
 ```
+* When writing unit tests, make sure to add any new flags to `two.test.js`'s second `execSync` call. Also, make sure to add any new possible projects in `hashes.json`, and create their checksums by running `npm run test-create`.

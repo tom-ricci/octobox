@@ -25,7 +25,6 @@ const tests = async (tester: typeof Page) => {
 
 (async (port: number, test: (tester: typeof Page) => Promise<void>) => {
   const server = await createServer({
-    configFile: false,
     root: "./",
     server: {
       port
@@ -57,12 +56,14 @@ const tests = async (tester: typeof Page) => {
     fs.rmSync("./octoboxtestapp", { recursive: true });
     // make our second app and test, this will be as custom as possible
     // we wont use the recommended linter configs here though because thats just a mess (eslint doesn't like getting packages from the system's global npm package list, which is where we install all our octobox packages during testing. thus, its a pain to get linter configs working)
-    execSync("npm create octobox-app -- argumented internal --path octoboxtestapptwo --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE --routing FALSE");
+    // we wont use a custom basename here either because vite#createServer() really doesnt seem to like custom basenames for some reason. it works in manual testing and im probably not gonna mess with it at all anyway, so probably not a big deal...
+    execSync("npm create octobox-app -- argumented internal --path octoboxtestapptwo --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE --routing TRUE --recommended_windows TRUE --custom_fallbacks TRUE --basename custom --unresponsive_ms 250 --pending_ms 500 --max_age_ms 10000");
     fs.writeFileSync("./octoboxtestapptwo/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");
 
 const tests = async (tester: typeof Page) => {
+  await new Promise(r => setTimeout(r, 3000));
   const element: typeof ElementHandle = await tester.$("div#root > h1");
   const text: string = await tester.evaluate((e: typeof ElementHandle) => e.innerText, element);
   await element.dispose();
@@ -71,8 +72,8 @@ const tests = async (tester: typeof Page) => {
 
 (async (port: number, test: (tester: typeof Page) => Promise<void>) => {
   const server = await createServer({
-    configFile: false,
     root: "./",
+    base: "/custom/",
     server: {
       port
     }
@@ -80,7 +81,7 @@ const tests = async (tester: typeof Page) => {
   await server.listen();
   server.printUrls();
   const tester: typeof Page = await (await puppeteer.launch()).newPage();
-  await tester.goto(\`http://localhost:\${port}\`);
+  await tester.goto(\`http://localhost:\${port}/custom/\`);
   await test(tester);
   process.exit();
 })(4000, tests);

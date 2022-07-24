@@ -7,6 +7,8 @@
     "elevate": "sudo echo '' || exit 0",
     "test": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js && npm run dev-uninstall && echo 'Done.'",
     "test-create": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js create && npm run dev-uninstall && echo 'Done.'",
+    "test-create-and-run": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js create && npm run dev-uninstall && npm run test",
+    "test-skip-checksum": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js skip && npm run dev-uninstall && echo 'Done.'",
     "dev": "npm run elevate && npm run build && npm run dev-install && cd ../ && npm create octobox-app -- internal && cd ./create-octobox-app && npm run app-uninstall",
     "build": "tsc --project tsconfig.json && minify bin/index.max.js > bin/index.js && rimraf bin/index.max.js && chmod u+x bin/index.js || exit 0",
     "dev-install": "npm run dev-uninstall && npm run app-install && npm run plugins-eslint-install && npm run plugins-stylelint-install && npm run plugins-utils-install",

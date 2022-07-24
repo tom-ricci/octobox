@@ -25,7 +25,6 @@ const tests = async (tester: typeof Page) => {
 
 (async (port: number, test: (tester: typeof Page) => Promise<void>) => {
   const server = await createServer({
-    configFile: false,
     root: "./",
     server: {
       port

@@ -83,8 +83,8 @@ const main = async (): Promise<void> => {
       if("pending_ms" in argv && !Number.isNaN(parseInt(argv["pending_ms"]))) {
         args.pendingMs = parseInt(argv["pending_ms"]);
       }
-      if("max_age" in argv && !Number.isNaN(parseInt(argv["max_age"]))) {
-        args.maxAge = parseInt(argv["max_age"]);
+      if("max_age_ms" in argv && !Number.isNaN(parseInt(argv["max_age_ms"]))) {
+        args.maxAge = parseInt(argv["max_age_ms"]);
       }
     }
     utils.path = input;
