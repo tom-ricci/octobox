@@ -22,7 +22,9 @@ const utils = {
       utils.log.info(`Test ${ index - 1 } complete!`);
       await new Promise(r => setTimeout(r, 500));
     }
-    utils.log.info(`Running test ${ index }...`);
+    if(!utils.creation) {
+      utils.log.info(`Running test ${ index }...`);
+    }
     await test();
   },
   finish: async (index) => {
@@ -41,7 +43,8 @@ const utils = {
   },
   success: () => {
     successful++;
-  }
+  },
+  creation: false
 };
 
 module.exports = utils;

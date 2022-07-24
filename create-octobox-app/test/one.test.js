@@ -1,5 +1,3 @@
-// TODO: always update this test
-
 const utils = require("./testutils.js");
 const { execSync } = require("child_process");
 const fs = require("fs");
@@ -12,33 +10,29 @@ let status = true;
 const test = async () => {
   // test 1
   // for this we create a bunch of projects in our CWD, and compare them to functional projects via a checksum. we can probably assume people will be in the root directory of the project running this, so as long as we dont decide to make a directory named one of these we should be fine.
-  utils.log.info("In this test, some Octobox apps will be created. This is to ensure they can be created properly without any errors. If they're bootstraped smoothly, they will be compared against a checksum of what they should be, and the test will pass if this is true.");
+  // alternatively, if this test is being run in creation mode, it will add/update the checksums to reflect the actual checksums of the projects and then skip all remaining tests
+  if(!utils.creation) {
+    utils.log.info("In this test, some Octobox apps will be created. This is to ensure they can be created properly without any errors. If they're bootstraped smoothly, they will be compared against a checksum of what they should be, and the test will pass if this is true.");
+  }
   await new Promise(r => setTimeout(r, 1000));
-  // path resolution tests:
-  // one valid directory with defaults
-  await run("npm create octobox-app -- argumented internal --path qwertyuiop0123456789 --tailwind FALSE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./qwertyuiop0123456789", "BQahZfj8wXJOC0LRfzD3JQLvdpg=", 1);
-  // one invalid directory (sanitization required) with defaults
-  await run("npm create octobox-app -- argumented internal --path '/_+../][872345gdsef2__gerygh' --tailwind FALSE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./872345gdsef2gerygh", "h4w/1AIs8JFO2o0UxrJq/HHvOSI=", 2);
-  // plugin tests:
-  // tailwind
-  await run("npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind TRUE --eslint FALSE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "ngPQ3H2Vo+jb8fz0Y00UZCQF8e8=", 3);
-  // eslint
-  await run("npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint FALSE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "ZKKHB1CayZPgofGqOyf4hXDHYPk=", 4);
-  // stylelint
-  await run("npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "pZnDcnO9MSyUMawTBV4CAbjezdA=", 5);
-  // eslint, stylelint
-  await run("npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE", "./octoboxapptestone", "GsJxynWG5sUxwP1S+dktvZGHOcY=", 6);
-  // eslint, stylelint, recommended eslint config, recommended stylelint config
-  await run("npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE --recommended_eslint_config TRUE --recommended_stylelint_config TRUE", "./octoboxapptestone", "7nTCXEWFt3WXjirTKtfrZ07h0o4=", 7);
-  // final test:
-  // all of it
-  await run("npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config TRUE --recommended_stylelint_config TRUE", "./octoboxapptestone", "orG9YUnDz3UoUx9OZHz7w2bNkUA=", 8);
-  // comparison time
+  // run the tests -- they're stored in hashes.json
+  const json = JSON.parse(fs.readFileSync("./test/hashes.json").toString());
+  for(let i = 0; i < json.hashes.length; i++) {
+    const index = i + 1;
+    const hash = json.hashes[i];
+    await run(hash[1], hash[2], hash[3], index);
+  }
+  // comparison time, or if we're just creating hashes exit time
+  if(utils.creation) {
+    utils.log.info("Hashes created.");
+    await new Promise(r => setTimeout(r, 1000));
+    process.exit(0);
+  }
   if(status) {
     utils.success();
     utils.log.pass("Test 1 passed!");
   }else{
-    utils.log.fail("Test 1 Failed!");
+    utils.log.fail("Test 1 failed!");
   }
   // wait time to know what happened
   await new Promise(r => setTimeout(r, 1000));
@@ -58,13 +52,23 @@ const run = async (cmd, path, hash, index) => {
   ehash = ehash.substring(ehash.indexOf("', hash: '") + 10);
   ehash = ehash.substring(0, ehash.indexOf("',"));
   // log
-  utils.log.info(`Checksum ${ index }:`);
-  utils.log.info(`Expected: ${ hash }`);
-  utils.log.info(`Actual:   ${ ehash }`);
+  if(!utils.creation) {
+    utils.log.info(`Checksum ${ index }:`);
+    utils.log.info(`Expected: ${ hash }`);
+    utils.log.info(`Actual:   ${ ehash }`);
+  }
   // cleanup
   fs.rmSync(path, { recursive: true });
-  utils.log.info(ehash === hash ? `App ${ index } equals its checksum!` : `App ${ index } does not equal its checksum!`);
+  if(!utils.creation) {
+    utils.log.info(ehash === hash ? `App ${ index } equals its checksum!` : `App ${ index } does not equal its checksum!`);
+  }
   status = !status ? false : ehash === hash;
+  // update hash (if creating new hashes)
+  if(utils.creation) {
+    const json = JSON.parse(fs.readFileSync("./test/hashes.json").toString());
+    json.hashes[index - 1][3] = ehash;
+    fs.writeFileSync("./test/hashes.json", JSON.stringify(json, null, 2));
+  }
 };
 
 module.exports = test;
