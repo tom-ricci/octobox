@@ -1,6 +1,5 @@
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
-const fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch(...args));
 
 const test = async () => {
   // this test should make sure routing works by checking to see if all cypress specs pass in our routing demo app
