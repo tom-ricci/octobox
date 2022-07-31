@@ -1,6 +1,7 @@
 const utils = require("./testutils.js");
 const {execSync, exec: execAsync} = require("child_process");
 const fs = require("fs");
+const six = require("./six.test.js");
 
 const test = async () => {
   // this test makes a dirty app with linters and lints them. if all goes well, the test will pass.
@@ -65,7 +66,7 @@ const test = async () => {
       }else{
         utils.log.fail("Test 5 failed!");
       }
-      await utils.finish(5);
+      await utils.run(six, 6);
     });
   });
 };
