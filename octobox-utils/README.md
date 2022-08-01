@@ -1,3 +1,3 @@
-# create-octobox-app
-Octobox's app creation CLI.\
+# eslint-config-octobox
+Octobox's utilities.\
 Head over to [octobox.thomasricci.dev](https://octobox.thomasricci.dev) for more details.

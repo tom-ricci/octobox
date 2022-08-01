@@ -4,10 +4,6 @@
   "description": "Octobox's utilities, including React components and hooks.",
   "main": "index.ts",
   "module": "index.ts",
-  "scripts": {
-    "test": "echo -e \"No unit tests here, run Octobox's parent package tests!\"",
-    "build": "exit 0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tom-ricci/octobox.git"

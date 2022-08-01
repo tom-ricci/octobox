@@ -3,9 +3,6 @@
   "version": "2.0.0",
   "description": "Octobox's ESLint config based on Thomas Ricci's styleguide.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo -e \"No unit tests here, run Octobox's parent package tests!\""
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tom-ricci/octobox.git"

@@ -5,10 +5,7 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node index.ts",
-    "test": "ts-node index.ts",
-    "dev": "ts-node index.ts",
-    "build": "ts-node index.ts"
+    "start": "cd create-octobox-app && npm run dev"
   },
   "repository": {
     "type": "git",

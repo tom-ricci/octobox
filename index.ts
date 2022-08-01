@@ -1,1 +1,1 @@
-console.log("To run Octobox's scripts, head over to ./create-octobox-app. Running \"dev\" will build, install, run, and finally uninstall Octobox from your system. \"Test\" will do the same thing, except it will run unit tests instead of Octobox. \"Build\" will just build Octobox. All other scripts are helper scripts, although you can run them. Read create-octobox-app's README for more.");
+console.log("Read the docs for information.");
