@@ -1,6 +1,6 @@
 # Octobox
 ### Stop scaffolding. Start building.
-Octobox is a React metaframework written in TypeScript. Just run `npx create-octobox-app@latest` and let Octobox let you focus on what matters &mdash; *your app*.
+Octobox is a React metaframework written in TypeScript. Just run `npm create octobox-app@latest` and let Octobox let you focus on what matters &mdash; *your app*.
 
 # Features
 * Comprehensive routing
