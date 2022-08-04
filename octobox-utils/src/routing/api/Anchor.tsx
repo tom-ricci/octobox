@@ -4,7 +4,6 @@ import { useCheckUrl } from "../useCheckUrl";
 import { LocationManager } from "../LocationManager";
 import { useReload } from "./useReload";
 import { Preload } from "./Preload";
-import { useDevelopmentModeStatus } from "../../mode/useDevelopmentModeStatus";
 
 export interface DynamicAnchorProps extends Omit<LinkProps, "preload"> {
   preload?: Preload;
