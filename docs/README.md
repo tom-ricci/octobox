@@ -1,5 +1,7 @@
 # octobox-docs
 Octobox's documentation.
+> **Note**\
+> This is documentation for Octobox v2, which is not released yet. For v1 documentation, check the latest release.
 
 # Contents
 * [Overview](https://github.com/tom-ricci/octobox/blob/docs/Overview.md)
