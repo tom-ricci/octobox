@@ -10,4 +10,4 @@ When you have an erronerous file, Octobox will throw an error on the development
 There's nothing proprietary about Octobox's implementation of linters, so IDE plugins for ESLint and Stylelint should function properly.
 
 ## Known Bugs
-Linters occasionally break and continue to report there being an error after it was fixed. To work around this, stop the development server and edit and save your file. Then restart the development server. Once everything is running smoothly again, you can undo your changes to the file. We don't know why this happens, but research into this issue and a fix is planned.
+Linters occasionally break and continue to report there being an error after it was fixed. To work around this, stop the development server and edit and save your file. Then restart the development server. Once everything is running smoothly again, you can undo your changes to the file. We don't know why this happens, but research into this issue is planned and a fix will be on its way.
