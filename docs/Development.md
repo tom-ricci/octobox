@@ -6,7 +6,7 @@ Octobox requires Node 16 and npm 8. Its commands support Bash and Powershell, an
 ## Local Install
 If you want create an Octobox app locally, run the `start` npm script after cloning the Octobox repo. You can also run `dev` in `/create-octobox-app` for the same effect.
 ### Using Arguments
-To use arguments, first run `npm run dev-install` inside `./create-octobox-app`. Then run `npm create octobox-app@latest -- internal argumented $ARGS`, filling in `$ARGS` with your arguments as defined by [this](https://github.com/tom-ricci/octobox/blob/docs/Install.md#arguments).
+To use arguments, first run `npm run dev-install` inside `./create-octobox-app`. Then run `npm create octobox-app@latest -- internal argumented $ARGS`, filling in `$ARGS` with your arguments as defined by [this](https://github.com/tom-ricci/octobox/blob/main/docs/Install.md#arguments).
 
 ## Contributing
 All of Octobox's development scripts are stored inside the installer's directory, `/create-octobox-app`. Assume every script and path below is relative to that directory.
