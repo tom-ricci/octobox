@@ -8,6 +8,9 @@
     "type": "git",
     "url": "git+https://github.com/tom-ricci/octobox.git"
   },
+  "scripts": {
+    "build": "echo 'There is no build step for octobox-utils at this time. It is shipped as source code.'"
+  },
   "keywords": [
     "octobox"
   ],
