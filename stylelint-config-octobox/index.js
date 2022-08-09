@@ -3,6 +3,8 @@ module.exports = {
     "color-no-invalid-hex": true,
     "font-family-no-missing-generic-family-keyword": true,
     "declaration-block-no-duplicate-custom-properties": true,
+    "custom-property-empty-line-before": null,
+    "max-line-length": null,
     "declaration-block-no-duplicate-properties": true,
     "block-no-empty": true,
     "comment-no-empty": true,
@@ -12,7 +14,7 @@ module.exports = {
     "color-function-notation": true,
     "shorthand-property-no-redundant-values": true,
     "declaration-block-single-line-max-declarations": 2,
-    "color-hex-case": "upper",
+    "color-hex-case": null,
     "function-comma-space-before": false,
     "function-comma-space-after": true,
     "function-name-case": "lower",
@@ -27,7 +29,9 @@ module.exports = {
     "declaration-bang-space-after": "never",
     "declaration-bang-space-before": "always",
     "block-opening-brace-space-before": "always",
-    "rule-empty-line-before": "always",
+    "rule-empty-line-before": ["always", {
+      "except": ["after-single-line-comment", "first-nested"]
+    }],
     "comment-whitespace-inside": "always",
     "indentation": 4,
     "no-eol-whitespace": true,

@@ -1,36 +1,61 @@
 {
   "name": "create-octobox-app",
-  "version": "1.1.1",
-  "description": "Creates an Octobox app.",
-  "main": "./bin/create-octobox-app.js",
+  "version": "2.0.0",
+  "description": "Make an Octobox app.",
+  "main": "bin/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Thomas Ricci",
-  "license": "MIT",
-  "bin": {
-    "create-octobox-app": "bin/create-octobox-app.js"
+    "elevate": "sudo echo '' || exit 0",
+    "test": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js && npm run dev-uninstall && echo 'Done.'",
+    "test-create": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js create && npm run dev-uninstall && echo 'Done.'",
+    "test-create-and-run": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js create && npm run dev-uninstall && npm run test",
+    "test-skip-checksum": "npm run elevate && npm run build && npm run dev-install && node test/main.test.js skip && npm run dev-uninstall && echo 'Done.'",
+    "dev": "npm run elevate && npm run build && npm run dev-install && cd ../ && npm create octobox-app -- internal && cd ./create-octobox-app && npm run app-uninstall",
+    "build": "tsc --project tsconfig.json && minify bin/index.max.js > bin/index.js && rimraf bin/index.max.js && chmod u+x bin/index.js || exit 0",
+    "dev-install": "npm run dev-uninstall && npm run app-install && npm run plugins-eslint-install && npm run plugins-stylelint-install && npm run plugins-utils-install",
+    "dev-uninstall": "npm run app-uninstall && npm run plugins-eslint-uninstall && npm run plugins-stylelint-uninstall && npm run plugins-utils-uninstall",
+    "app-install": "npm run app-uninstall && sudo npm link || npm link",
+    "app-uninstall": "sudo npm -g uninstall create-octobox-app || npm -g uninstall create-octobox-app",
+    "plugins-eslint-install": "npm run plugins-eslint-uninstall && cd ../eslint-config-octobox && sudo npm link || npm link",
+    "plugins-eslint-uninstall": "sudo npm -g uninstall eslint-config-octobox || npm -g uninstall eslint-config-octobox",
+    "plugins-stylelint-install": "npm run plugins-stylelint-uninstall && cd ../stylelint-config-octobox && sudo npm link || npm link",
+    "plugins-stylelint-uninstall": "sudo npm -g uninstall stylelint-config-octobox || npm -g uninstall stylelint-config-octobox",
+    "plugins-utils-install": "npm run plugins-utils-uninstall && cd ../octobox-utils && npm run build && sudo npm link || npm link",
+    "plugins-utils-uninstall": "sudo npm -g uninstall octobox-utils || npm -g uninstall octobox-utils"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tom-ricci/octobox.git"
   },
   "engines": {
-    "node": ">=16"
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   },
   "keywords": [
-    "octobox",
-    "create-octobox-app",
-    "react",
-    "typescript",
-    "framework",
-    "tailwind",
-    "sass",
-    "routing",
-    "github pages"
+    "octobox"
   ],
+  "bin": "bin/index.js",
+  "author": "Thomas Ricci",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://www.octobox.thomasricci.dev"
+  "homepage": "https://github.com/tom-ricci/octobox#readme",
+  "devDependencies": {
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^17.0.21",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "^8.11.0",
+    "folder-hash": "^4.0.2",
+    "minify": "^8.0.4",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.2",
+    "uuid": "^8.3.2"
+  },
+  "dependencies": {
+    "ansi-colors": "^4.1.1",
+    "enquirer": "^2.3.6",
+    "minimist": "^1.2.5",
+    "replaceall": "^0.1.6"
+  }
 }

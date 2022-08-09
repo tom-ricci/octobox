@@ -1,3 +1,3 @@
-# Octobox
-### Stop scaffolding. Start building.
-Octobox is a configuration-less Typescript framework for building React apps sporting features like routing, animations, linter support, SEO, and much more. View the documentation [here](https://github.com/tom-ricci/octobox).
+# create-octobox-app
+Octobox's app creation CLI.\
+Head over to [octobox.thomasricci.dev](https://octobox.thomasricci.dev) for more details.

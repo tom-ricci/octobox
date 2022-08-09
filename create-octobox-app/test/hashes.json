@@ -1,0 +1,106 @@
+{
+  "schema": [
+    "DESCRIPTION",
+    "TEST COMMAND",
+    "TEST COMMAND CWD",
+    "HASH"
+  ],
+  "hashes": [
+    [
+      "one valid directory with defaults",
+      "npm create octobox-app -- argumented internal --path qwertyuiop0123456789 --tailwind FALSE --eslint FALSE --stylelint FALSE --routing FALSE",
+      "./qwertyuiop0123456789",
+      "UTQz3+Ly2jUquju/MAYv/SXcao8="
+    ],
+    [
+      "one invalid directory (sanitization required) with defaults",
+      "npm create octobox-app -- argumented internal --path '/_+../][872345gdsef2__gerygh' --tailwind FALSE --eslint FALSE --stylelint FALSE --routing FALSE",
+      "./872345gdsef2gerygh",
+      "22JZWCfeyccIP50XzXobLBxxOBM="
+    ],
+    [
+      "tailwind",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind TRUE --eslint FALSE --stylelint FALSE --routing FALSE",
+      "./octoboxapptestone",
+      "3o5gdSPhWEEYm0VYfh0WcasPJro="
+    ],
+    [
+      "eslint",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint FALSE --recommended_eslint_config FALSE --routing FALSE",
+      "./octoboxapptestone",
+      "xvf6jPZFVDfpZujUDDZRJ6nzzRE="
+    ],
+    [
+      "stylelint",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint TRUE --recommended_stylelint_config FALSE --routing FALSE",
+      "./octoboxapptestone",
+      "oiaiAwtekieqodSxwhD0m6j9aOI="
+    ],
+    [
+      "eslint, stylelint",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE --routing FALSE",
+      "./octoboxapptestone",
+      "l/io+aVkt06RxmptCK+FPmfWwiI="
+    ],
+    [
+      "eslint, stylelint, recommended eslint config, recommended stylelint config",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint TRUE --stylelint TRUE --recommended_eslint_config TRUE --recommended_stylelint_config TRUE --routing FALSE",
+      "./octoboxapptestone",
+      "s0jHbFze2iP7Cp0jkaytf92ScF4="
+    ],
+    [
+      "routing",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows FALSE --custom_fallbacks FALSE",
+      "./octoboxapptestone",
+      "Zr6GHh7BdOh+ZIZic+XOs7scP3U="
+    ],
+    [
+      "routing with default/wildcard",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows TRUE --custom_fallbacks FALSE",
+      "./octoboxapptestone",
+      "JjE7XGCTGJGyzZYeZjjEkrdpZQ8="
+    ],
+    [
+      "routing with err/pending",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows FALSE --custom_fallbacks TRUE",
+      "./octoboxapptestone",
+      "W+B5cG7ffgudlVK4mlRtFw9Ty9c="
+    ],
+    [
+      "routing with default/wildcard and err/pending",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows TRUE --custom_fallbacks TRUE",
+      "./octoboxapptestone",
+      "+VjPkcdhSYRfUNvrvEXdmg5hH8c="
+    ],
+    [
+      "routing with basename",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows FALSE --custom_fallbacks FALSE --basename test",
+      "./octoboxapptestone",
+      "WmVMkl1gy8w0cLDTyotA5H7Ek2Q="
+    ],
+    [
+      "routing with unresponsive ms",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows FALSE --custom_fallbacks FALSE --unresponsive_ms 100",
+      "./octoboxapptestone",
+      "DjRvqqFH4cnJFpfE/FfDYk4+RMQ="
+    ],
+    [
+      "routing with pending ms",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows FALSE --custom_fallbacks FALSE --pending_ms 500",
+      "./octoboxapptestone",
+      "S+306TU95NgeNd6qYhDCuUWxShw="
+    ],
+    [
+      "routing with max age",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind FALSE --eslint FALSE --stylelint FALSE --routing TRUE --recommended_windows FALSE --custom_fallbacks FALSE --max_age_ms 1000",
+      "./octoboxapptestone",
+      "2unE4AqYqeb06Oh3EyRg8p6R64M="
+    ],
+    [
+      "everything",
+      "npm create octobox-app -- argumented internal --path octoboxapptestone --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config TRUE --recommended_stylelint_config TRUE --routing TRUE --recommended_windows TRUE --custom_fallbacks TRUE --basename test --unresponsive_ms 250 --pending_ms 500 --max_age_ms 10000",
+      "./octoboxapptestone",
+      "oS2VmDmkT1FNlfJpigbxFwPZg8E="
+    ]
+  ]
+}

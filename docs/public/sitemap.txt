@@ -1,1 +1,0 @@
-https://octobox.thomasricci.dev/%PUBLIC_URL%/?/

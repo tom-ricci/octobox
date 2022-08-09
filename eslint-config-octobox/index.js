@@ -82,9 +82,7 @@ module.exports = {
     "no-undef": [
       "off"
     ],
-    "template-curly-spacing": [
-      "error", "never"
-    ],
+    "template-curly-spacing": "off",
     "object-curly-spacing": [
       "error", "always"
     ],
@@ -100,6 +98,7 @@ module.exports = {
     "semi": [
       "error",
       "always"
-    ]
+    ],
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 };

@@ -1,29 +1,31 @@
 {
   "name": "stylelint-config-octobox",
-  "version": "1.1.0",
-  "description": "Octobox's stylelint config based on Thomas Ricci's styleguide. This is not meant to be used standalone, and should only be used in an Octobox app.",
+  "version": "2.0.0",
+  "description": "Octobox's Stylelint config based on Thomas Ricci's styleguide.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tom-ricci/octobox.git"
   },
-  "engines": {
-    "node": ">=16"
-  },
   "keywords": [
-    "octobox",
-    "stylelint",
-    "style",
-    "lint",
-    "config"
+    "octobox"
   ],
   "author": "Thomas Ricci",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tom-ricci/octobox/issues"
   },
-  "homepage": "https://www.octobox.thomasricci.dev"
+  "homepage": "https://github.com/tom-ricci/octobox#readme",
+  "devDependencies": {
+    "eslint": "^8.12.0"
+  },
+  "peerDependencies": {
+    "stylelint": ">= 14.9.1",
+    "stylelint-config-standard-scss": ">= 3.0.0",
+    "vite-plugin-stylelint": ">= 2.1.0"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  }
 }
