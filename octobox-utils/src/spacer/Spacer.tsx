@@ -9,7 +9,7 @@ interface Props extends React.HTMLProps<HTMLDivElement> {
 }
 
 /**
- * A Spacer is a component which can have a height and width written in CSS, designed to act as a blank space separating other components. The default height and width is 100%.
+ * A Spacer is a component which can have a height and width written in CSS, designed to act as a blank space separating other components. The default height and width is 100%. The <code>inline</code> prop defines if the spacer should be displayed as <code>inline-block</code>.
  * @constructor
  */
 export const Spacer: FC<Props> = ({ height, width, inline, ...props}): ReactElement => {
