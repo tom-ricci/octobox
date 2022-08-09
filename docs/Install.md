@@ -1,6 +1,4 @@
 # Install
-> **Note**\
-> This is documentation for Octobox v2, which is not released yet. For v1 documentation, check the latest release.
 
 You can use the default setup, which will bring you through a list of setup prompts to create your app.
 ```shell
