@@ -12,13 +12,13 @@ To use arguments, first run `npm run dev-install` inside `./create-octobox-app`.
 All of Octobox's development scripts are stored inside the installer's directory, `/create-octobox-app`. Assume every script and path below is relative to that directory.
 
 ### Environment
-You can (re)install Octobox into your local environment by running `npm run dev-install` and uninstall it with `npm run dev-uninstall`.
+You can (re)install Octobox into your local environment by running `npm run dev-install` and uninstall it with `npm run dev-uninstall`. Octobox will also build its installer and compilier when installing.
 
 ### Writing
 When you write code for Octobox, make sure to lint your app using the ESLint configurations provided.
 
 ### Building
-To build Octobox's installer, run the `build` npm script.
+To build Octobox's buildable packages, run the `build` npm script. It will build the Octobox installer and Octobox compilier.
 
 ### Testing
 #### Writing
