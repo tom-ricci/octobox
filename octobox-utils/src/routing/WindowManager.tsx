@@ -3,6 +3,7 @@ import { DefaultError } from "./defaults/DefaultError";
 import { DefaultPending } from "./defaults/DefaultPending";
 import { WindowLoader, WindowUnloader } from "./api/Loaders";
 import { useRouter } from "@tanstack/react-location";
+import { CompilierConfig as PrerenderingConfig } from "./api/CompilierConfig";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
 
@@ -11,6 +12,7 @@ type Leaf = [{
   component: () => Promise<ReactNode>,
   loader?: () => Promise<Promise<WindowLoader> | undefined>
   unloader?: () => Promise<Promise<WindowUnloader> | undefined>
+  prerender?: () => Promise<Promise<PrerenderingConfig> | undefined>
   error?: ReactNode,
   pending?: ReactNode
 }];
@@ -26,6 +28,7 @@ export interface Config {
   component?: () => Promise<ReactNode>;
   loader?: () => Promise<Promise<WindowLoader> | undefined>
   unloader?: () => Promise<Promise<WindowUnloader> | undefined>
+  prerender?: () => Promise<Promise<PrerenderingConfig> | undefined>
   error?: ReactNode;
   pending?: ReactNode;
   children?: Config[];
@@ -199,6 +202,7 @@ export class WindowManager {
         this.fill(route[0].children, comp, extras);
       }else{
         // tell the branch what component it refers to, its pending and error components, and its data loaders
+        // also add its prerendering component for the Config object
         route[0] = {
           value: route[0].value,
           component: () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>)),
@@ -218,6 +222,15 @@ export class WindowManager {
             if("Unloader" in mod) {
               // @ts-ignore
               return mod["Unloader"];
+            }else{
+              return undefined;
+            }
+          },
+          prerender: async (): Promise<Promise<PrerenderingConfig> | undefined> => {
+            const mod = await comp();
+            if("Config" in mod) {
+              // @ts-ignore
+              return mod["Config"];
             }else{
               return undefined;
             }
@@ -358,6 +371,21 @@ export class WindowManager {
             if("Unloader" in mod) {
               // @ts-ignore
               return mod["Unloader"];
+            }else{
+              return undefined;
+            }
+          }
+          return undefined;
+        };
+      }
+      if(!("prerender" in tree[0])) {
+        // @ts-ignore
+        tree[0].prerender = async (): Promise<Promise<PrerenderingConfig> | undefined> => {
+          if(comp !== undefined) {
+            const mod = await comp();
+            if("Config" in mod) {
+              // @ts-ignore
+              return mod["Config"];
             }else{
               return undefined;
             }

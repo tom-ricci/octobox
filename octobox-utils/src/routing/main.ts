@@ -20,6 +20,7 @@ export * from "./api/MetaTags";
 export * from "./api/PermissiveObject";
 export * from "./api/PermissiveObjectWithMetadata";
 export * from "./api/Preload";
+export * from "./api/CompilierConfig";
 export * from "./api/Redirect";
 export * from "./api/RedirectComponent";
 export * from "./api/useAnchorState";

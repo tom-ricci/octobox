@@ -6,6 +6,17 @@ import { DefaultPending } from "./defaults/DefaultPending";
 import { PermissiveObject } from "./api/PermissiveObject";
 import { LocationInstance } from "./LocationInstance";
 import { MetadataManager } from "./MetadataManager";
+import { CompilierConfig as PrerenderingConfig } from "./api/CompilierConfig";
+
+interface CompilierConfig {
+  path: string
+  config: (() => Promise<Promise<PrerenderingConfig> | undefined>) | undefined
+}
+
+interface ResolvedCompilierConfig {
+  path: string
+  config: PrerenderingConfig | undefined
+}
 
 /**
  * Manages this app's instance of ReactLocation.
@@ -90,10 +101,17 @@ export class LocationManager {
   }
 
   /**
-   * Builds the routes.
+   * Builds the routes and compilier configuration if requested.
    * @private
    */
   private build(config: Config): Route {
+    console.log(import.meta.env.MODE);
+    if(import.meta.env.MODE === "COMPILE") {
+      (async () => {
+        const store = await this.buildCompilierStorage(config);
+        sessionStorage.setItem("8769b6cf-ac3f-4d8c-b6b7-cd72d7910f35", store);
+      })();
+    }
     return this.buildChild(config);
   }
 
@@ -165,6 +183,44 @@ export class LocationManager {
     }
     // we're done!
     return route;
+  }
+
+  /**
+   * Builds the Octobox prerenderer config and resolves the per-window compilier configuration.
+   * @private
+   */
+  private async buildCompilierStorage(config: Config): Promise<string> {
+    // first of all, get all the content from the window config
+    const store = this.buildCompilierStorageChildren(config, "");
+    const nstore: ResolvedCompilierConfig[] = [];
+    // then resolve all the configs (this is the main reason this whole process is event based instead of always ran on mount--we wouldn't want all the windows to be loaded. kinda.,, like. takes away the whole benefit of lazy routing in the first place)
+    for(const item of store) {
+      if(item.config !== undefined) {
+        let resolved = await item.config();
+        // @ts-ignore
+        resolved = resolved ?? {};
+        nstore.push({ path: item.path, config: resolved});
+      }
+    }
+    // convert it to json so its easier for the compilier to decode
+    const objstore = Object.assign({}, nstore);
+    return JSON.stringify(objstore);
+  }
+
+  /**
+   * Resolves compilier configurations recursively.
+   * @private
+   */
+  private buildCompilierStorageChildren(config: Config, parent: string): CompilierConfig[] {
+    let arr: CompilierConfig[] = [];
+    parent = parent.length <= 0 ? parent : `${parent}/`;
+    arr.push({ path: `${parent}${config.path}`, config: config.prerender });
+    if(config.children !== undefined) {
+      for(const child of config.children) {
+        arr = arr.concat(this.buildCompilierStorageChildren(child, `${parent}${config.path}`));
+      }
+    }
+    return arr;
   }
 
   /**
