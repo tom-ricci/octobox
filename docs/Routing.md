@@ -89,6 +89,8 @@ You might've noticed that wildcard, default, pending, and error windows all star
 
 You also cannot start static path segments with a `$`. If you need to use a dollar sign in a static window, you can create a dynamic window, write some code in the window to check to see if the current path matches the static path you're looking for, and render the content if so.
 
+You cannot use the characters `*` and `:` in paths as these characters are used internally by the Octobox router and compilier.
+
 Also, while this is not technically a reserved word, it's recommended to avoid nesting dupilcate dynamic routes in one path such as `/$comment/$reply/$reply/$reply/...`. It's technically possible, but may make things a bit wonky. If you need that sort of behavior, it might make more sense using a wildcard window and changing your logic.
 
 ## The `<Filesystem/>` Component

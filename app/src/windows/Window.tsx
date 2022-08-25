@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Outlet } from "octobox-utils";
+import { CompilierConfig, Outlet } from "octobox-utils";
 import { Anchor } from "octobox-utils";
 import { WindowLoader } from "octobox-utils";
 
@@ -39,6 +39,11 @@ export const Loader: WindowLoader = async () => {
       }
     }
   };
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

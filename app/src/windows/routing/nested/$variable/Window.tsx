@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { useParams } from "octobox-utils";
+import { CompilierConfig, useParams } from "octobox-utils";
 
 interface Props {
 
@@ -15,6 +15,12 @@ const Window: FC<Props> = (): ReactElement => {
       <p className={"pb-3"}>If you haven't noticed yet, another feature of variable windows is that they can access the values of each path variable. Change the last part of the URL and see what changes in the first paragraph.</p>
     </React.Fragment>
   );
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "dynamic",
+  params: [ "octobox", "dynamic", "octobox" ]
 };
 
 export default Window;

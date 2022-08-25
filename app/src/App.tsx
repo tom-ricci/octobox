@@ -8,7 +8,7 @@ interface Props {
 export const App: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
-      <Filesystem/>
+      <Filesystem basename={"sussy"}/>
     </React.Fragment>
   );
 };

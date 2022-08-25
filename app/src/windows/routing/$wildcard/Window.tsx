@@ -1,4 +1,5 @@
 import React, { FC, ReactElement } from "react";
+import { CompilierConfig } from "octobox-utils";
 
 interface Props {
 
@@ -11,6 +12,11 @@ const Window: FC<Props> = (): ReactElement => {
       <p>This window isn't any actual route, but rather a 404 page. If no routes match, it'll be loaded instead.</p>
     </React.Fragment>
   );
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "wildcard"
 };
 
 export default Window;

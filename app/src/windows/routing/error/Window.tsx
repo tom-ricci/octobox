@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { WindowLoader } from "octobox-utils";
+import { CompilierConfig, WindowLoader } from "octobox-utils";
 import { Anchor } from "octobox-utils";
 
 interface Props {
@@ -17,6 +17,11 @@ const Window: FC<Props> = (): ReactElement => {
 
 export const Loader: WindowLoader = async () => {
   throw new Error("Error component error, nothing to see here.");
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

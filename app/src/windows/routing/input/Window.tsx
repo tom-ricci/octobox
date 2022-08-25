@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Form, Outlet, redirect } from "octobox-utils";
+import { CompilierConfig, Form, Outlet, redirect } from "octobox-utils";
 
 interface Props {
 
@@ -28,6 +28,11 @@ const Window: FC<Props> = (): ReactElement => {
       <Outlet/>
     </React.Fragment>
   );
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

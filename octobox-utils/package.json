@@ -32,7 +32,6 @@
     "@types/react": "^18.0.1",
     "@types/react-dom": "^18.0.5",
     "@types/uuid": "^8.3.4",
-    "@types/lodash.merge": "^4.6.7",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
     "eslint": "^8.13.0",
@@ -51,6 +50,6 @@
     "puppeteer": "^16.1.0",
     "uuid": "^8.3.2",
     "vite": "^2.9.2",
-    "lodash.merge": "^4.6.2"
+    "replaceall": "^0.1.6"
   }
 }

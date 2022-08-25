@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Spacer } from "octobox-utils";
+import { CompilierConfig, Spacer } from "octobox-utils";
 import { Anchor } from "octobox-utils";
 
 interface Props {
@@ -29,6 +29,11 @@ const Window: FC<Props> = (): ReactElement => {
       </div>
     </React.Fragment>
   );
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

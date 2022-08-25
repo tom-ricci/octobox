@@ -91,7 +91,7 @@ export class LocationManager {
           defaultPendingMinMs={this.minPendingTimeout}
           useErrorBoundary={true}
           // build our routes
-          routes={[this.build(this.config)]}>
+          routes={[this.build(this.config, this.basename)]}>
           <MetadataManager.VHead/>
         </Router>
       </React.Fragment>);
@@ -104,12 +104,15 @@ export class LocationManager {
    * Builds the routes and compilier configuration if requested.
    * @private
    */
-  private build(config: Config): Route {
+  private build(config: Config, basename?: string): Route {
     console.log(import.meta.env.MODE);
     if(import.meta.env.MODE === "COMPILE") {
       (async () => {
         const store = await this.buildCompilierStorage(config);
         sessionStorage.setItem("8769b6cf-ac3f-4d8c-b6b7-cd72d7910f35", store);
+        if(basename !== undefined) {
+          sessionStorage.setItem("8769b6cf-ac3f-4d8c-b6b7-cd72d7910f35b", basename);
+        }
       })();
     }
     return this.buildChild(config);

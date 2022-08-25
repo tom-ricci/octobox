@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { WindowLoader, WindowUnloader } from "octobox-utils";
+import { CompilierConfig, WindowLoader, WindowUnloader } from "octobox-utils";
 import { useLoader } from "octobox-utils";
 
 interface Props {
@@ -28,6 +28,11 @@ export const Loader: WindowLoader = async () => {
 
 export const Unloader: WindowUnloader = async () => {
   console.log("Unloaded!");
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

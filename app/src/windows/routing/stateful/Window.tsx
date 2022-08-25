@@ -1,4 +1,5 @@
 import React, { FC, ReactElement } from "react";
+import { CompilierConfig } from "octobox-utils";
 
 interface Props {
 
@@ -12,6 +13,11 @@ const Window: FC<Props> = (): ReactElement => {
       <p className={"pt-3"}>Take a look at the sidebar to see this change take effect.</p>
     </React.Fragment>
   );
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

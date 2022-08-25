@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { Outlet } from "octobox-utils";
+import { CompilierConfig, Outlet } from "octobox-utils";
 import { Spacer } from "octobox-utils";
 import { Anchor } from "octobox-utils";
 import { ActiveChild, InactiveChild } from "octobox-utils";
@@ -65,6 +65,11 @@ export const Loader: WindowLoader = async () => {
       title: "Routing",
     }
   };
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;

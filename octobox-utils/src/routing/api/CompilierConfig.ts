@@ -19,11 +19,10 @@ export interface DynamicCompilierConfig extends BaseCompilierConfig {
 }
 
 /**
- * A wildcard compilier config tells the compilier this will be a wildcard window. If the window makes use of the path in any way, paths can be provided to compile the window with. These paths are relative to the location of the window whether you use <code>./</code> or <code>/</code>.
+ * A wildcard compilier config tells the compilier this will be a wildcard window.
  */
 export interface WildcardCompilierConfig extends BaseCompilierConfig {
   type: "wildcard"
-  paths: [string, ...string[]]
 }
 
 /**
@@ -41,8 +40,14 @@ export interface DisabledCompilierConfig {
 }
 
 /**
- * A CompilierConfig definies the configuration values for the Octobox prerenderer/compilier.
+ * A CompilierConfig definies the configuration values for the Octobox prerenderer/compilier. To add one to a window, export a named <code>Config</code> object with this type. Compilation is not supported on pending and error windows.
  *
- * If a config is specified for a default window of another window, the default window's config will be used when the default window should be displayed, and the other window's config will be used when a different child window is rendered. If a config is specified in both a normal window (parent) and that window's default window (child), the parent config will be used when compiling windows nested below the parent, and the child config will be used when compiling the parent window's path. CompilierConfigs use <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions">union discrimination</a>, so certain configuration values may be required or typed based on the types of other values.
+ * If no config is specified in a window, the window will not be compiled.
+ *
+ * CompilierConfigs use <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions">union discrimination</a>, so certain configuration values may be required or typed based on the types of other values.
+ *
+ * When windows have default windows, the default window's config will be used when the default window should be displayed, and the main window's config will be used when a different child window should be rendered. If the default window has no config or compilation is disabled, the main window will not be compiled when the default window should be displayed.
+ *
+ * If a dynamic window has compilation disabled in its config or does not contain a config, its child windows will not be compiled regardless of their configs. This is due to a technical impossibility, and does not occour with the children of static windows.
  */
 export type CompilierConfig = DynamicCompilierConfig | WildcardCompilierConfig | StaticCompilierConfig | DisabledCompilierConfig;

@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from "react";
-import { WindowLoader } from "octobox-utils";
+import { CompilierConfig, WindowLoader } from "octobox-utils";
 import { useSleep } from "octobox-utils";
 import { useLoader } from "octobox-utils";
 
@@ -28,6 +28,11 @@ export const Loader: WindowLoader = async () => {
     element.innerText = "5144ed130176a9c9bdca9b1fb1e283fc";
   }
   return { data: "I'm expensive!" };
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;
