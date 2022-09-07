@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-const { createServer, build } = require("vite");
+const { createServer, build, preview } = require("vite");
 const puppeteer = require("puppeteer");
 const portfinder = require("portfinder");
-const { exec } = require("child_process");
 const nodeFetch = require("node-fetch");
-const util = require("util");
 const replaceall = require("replaceall");
+const terminator = require("http-terminator");
 
 interface EnabledCompilierConfig {
   compile: true
@@ -71,6 +70,7 @@ const init = async () => {
   });
   const port = await portfinder.getPortPromise();
   await server.listen(port);
+  globals.port = port;
   // we also need to set up our pptr browser to get the resolved data
   const page = await (await puppeteer.launch({ args: ["--no-sandbox"]})).newPage();
   await page.goto(`http://localhost:${port}`);
@@ -115,111 +115,96 @@ const runner = async (store: Store) => {
     root: process.cwd(),
     configFile: `${process.cwd()}/vite.config.ts`
   });
-  // annnd we use serve to host the bundle
-  const port = await portfinder.getPortPromise();
-  const server = exec(`npx --yes serve -s -p ${port} -n`, { cwd: `${process.cwd()}/dist/`});
-  globals.port = port;
-  // we also need to wait for serve to spin up, so check every 2 seconds for it to be up (we can't use async/await or promises in the line above, so we need to do something like this
-  const waitForServer = async () => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    const res = await nodeFetch(`http://localhost:${port}`);
-    if(res.ok && res.status === 200) {
-      // if the server is up, we create a new puppeteer instance and prepare our window configs for compilation
-      const page = await (await puppeteer.launch({ args: ["--no-sandbox"]})).newPage();
-      // we need to start turning the store into routes we can actually use
-      const rstore: ResolvedStore = {};
-      for(const val in store) {
-        const item = store[val];
-        // take the compilier config and make sure all the properties are valid and sanitized
-        // we do this by adding defaults and sanitizing current inputs
-        const config: CompilierConfig = (item.config !== undefined && "compile" in item.config) ? item.config : {
-          compile: false
-        };
-        if(config.compile) {
-          // the dynamic paths cant contain slashes because they are single path segments, the wildcard paths have to start with /
-          if(config.type === "dynamic") {
-            for(let i = config.params.length - 1; i > -1; i--) {
-              if(config.params[i].includes("/")) {
-                config.params.pop();
-              }
-            }
-            if(config.params.length < 1) {
-              continue;
-            }
-          }else if(config.type === "wildcard") {
-            // we need to do something like this so we have a path that a wildcard can use--
-            config.paths = [`/${globals.notfound}`];
+  // we need to start turning the store into routes we can actually use
+  const rstore: ResolvedStore = {};
+  for(const val in store) {
+    const item = store[val];
+    // take the compilier config and make sure all the properties are valid and sanitized
+    // we do this by adding defaults and sanitizing current inputs
+    const config: CompilierConfig = (item.config !== undefined && "compile" in item.config) ? item.config : {
+      compile: false
+    };
+    if(config.compile) {
+      // the dynamic paths cant contain slashes because they are single path segments, the wildcard paths have to start with /
+      if(config.type === "dynamic") {
+        for(let i = config.params.length - 1; i > -1; i--) {
+          if(config.params[i].includes("/")) {
+            config.params.pop();
           }
         }
-        // add the sanitized configs to a storage object
-        rstore[item.path] = config;
+        if(config.params.length < 1) {
+          continue;
+        }
+      }else if(config.type === "wildcard") {
+        // we need to do something like this so we have a path that a wildcard can use--
+        config.paths = [`/${globals.notfound}`];
       }
-      // now we need to take all the paths in the storage object and split them up, then add them to another storage object and a rejoined version to yet another storage object
-      // this is required so we can place configs in the right spots
-      const stores: ResolvedStoreArray[] = [];
-      const resolvedStoreIndex: ResolvedStore = {};
-      for(const x in rstore) {
-        let val = `${x}`;
-        const config = rstore[x];
-        // if the route ends in "//", its a default route and we need to keep track of that
-        let def = false;
-        if(val.endsWith("//")) {
-          def = true;
-          val = val.substring(0, val.length - 2);
-        }
-        if(val.endsWith("/")) {
-          val = val.substring(0, val.length - 1);
-        }
-        const vals = val.split("/");
-        // if its a default route we need to add another "/" to the end so we know its default
-        if(def) {
-          vals.push("/");
-        }
-        // then we can put the data in their storage objects
-        resolvedStoreIndex[vals.join("/")] = config;
-        const valsWithConfigs = vals.map((value, index) => {
-          if(index === vals.length - 1) {
-            return { path: value, config };
-          }else{
-            return { path: value, config: undefined };
-          }
-        });
-        stores.push(valsWithConfigs);
-      }
-      // we need to do this shift here because of an off-by-one error that, when fixed, breaks the first element
-      // we also don't need to do anything to the first element because its expected to "just work" according to octobox's formatting and window requirements
-      const firstStore = stores.shift() as ResolvedStoreArray;
-      // now for the rest of them, we need to fill in configs for each path segment
-      // to do this, we build a string out of all path segments which don't include configs. this is then a valid path for another window, and thus has a config stored somewhere. we then match the string against the other paths to find the config which goes at the deepest path segment of that string. we rinse and repeat until all path segments have a config
-      for(const store of stores) {
-        while(store.find(value => value.config === undefined) !== undefined) {
-          let str = "";
-          let index = 0;
-          for(const segment of store) {
-            if(segment.config === undefined) {
-              str += `${segment.path}/`;
-              index++;
-            }else{
-              break;
-            }
-          }
-          str = str.substring(0, str.length - 1);
-          store[index - 1].config = resolvedStoreIndex[str];
-        }
-      }
-      // we unshift this storage object and add the first element back in
-      stores.unshift(firstStore);
-      // now, we can clean up the data we have
-      // this will go through all the windows and find dynamic and wildcard ones which don't have paths, and remove them from the list. it will also override parents with their default children (if they have a default window). it will also remove any windows which have compilation disabled. it will also remove similar paths and params from non-static windows.
-      const finalStores = clean(stores);
-      // now we build the paths we need to prerender
-      const paths = buildPaths(finalStores);
-    }else{
-      await waitForServer();
     }
-  };
-  await waitForServer();
-  server.kill();
+    // add the sanitized configs to a storage object
+    rstore[item.path] = config;
+  }
+  // now we need to take all the paths in the storage object and split them up, then add them to another storage object and a rejoined version to yet another storage object
+  // this is required so we can place configs in the right spots
+  const stores: ResolvedStoreArray[] = [];
+  const resolvedStoreIndex: ResolvedStore = {};
+  for(const x in rstore) {
+    let val = `${x}`;
+    const config = rstore[x];
+    // if the route ends in "//", its a default route and we need to keep track of that
+    let def = false;
+    if(val.endsWith("//")) {
+      def = true;
+      val = val.substring(0, val.length - 2);
+    }
+    if(val.endsWith("/")) {
+      val = val.substring(0, val.length - 1);
+    }
+    const vals = val.split("/");
+    // if its a default route we need to add another "/" to the end so we know its default
+    if(def) {
+      vals.push("/");
+    }
+    // then we can put the data in their storage objects
+    resolvedStoreIndex[vals.join("/")] = config;
+    const valsWithConfigs = vals.map((value, index) => {
+      if(index === vals.length - 1) {
+        return { path: value, config };
+      }else{
+        return { path: value, config: undefined };
+      }
+    });
+    stores.push(valsWithConfigs);
+  }
+  // we need to do this shift here because of an off-by-one error that, when fixed, breaks the first element
+  // we also don't need to do anything to the first element because its expected to "just work" according to octobox's formatting and window requirements
+  const firstStore = stores.shift() as ResolvedStoreArray;
+  // now for the rest of them, we need to fill in configs for each path segment
+  // to do this, we build a string out of all path segments which don't include configs. this is then a valid path for another window, and thus has a config stored somewhere. we then match the string against the other paths to find the config which goes at the deepest path segment of that string. we rinse and repeat until all path segments have a config
+  for(const store of stores) {
+    while(store.find(value => value.config === undefined) !== undefined) {
+      let str = "";
+      let index = 0;
+      for(const segment of store) {
+        if(segment.config === undefined) {
+          str += `${segment.path}/`;
+          index++;
+        }else{
+          break;
+        }
+      }
+      str = str.substring(0, str.length - 1);
+      store[index - 1].config = resolvedStoreIndex[str];
+    }
+  }
+  // we unshift this storage object and add the first element back in
+  stores.unshift(firstStore);
+  // now, we can clean up the data we have
+  // this will go through all the windows and find dynamic and wildcard ones which don't have paths, and remove them from the list. it will also override parents with their default children (if they have a default window). it will also remove any windows which have compilation disabled. it will also remove similar paths and params from non-static windows.
+  const finalStores = clean(stores);
+  // now we build the paths we need to prerender
+  const paths = buildPaths(finalStores);
+  // and prerender
+  await prerender(paths);
 };
 
 const clean = (arr: ResolvedStoreArray[]): ResolvedStoreArray[] => {
@@ -319,24 +304,12 @@ const buildPaths = (stores: ResolvedStoreArray[]): string[] => {
       value += "/";
       return replaceall("//", "/", value);
     });
-    // paths = paths.map(value => {
-    //   const nvalue = `https://${value}`;
-    //   return nvalue.replace(`localhost:${globals.port}/`, `localhost:${globals.port}/${globals.basename}`);
-    // });
-
-
   }
-
-  console.log(util.inspect(paths, false, null, false));
-
+  paths = paths.map(value => {
+    const nvalue = `http://${value}`;
+    return nvalue.replace(`localhost:${globals.port}/`, `localhost:${globals.port}/${globals.basename}`);
+  });
   return paths;
-
-  // TODO: here we need to actually prerender things
-  // TODO: basename support
-  // TODO: we should probably have entry points for the compiled html, like a div with the attribute "body-entry" or "head-entry" or something, and all the prerendered content will go inside those elements.
-  // TODO: shut down server properly -- its not working
-
-
 };
 
 interface CascadingCompilierConfig {
@@ -387,6 +360,31 @@ const buildPathTree = (path: string, children: CascadingCompilierConfig): string
     }
   }
   return arr;
+};
+
+const prerender = async (paths: string[]) => {
+  const server = await preview({
+    configFile: `${process.cwd()}/vite.config.ts`,
+    mode: "COMPILE",
+    preview: {
+      port: globals.port,
+      host: "localhost",
+      open: false
+    }
+  });
+  const stopper = terminator.createHttpTerminator({
+    server: server.httpServer
+  });
+  const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
+  const page = browser.newPage();
+
+  await stopper.terminate();
+  // TODO: here we need to actually prerender things
+  // TODO: we should probably have entry points for the compiled html, like a div with the attribute "body-entry" or "head-entry" or something, and all the prerendered content will go inside those elements.
+};
+
+const sleep = async (ms: number) => {
+  await new Promise(resolve => setTimeout(resolve, ms));
 };
 
 init().catch(console.error);

@@ -45,11 +45,12 @@
   },
   "dependencies": {
     "@tanstack/react-location": "^3.7.4",
+    "http-terminator": "^3.2.0",
     "node-fetch": "^2.6.7",
     "portfinder": "^1.0.32",
     "puppeteer": "^16.1.0",
+    "replaceall": "^0.1.6",
     "uuid": "^8.3.2",
-    "vite": "^2.9.2",
-    "replaceall": "^0.1.6"
+    "vite": "^2.9.2"
   }
 }
