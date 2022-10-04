@@ -419,13 +419,13 @@ const prerender = async (paths: string[]): Promise<{ path: string, html: string 
 
 const storeFiles = (files: {path: string, html: string}[]) => {
   for(const file of files) {
-    fs.mkdirSync(`./build${file.path}`);
+    fs.mkdirSync(`./build${file.path}`, { recursive: true });
     fs.writeFileSync(`./build${file.path}/index.html`, file.html);
   }
   let basename = `${globals.basename}`;
   basename = basename.startsWith("/") ? basename : `/${basename}`;
-  basename = basename.endsWith("/") ? basename : basename += "/";
-  fs.copySync("./dist", `./build${basename}`);
+  basename = basename.endsWith("/") ? basename : `${basename}/`;
+  fs.copySync("./dist", `./build${basename}`, { overwrite: true });
 };
 
 init().catch(console.error);
@@ -435,4 +435,5 @@ TODO: notes
  dont use the string "jtbuksxfmarnecqwldhigvpyo" in meta tag attributes, static route path segments, dynamic compile params, nor session storage keys
  dont use #root[data-jtbuksxfmarnecqwldhigvpyo-pn]
  redirects aren't supported by compilier - expect wonky outputs
+ if a window is named assets, or named any other directory used by vite to compile, it will not exist in the final prerendered html.
  */
