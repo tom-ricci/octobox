@@ -4,6 +4,7 @@ import { DefaultPending } from "./defaults/DefaultPending";
 import { WindowLoader, WindowUnloader } from "./api/Loaders";
 import { useRouter } from "@tanstack/react-location";
 import { CompilierConfig as PrerenderingConfig } from "./api/CompilierConfig";
+import { MetadataManager } from "./MetadataManager";
 
 type Branch = [{ value: string, children?: Branch | Leaf }];
 
@@ -205,7 +206,7 @@ export class WindowManager {
         // also add its prerendering component for the Config object
         route[0] = {
           value: route[0].value,
-          component: () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>)),
+          component: () => comp().then((mod) => (mod?.default ? <React.Fragment><mod.default/><MetadataManager.SecondaryHeadPortal/></React.Fragment> : <React.Fragment/>)),
           pending: extras.pending,
           error: extras.error,
           loader: async (): Promise<Promise<WindowLoader> | undefined> => {
@@ -346,7 +347,7 @@ export class WindowManager {
     if(comp !== undefined && tree !== undefined) {
       if(!("component" in tree[0])) {
         // @ts-ignore
-        tree[0].component = () => comp().then((mod) => (mod?.default ? <mod.default/> : <React.Fragment/>));
+        tree[0].component = () => comp().then((mod) => (mod?.default ? <React.Fragment><mod.default/><MetadataManager.SecondaryHeadPortal/></React.Fragment> : <React.Fragment/>));
       }
       if(!("loader" in tree[0])) {
         // @ts-ignore

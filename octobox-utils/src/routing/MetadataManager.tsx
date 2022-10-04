@@ -1,8 +1,8 @@
 import { MetaTags } from "./api/MetaTags";
 import React, { FC, ReactElement, ReactNode, useMemo } from "react";
-import { Outlet, TransitionState, useMatches, useNavigate, useRouter } from "@tanstack/react-location";
+import { Outlet, TransitionState, useMatches, useNavigate, useRouter, useResolvePath } from "@tanstack/react-location";
 import * as ReactDOM from "react-dom";
-import { useUUID } from "octobox-utils";
+import { PermissiveObject, useDevelopmentModeStatus, useUUID } from "octobox-utils";
 import { NavigationInstance } from "./NavigationInstance";
 
 /**
@@ -103,6 +103,11 @@ export class MetadataManager {
    */
   public static readonly RenderingStatusConsumer: FC<{pending: TransitionState<any> | undefined}> = ({ pending }): ReactElement => {
     const matches = useMatches();
+    // do some match path & status resolution for the compilier
+    const matchName = matches[matches.length - 1].pathname.trim().endsWith("/") ? matches[matches.length - 1].pathname.trim() : `${matches[matches.length - 1].pathname.trim()}/`;
+    // we ONLY use resolved here because we want to skip over any failed pages--thats on the user, not us
+    const matchStatus = matches[matches.length - 1].status === "resolved";
+    const match = [matchName, matchStatus];
     let data = useMemo(() => {
       if(pending === undefined) {
         // get data
@@ -143,16 +148,54 @@ export class MetadataManager {
     }, [pending]);
     data = data ?? MetadataManager.old ?? { title: "Octobox App" };
     return <React.Fragment>
-      <MetadataManager.HeadPortal data={data}/>
+      <MetadataManager.HeadPortal data={data} match={match}/>
     </React.Fragment>;
   };
 
-  public static readonly HeadPortal: FC<{data: CompiledMetaTags}> = ({ data }): ReactElement => {
+  public static readonly HeadPortal: FC<{data: CompiledMetaTags, match: (string | boolean)[]}> = ({ data, match }): ReactElement => {
+    // compileMode is used for identifying when the page is fully loaded in the octobox compilier. more info at bottom of file
+    const compileMode = checkCompilationStatus();
     return ReactDOM.createPortal((<React.Fragment>
       {data.title !== undefined && data.title}
       {data.links !== undefined && Object.values(data.links)}
       {data.meta !== undefined && Object.values(data.meta)}
+      {compileMode && <meta data-jtbuksxfmarnecqwldhigvpyo-mn={match[0]} data-jtbuksxfmarnecqwldhigvpyo-ms={match[1]}/>}
     </React.Fragment>), document.head);
   };
 
+  public static readonly SecondaryHeadPortal: FC = (): ReactElement => {
+    // this whole component is used soley for identifying when the page is fully loaded in the compiler. more info at bottom of file
+    if(checkCompilationStatus()) {
+      // grab the current path according to our location (this works because this is running in a component between the route's parent component and the window, actually)
+      let path = useResolvePath()(".");
+      path = path.endsWith("/") ? path : `${path}/`;
+      const root = document.getElementById("root");
+      if(root !== null) {
+        // then add the path to the attribute to be scraped by pptr
+        const attr = root.getAttribute("data-jtbuksxfmarnecqwldhigvpyo-pn");
+        if(attr === null || attr === undefined || path.length > attr.length) {
+          root.setAttribute("data-jtbuksxfmarnecqwldhigvpyo-pn", path);
+        }
+      }
+    }
+    return <React.Fragment/>;
+  };
+
 }
+
+/**
+ * Checks whether the app is running in the Octobox compilier or not.
+ */
+const checkCompilationStatus = (): boolean => {
+  const pptr = sessionStorage.getItem("jtbuksxfmarnecqwldhigvpyo");
+  return pptr !== null && pptr === "yes" && !import.meta.env.DEV;
+};
+
+/*
+Compilier Information:
+Every time metadata is updated, we include a tag with the path the metadata is being resolved from and the status of the window at that time (whether its loaded or not). This is then used in conjunction with the secondary head portal, which keeps track of the path of the deepest window loaded at the time. This will only run after a window has been fully loaded. Child windows do not count, and as such this may fire a few times before the depest window to be loaded is loaded.
+
+The compilier waits until a meta tag appears with the correct path, the same tag appears with a status of "true", and the root's data attribute is the correct path. Once all three are true, the compilier knows the page's content and metadata has loaded, and will then snapshot the page. This data will then be removed in the final build to not influence scrapers.
+
+This will only ever happen when a local storage value created by pptr exists to indicate the app is being compiled.
+ */

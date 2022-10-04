@@ -19,13 +19,6 @@ export interface DynamicCompilierConfig extends BaseCompilierConfig {
 }
 
 /**
- * A wildcard compilier config tells the compilier this will be a wildcard window.
- */
-export interface WildcardCompilierConfig extends BaseCompilierConfig {
-  type: "wildcard"
-}
-
-/**
  * A static compilier config tells the compilier this will be a static window.
  */
 export interface StaticCompilierConfig extends BaseCompilierConfig {
@@ -50,4 +43,4 @@ export interface DisabledCompilierConfig {
  *
  * If a dynamic window has compilation disabled in its config or does not contain a config, its child windows will not be compiled regardless of their configs. This is due to a technical impossibility, and does not occour with the children of static windows.
  */
-export type CompilierConfig = DynamicCompilierConfig | WildcardCompilierConfig | StaticCompilierConfig | DisabledCompilierConfig;
+export type CompilierConfig = DynamicCompilierConfig | StaticCompilierConfig | DisabledCompilierConfig;

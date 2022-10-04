@@ -3,9 +3,9 @@
 const { createServer, build, preview } = require("vite");
 const puppeteer = require("puppeteer");
 const portfinder = require("portfinder");
-const nodeFetch = require("node-fetch");
 const replaceall = require("replaceall");
 const terminator = require("http-terminator");
+const fs = require("fs-extra");
 
 interface EnabledCompilierConfig {
   compile: true
@@ -18,6 +18,7 @@ interface DynamicCompilierConfig extends BaseCompilierConfig {
   params: [string, ...string[]]
 }
 
+// README: Wildcard configs and all operations against them are now useless. They exist as a remnant of a previous 404 compilation feature meant to allow crawlers to index certain 404 routes deemed popular enough to warrant indexing (popularity was designed with heuristics and user tracking in mind, but the developer was expected to determine which routes would be compiled). This was ultimately scrapped but the code still exists incase we ever implement it again and because it's easier to maintain the code this way at the moment.
 interface WildcardCompilierConfig extends BaseCompilierConfig {
   type: "wildcard"
   paths: string[]
@@ -55,7 +56,7 @@ const exit = () => {
 
 const globals = {
   port: 0,
-  notfound: Math.random().toString(36).slice(2),
+  notfound: "jtbuksxfmarnecqwldhigvpyo",
   basename: ""
 };
 
@@ -204,7 +205,9 @@ const runner = async (store: Store) => {
   // now we build the paths we need to prerender
   const paths = buildPaths(finalStores);
   // and prerender
-  await prerender(paths);
+  const html = await prerender(paths);
+  // lastly, store the files !! we're done after this :)
+  storeFiles(html);
 };
 
 const clean = (arr: ResolvedStoreArray[]): ResolvedStoreArray[] => {
@@ -239,7 +242,7 @@ const clean = (arr: ResolvedStoreArray[]): ResolvedStoreArray[] => {
       return true;
     }
   });
-  // hehe funny one liner look at it go :)) what a good one liner!! so impossible to maintain :) whos a good one linerrrr. you are. you are! good one liner!! (read this in the voice you speak to a dog to)
+  // hehe funny one liner look at it go :)) what a good one liner!! so impossible to maintain :) whos a good one linerrrr. you are. you are! good one liner!! (read this in the voice you use to speak to a dog)
   arr = arr.filter(elem => !(elem[elem.length - 1].config?.compile === false || elem.filter(value => value.path.includes(":")).find(value => !(value.config?.compile && value.config.type === "dynamic" && value.config.params.length > 0)) !== undefined || elem.filter(value => value.path.includes("*")).find(value => !(value.config?.compile && value.config.type === "wildcard" && value.config.paths.length > 0)) !== undefined));
   // in all seriousness the line above removes any window which has compilation disabled, contains an invalid dynamic window in its path, or is an invalid wildcard window
   // invalid dynamic windows are dynamic windows with either compilation disabled or no params
@@ -309,6 +312,13 @@ const buildPaths = (stores: ResolvedStoreArray[]): string[] => {
     const nvalue = `http://${value}`;
     return nvalue.replace(`localhost:${globals.port}/`, `localhost:${globals.port}/${globals.basename}`);
   });
+  // we're actually undoing something we did previously here instead of just removing that code--but given this is running in nodejs it should be fine. if performance was a concern this would be written in rust
+  paths = paths.map(value => {
+    return value.endsWith("/") ? value.substring(0, value.length - 1) : value;
+  });
+  paths = paths.filter(value => {
+    return !value.includes(globals.notfound);
+  });
   return paths;
 };
 
@@ -362,29 +372,67 @@ const buildPathTree = (path: string, children: CascadingCompilierConfig): string
   return arr;
 };
 
-const prerender = async (paths: string[]) => {
+const prerender = async (paths: string[]): Promise<{ path: string, html: string }[]> => {
+  // boot up vite preview server
   const server = await preview({
     configFile: `${process.cwd()}/vite.config.ts`,
-    mode: "COMPILE",
     preview: {
       port: globals.port,
       host: "localhost",
-      open: false
+      open: false,
     }
   });
   const stopper = terminator.createHttpTerminator({
     server: server.httpServer
   });
+  const htmls: { path: string, html: string }[] = [];
+  // create a pptr browser
   const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
-  const page = browser.newPage();
-
+  // load html
+  for(const path of paths) {
+    // on every new page, we add the compilation storage item so the router knows to compile
+    const page = await browser.newPage();
+    await page.evaluateOnNewDocument(() => {
+      sessionStorage.setItem("jtbuksxfmarnecqwldhigvpyo", "yes");
+    });
+    // then we get the path from the url we're prerendering so we can identify its selectors in the dom when its compiled
+    let url = new URL(path).pathname;
+    url = url.endsWith("/") ? url : `${url}/`;
+    url = url.startsWith("./") ? url.replace("./", "/") : url;
+    url = url.startsWith("/") ? url : `/${url}`;
+    // and finally we begin loading the html, wait for it to be ready, and scrape it
+    await page.goto(path, { waitUntil: "networkidle0" });
+    await page.waitForSelector(`meta[data-jtbuksxfmarnecqwldhigvpyo-mn="${url}"][data-jtbuksxfmarnecqwldhigvpyo-ms="true"]`);
+    await page.waitForSelector(`#root[data-jtbuksxfmarnecqwldhigvpyo-pn="${url}"]`);
+    const html = await page.content();
+    htmls.push({path: url, html});
+  }
+  // we don't need the server anymore, we have all the html
   await stopper.terminate();
-  // TODO: here we need to actually prerender things
-  // TODO: we should probably have entry points for the compiled html, like a div with the attribute "body-entry" or "head-entry" or something, and all the prerendered content will go inside those elements.
+  // and lastly we just need to remove the compilation indicators so they don't confuse robots
+  for(const entry of htmls) {
+    entry.html = replaceall(`<meta data-jtbuksxfmarnecqwldhigvpyo-mn="${entry.path}" data-jtbuksxfmarnecqwldhigvpyo-ms="true">`, "", entry.html);
+    entry.html = replaceall(`data-jtbuksxfmarnecqwldhigvpyo-pn="${entry.path}"`, "", entry.html);
+  }
+  return htmls;
 };
 
-const sleep = async (ms: number) => {
-  await new Promise(resolve => setTimeout(resolve, ms));
+const storeFiles = (files: {path: string, html: string}[]) => {
+  for(const file of files) {
+    fs.mkdirSync(`./build${file.path}`);
+    fs.writeFileSync(`./build${file.path}/index.html`, file.html);
+  }
+  let basename = `${globals.basename}`;
+  basename = basename.startsWith("/") ? basename : `/${basename}`;
+  basename = basename.endsWith("/") ? basename : basename += "/";
+  fs.copySync("./dist", `./build${basename}`);
 };
 
 init().catch(console.error);
+
+/*
+TODO: notes
+ dont use the string "jtbuksxfmarnecqwldhigvpyo" in meta tag attributes, static route path segments, dynamic compile params, nor session storage keys
+ dont use #root[data-jtbuksxfmarnecqwldhigvpyo-pn]
+ redirects aren't supported by compilier - expect wonky outputs
+ */
