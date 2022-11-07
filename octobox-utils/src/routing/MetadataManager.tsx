@@ -36,13 +36,18 @@ export class MetadataManager {
   public static compile(meta: MetaTags): CompiledMetaTags {
     const links: CompiledTags = {};
     const mm: CompiledTags = {};
+    // required for prerendering--we need to identify and remove react-based metadata on page load, and we use this attr to do it
+    // and it needs to be in an object to avoid an annoying linter error intellij likes to whine about
+    const react = {
+      react: "true"
+    };
     for(const link in meta.links) {
-      links[link] = <link {...meta.links[link]} key={useUUID()}/>;
+      links[link] = <link {...meta.links[link]} key={useUUID()} {...react}/>;
     }
     for(const m in meta.meta) {
-      mm[m] = <meta {...meta.meta[m]} key={useUUID()}/>;
+      mm[m] = <meta {...meta.meta[m]} key={useUUID()} {...react}/>;
     }
-    const title = <title>{meta.title}</title>;
+    const title = <title {...react}>{meta.title}</title>;
     return { title, links, meta: mm };
   }
 
@@ -155,6 +160,10 @@ export class MetadataManager {
   public static readonly HeadPortal: FC<{data: CompiledMetaTags, match: (string | boolean)[]}> = ({ data, match }): ReactElement => {
     // compileMode is used for identifying when the page is fully loaded in the octobox compilier. more info at bottom of file
     const compileMode = checkCompilationStatus();
+    const elems = document.head.querySelectorAll("[react=true][prerender=true]");
+    for(const elem of elems) {
+      elem.remove();
+    }
     return ReactDOM.createPortal((<React.Fragment>
       {data.title !== undefined && data.title}
       {data.links !== undefined && Object.values(data.links)}

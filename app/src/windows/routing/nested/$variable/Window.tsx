@@ -20,7 +20,7 @@ const Window: FC<Props> = (): ReactElement => {
 export const Config: CompilierConfig = {
   compile: true,
   type: "dynamic",
-  params: [ "octobox", "dynamic", "octobox" ]
+  params: [ "octotest", "dynamic", "octotest" ]
 };
 
 export default Window;
