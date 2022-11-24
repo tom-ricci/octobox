@@ -31,7 +31,7 @@ export type Link = {
   title?: string
   type?: string;
   key?: never;
-  prerendered?: never;
+  prerender?: never;
   [x: string]: string | undefined;
 }
 
@@ -46,6 +46,6 @@ export type Meta = {
   scheme?: string;
   url?: string;
   key?: never;
-  prerendered?: never;
+  prerender?: never;
   [x: string]: string | undefined;
 };

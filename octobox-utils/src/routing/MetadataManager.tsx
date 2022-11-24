@@ -154,22 +154,27 @@ export class MetadataManager {
     data = data ?? MetadataManager.old ?? { title: "Octobox App" };
     return <React.Fragment>
       <MetadataManager.HeadPortal data={data} match={match}/>
+      <MetadataManager.HeadPortalCleanup/>
     </React.Fragment>;
   };
 
   public static readonly HeadPortal: FC<{data: CompiledMetaTags, match: (string | boolean)[]}> = ({ data, match }): ReactElement => {
     // compileMode is used for identifying when the page is fully loaded in the octobox compilier. more info at bottom of file
     const compileMode = checkCompilationStatus();
-    const elems = document.head.querySelectorAll("[react=true][prerender=true]");
-    for(const elem of elems) {
-      elem.remove();
-    }
     return ReactDOM.createPortal((<React.Fragment>
       {data.title !== undefined && data.title}
       {data.links !== undefined && Object.values(data.links)}
       {data.meta !== undefined && Object.values(data.meta)}
       {compileMode && <meta data-jtbuksxfmarnecqwldhigvpyo-mn={match[0]} data-jtbuksxfmarnecqwldhigvpyo-ms={match[1]}/>}
     </React.Fragment>), document.head);
+  };
+
+  public static readonly HeadPortalCleanup: FC = (): ReactElement => {
+    const elems = document.head.querySelectorAll("[react=true][prerender=true]");
+    for(const elem of elems) {
+      elem.remove();
+    }
+    return <React.Fragment/>;
   };
 
   public static readonly SecondaryHeadPortal: FC = (): ReactElement => {
