@@ -20,9 +20,8 @@ npm create octobox-app@latest -- argumented $ARGS
 | `--recommended_eslint_config`    | True / False            | Only if `--eslint` is true    | If your app uses Octobox's recommended ESLint configuration or not.    |
 | `--stylelint`                    | True / False            | Required                      | If your app uses Stylelint or not.                                     |
 | `--recommended_stylelint_config` | True / False            | Only if `--stylelint` is true | If your app uses Octobox's recommended Stylelint configuration or not. |
-| `--routing`                      | True / False            | Required                      | If your app uses Octobox's router or not.                              |
-| `--recommended_windows`          | True / False            | Only if `--routing` is true   | Adds top-level `$default` and `$wildcard` Windows automatically.       |
-| `--custom_fallbacks`             | True / False            | Only if `--routing` is true   | Adds custom pending and error elements automatically.                  |
+| `--recommended_windows`          | True / False            | Required                      | Adds top-level `$default` and `$wildcard` Windows automatically.       |
+| `--custom_fallbacks`             | True / False            | Required                      | Adds custom pending and error elements automatically.                  |
 | `--basename`                     | URI Pathname            | Optional                      | The path your app will be hosted on, or nothing if `/`.                |
 | `--unresponsive_ms`              | Number                  | Optional                      | The amount of time the router will wait before loading pending UI.     |
 | `--pending_ms`                   | Number                  | Optional                      | The minimum amount of time the router may pend plus unresponsive time. |

@@ -70,7 +70,8 @@ const main = async (): Promise<void> => {
     if(args.stylelint) {
       args.stylelintRecommended = argv["recommended_stylelint_config"].toUpperCase() === "TRUE";
     }
-    args.routing = argv["routing"].toUpperCase() === "TRUE";
+    // in my not removing features but instead just patching them up so they work fashion, this is going to be set to true. im not removing the code for what to do when routing is false. thats just deprecated!
+    args.routing = true;
     if(args.routing) {
       args.recommendedWindows = argv["recommended_windows"].toUpperCase() === "TRUE";
       args.customFallbacks = argv["custom_fallbacks"].toUpperCase() === "TRUE";
@@ -171,10 +172,8 @@ const setup = async (): Promise<void> => {
     config.stylelintRecommended = await stylelintRecommendedQuery.run();
   }
   // ask if user wants routing and set it up if so
-  config.routing = await new Enquirer.Confirm({
-    name: "routing",
-    message: "Do you want to use Octobox's router in this app?",
-  }).run();
+  // no! we're going to do what we did earlier--this will always happen
+  config.routing = true;
   if(config.routing) {
     config.recommendedWindows = await new Enquirer.Confirm({
       name: "recommendedWindows",
