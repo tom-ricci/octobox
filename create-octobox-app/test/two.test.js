@@ -17,7 +17,7 @@ const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");
 
 const tests = async (tester: typeof Page) => {
-  const element: typeof ElementHandle = await tester.$("div#root > h1");
+  const element: typeof ElementHandle = await tester.$("#root > div > h1");
   const text: string = await tester.evaluate((e: typeof ElementHandle) => e.innerText, element);
   await element.dispose();
   text === "Hello world!" ? process.exit(0) : process.exit(1);
@@ -64,7 +64,7 @@ const { ElementHandle, Page } = require("puppeteer");
 
 const tests = async (tester: typeof Page) => {
   await new Promise(r => setTimeout(r, 3000));
-  const element: typeof ElementHandle = await tester.$("div#root > h1");
+  const element: typeof ElementHandle = await tester.$("#root > div > h1");
   const text: string = await tester.evaluate((e: typeof ElementHandle) => e.innerText, element);
   await element.dispose();
   text === "Hello world!" ? process.exit(0) : process.exit(1);

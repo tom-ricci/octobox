@@ -14,7 +14,7 @@ const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");
 
 const tests = async (tester: typeof Page) => {
-  const element: typeof ElementHandle = await tester.$("div#root > h1");
+  const element: typeof ElementHandle = await tester.$("#root > div > h1");
   const pass: boolean = await tester.evaluate(async (e: typeof ElementHandle): Promise<boolean> => {
     return Promise.resolve(e.innerText === "Hello world!" && e.computedStyleMap().get("color").toString().toUpperCase() === "RGB(255, 0, 0)");
   }, element);
