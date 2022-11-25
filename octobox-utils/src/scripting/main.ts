@@ -5,6 +5,7 @@ const puppeteer = require("puppeteer");
 const portfinder = require("portfinder");
 const replaceall = require("replaceall");
 const terminator = require("http-terminator");
+const colors = require("ansi-colors");
 const fs = require("fs-extra");
 
 interface EnabledCompilierConfig {
@@ -60,10 +61,24 @@ const globals = {
   basename: ""
 };
 
+const utils = {
+  logProgress: (msg: string): void => {
+    utils.logSafely(`${colors.bold.blue("➤")} ${colors.bold(msg)}`);
+  },
+  logSafely: (msg: string): void => {
+    console.log(`${msg}\u001b[0m`);
+  },
+  logSuccess: (msg: string): void => {
+    utils.logSafely(`${colors.bold.blue("✓")} ${colors.bold(msg)}`);
+  }
+};
+
 // we need to get every compilier config from the windows, so we do that first
 const init = async () => {
+  utils.logProgress("Building app...");
   // boot up resolution server, we need this to load & resolve all the configs
   // the mode of the server is set to COMPILE, which means it will resolve all configs on first page load. as long as the user never uses import.env.MODE or import.env.DEV/PROD to determine what mode they're in, their code will be running in production mode (the development mode hook returns false for compilation mode too)
+  utils.logProgress("Finding windows...");
   const server = await createServer({
     configFile: `${process.cwd()}/vite.config.ts`,
     root: process.cwd(),
@@ -110,12 +125,15 @@ const init = async () => {
 
 // the runner goes through every window and compiles them (or not) according to the settings stored in their configs
 const runner = async (store: Store) => {
+  utils.logProgress("Bundling app with Vite...");
   // now we need to build the app itself, so lets do that here
   // now it will definetely be running in production mode. no compilation mode here
   await build({
     root: process.cwd(),
     configFile: `${process.cwd()}/vite.config.ts`
   });
+  utils.logSuccess("App bundled!");
+  utils.logProgress("Resolving compilier configuration...");
   // we need to start turning the store into routes we can actually use
   const rstore: ResolvedStore = {};
   for(const val in store) {
@@ -373,6 +391,7 @@ const buildPathTree = (path: string, children: CascadingCompilierConfig): string
 };
 
 const prerender = async (paths: string[]): Promise<{ path: string, html: string }[]> => {
+  utils.logProgress("Prerendering windows...");
   // boot up vite preview server
   const server = await preview({
     configFile: `${process.cwd()}/vite.config.ts`,
@@ -390,6 +409,7 @@ const prerender = async (paths: string[]): Promise<{ path: string, html: string 
   const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
   // load html
   for(const path of paths) {
+    utils.logProgress(`Prerendering ${path}...`);
     // on every new page, we add the compilation storage item so the router knows to compile
     const page = await browser.newPage();
     await page.evaluateOnNewDocument(() => {
@@ -406,6 +426,7 @@ const prerender = async (paths: string[]): Promise<{ path: string, html: string 
     await page.waitForSelector(`#root[data-jtbuksxfmarnecqwldhigvpyo-pn="${url}"]`);
     const html = await page.content();
     htmls.push({path: url, html});
+    utils.logSuccess(`${path} successfully prerendered!`);
   }
   // we don't need the server anymore, we have all the html
   await stopper.terminate();
@@ -418,17 +439,74 @@ const prerender = async (paths: string[]): Promise<{ path: string, html: string 
 };
 
 const storeFiles = (files: {path: string, html: string}[]) => {
+  utils.logProgress("Packaging build...");
+  // find out which types of files we're going to store
+  const pkg = JSON.parse(fs.readFileSync("./package.json"));
+  let indexRoot = false;
+  let notFoundRoot = false;
+  let okRoot = false;
+  // we can store all our files in ./build without worrying about conflicts with vite build files--thats taken care of later
   for(const file of files) {
-    fs.mkdirSync(`./build${file.path}`, { recursive: true });
-    fs.writeFileSync(`./build${file.path}/index.html`, file.html);
+    if(pkg.compile.index === "all") {
+      storePage(file.path, file.html, "index");
+    }else if(pkg.compile.index === "root") {
+      indexRoot = true;
+    }
+    if(pkg.compile["404"] === "all") {
+      storePage(file.path, file.html, "404");
+    }else if(pkg.compile["404"] === "root") {
+      notFoundRoot = true;
+    }
+    if(pkg.compile["200"] === "all") {
+      storePage(file.path, file.html, "200");
+    }else if(pkg.compile["200"] === "root") {
+      okRoot = true;
+    }
   }
+  // we should also take care of the root-only files. sure theres better ways to do this but this works
+  if(indexRoot) {
+    storeRootPage(files, "index");
+  }
+  if(notFoundRoot) {
+    storeRootPage(files, "404");
+  }
+  if(okRoot) {
+    storeRootPage(files, "200");
+  }
+  // and lastly we can copy over the vite build into the final build
   let basename = `${globals.basename}`;
   basename = basename.startsWith("/") ? basename : `/${basename}`;
   basename = basename.endsWith("/") ? basename : `${basename}/`;
+  // vite overrides the assets / other dirs it uses here, except the index. that staying from the build is important.
+  fs.rmSync("./dist/index.html");
   fs.copySync("./dist", `./build${basename}`, { overwrite: true });
+  // and remove the original vite build
+  fs.removeSync("./dist");
+  utils.logSuccess("Build complete!");
+};
+
+const storePage = (path: string, data: string, type: "index" | "404" | "200") => {
+  fs.mkdirSync(`./build${path}`, { recursive: true });
+  fs.writeFileSync(`./build${path}/${type}.html`, data);
+};
+
+const storeRootPage = (pages: {path: string, html: string}[], type: "index" | "404" | "200") => {
+  // find the page with the shortest path
+  // this is guaranteed to be the root-level page because there literally cant be anything higher up that takes priority if its the shortest path
+  let shortest = 0;
+  for(let i = 0; i < pages.length; i++) {
+    if(pages[i].path.length <= pages[shortest].path.length) {
+      shortest = i;
+    }
+  }
+  storePage(pages[shortest].path, pages[shortest].html, type);
 };
 
 init().catch(console.error);
+
+
+// TODO: docs
+// TODO: remove --routing FALSE from tests, remove from hashes.json
 
 /*
 TODO: notes
@@ -436,4 +514,11 @@ TODO: notes
  dont use #root[data-jtbuksxfmarnecqwldhigvpyo-pn]
  redirects aren't supported by compilier - expect wonky outputs
  if a window is named assets, or named any other directory used by vite to compile, it will not exist in the final prerendered html.
+ we dont use hydration, we use a weird psuedo-hydration kinda thing that has all the prerendered content but doesnt display it if javascript is enabled, then the app creates a root and loads like a regular react app
+ compile in package.json style:
+ "compile": {
+    "index": "root | all",
+    "404": "root | all",
+    "200": "root | all"
+  }
  */

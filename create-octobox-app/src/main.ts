@@ -317,7 +317,16 @@ const bootstrap = async (config: Config): Promise<void> => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <div id="root"></div>
+    <div>
+      <div>
+        <script>
+          document.body.children[0].style.display = "none"
+        </script>
+        <div id="root">
+          <div></div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
@@ -328,12 +337,11 @@ import ReactDOM from "react-dom/client";
 import "./styles/main.scss";
 import { App } from "./App";
 
+for(const elem of document.head.querySelectorAll("[react=true]")) elem.setAttribute("prerender", "true");
+(document.body.children[0] as HTMLElement).style.display = "block";
+document.getElementById("root")?.children[0].remove();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<div><React.StrictMode><App/></React.StrictMode></div>);
 `);
   if(!config.routing) {
     fs.writeFileSync(`${ utils.path }/src/App.tsx`, `import React, { FC, ReactElement } from "react";
@@ -447,7 +455,7 @@ const tests = async (tester: typeof Page) => {
   // if the user wants any linters, install them
   if(config.eslint) {
     // install and add eslint to project
-    utils.execInPath("npm i -D @modyqyw/vite-plugin-eslint eslint eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest");
+    utils.execInPath("npm i -D @modyqyw/vite-plugin-eslint@2.0.9 eslint eslint-plugin-react@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest");
     let viteConfig: string = fs.readFileSync(`${ utils.path }/vite.config.ts`).toString().trim();
     const lines: string[] = viteConfig.split("\n");
     lines.splice(2, 0, `import ESLintPlugin from "@modyqyw/vite-plugin-eslint";${ "" }`);
@@ -502,7 +510,7 @@ const tests = async (tester: typeof Page) => {
 
   if(config.stylelint) {
     // install stylelint and add it to the vite config
-    utils.execInPath("npm i -D stylelint stylelint-config-standard-scss vite-plugin-stylelint");
+    utils.execInPath("npm i -D stylelint stylelint-config-standard-scss vite-plugin-stylelint@3.0.7");
     let viteConfig: string = fs.readFileSync(`${ utils.path }/vite.config.ts`).toString().trim();
     const lines: string[] = viteConfig.split("\n");
     lines.splice(config.eslint ? 3 : 2, 0, `import StylelintPlugin from "vite-plugin-stylelint";${ "" }`);
@@ -565,8 +573,7 @@ const tests = async (tester: typeof Page) => {
     if(config.recommendedWindows) {
       // we need to have an outlet in this window so it can render the default
       fs.writeFileSync(`${ utils.path }/src/windows/Window.tsx`, `import React, { FC, ReactElement } from "react";
-import { Outlet } from "octobox-utils";
-import { WindowLoader } from "octobox-utils";
+import { CompilierConfig, Outlet, WindowLoader } from "octobox-utils";
 
 interface Props {
 
@@ -583,9 +590,14 @@ const Window: FC<Props> = (): ReactElement => {
 export const Loader: WindowLoader = async () => {
   return {
     metadata: {
-      title: "Octobox App",
+      title: "Octobox App"
     }
   };
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;
@@ -594,6 +606,7 @@ export default Window;
       fs.mkdirSync(`${ utils.path }/src/windows/$default/`);
       fs.mkdirSync(`${ utils.path }/src/windows/$wildcard/`);
       fs.writeFileSync(`${ utils.path }/src/windows/$default/Window.tsx`, `import React, { FC, ReactElement } from "react";
+import { CompilierConfig } from "octobox-utils";
 
 interface Props {
 
@@ -605,6 +618,11 @@ const Window: FC<Props> = (): ReactElement => {
       <h1>Hello world!</h1>
     </React.Fragment>
   );
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;
@@ -628,7 +646,7 @@ export default Window;
     }else{
       // make the initial window -- no outlet this time since we're not doing that for the user here
       fs.writeFileSync(`${ utils.path }/src/windows/Window.tsx`, `import React, { FC, ReactElement } from "react";
-import { WindowLoader } from "octobox-utils";
+import { CompilierConfig, WindowLoader } from "octobox-utils";
 
 interface Props {
 
@@ -645,9 +663,14 @@ const Window: FC<Props> = (): ReactElement => {
 export const Loader: WindowLoader = async () => {
   return {
     metadata: {
-      title: "Octobox App",
+      title: "Octobox App"
     }
   };
+};
+
+export const Config: CompilierConfig = {
+  compile: true,
+  type: "static"
 };
 
 export default Window;
@@ -726,6 +749,14 @@ export default Window;
       }
       fs.writeFileSync(`${ utils.path }/vite.config.ts`, viteConfig);
     }
+    // lets add our required package fields for prerendering
+    const pkg = JSON.parse(fs.readFileSync(`${ utils.path }/package.json`));
+    pkg.scripts.build = "npx octobox-utils prerender";
+    pkg.compile = {
+      "index": "all",
+      "404": "all"
+    };
+    fs.writeFileSync(`${ utils.path }/package.json`, JSON.stringify(pkg, null, 2));
   }
 
   // quick npm i to make sure all deps are installed
