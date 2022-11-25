@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <div id="root"></div>
+    <div>
+      <div>
+        <script>
+          document.body.children[0].style.display = "none"
+        </script>
+        <div id="root">
+          <div></div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
