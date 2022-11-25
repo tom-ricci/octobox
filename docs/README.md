@@ -9,6 +9,7 @@ Octobox's documentation.
 * [Styling](https://github.com/tom-ricci/octobox/blob/main/docs/Styling.md)
 * [Linting](https://github.com/tom-ricci/octobox/blob/main/docs/Linting.md)
 * [Routing](https://github.com/tom-ricci/octobox/blob/main/docs/Routing.md)
+* [Prerendering](https://github.com/tom-ricci/octobox/blob/main/docs/Prerendering.md)
 * [Utilities](https://github.com/tom-ricci/octobox/blob/main/docs/Utilities.md)
 * [Testing](https://github.com/tom-ricci/octobox/blob/main/docs/Testing.md)
 * [Building](https://github.com/tom-ricci/octobox/blob/main/docs/Building.md)
