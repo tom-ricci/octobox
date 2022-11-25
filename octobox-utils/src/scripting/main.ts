@@ -506,7 +506,6 @@ init().catch(console.error);
 
 
 // TODO: docs
-// TODO: remove --routing FALSE from tests, remove from hashes.json
 
 /*
 TODO: notes

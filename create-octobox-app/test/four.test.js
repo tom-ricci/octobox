@@ -8,7 +8,7 @@ const test = async () => {
   utils.log.info("In this test, an Octobox app will be created with TailwindCSS and an element created with a TailwindCSS class. If the element is found in the DOM with its style as defined by the class and its content, the test will pass.");
   await new Promise(r => setTimeout(r, 1000));
   // make our app and our test since the test isnt a part of the framework itself
-  execSync("npm create octobox-app -- argumented internal --path tailwindoctoboxapp --tailwind TRUE --eslint FALSE --stylelint FALSE --routing FALSE");
+  execSync("npm create octobox-app -- argumented internal --path tailwindoctoboxapp --tailwind TRUE --eslint FALSE --stylelint FALSE --custom_fallbacks FALSE --recommended_windows FALSE");
   fs.writeFileSync("./tailwindoctoboxapp/test/main.test.ts", `const { createServer } = require("vite");
 const puppeteer = require("puppeteer");
 const { ElementHandle, Page } = require("puppeteer");

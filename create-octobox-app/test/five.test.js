@@ -8,7 +8,7 @@ const test = async () => {
   utils.log.info("In this test, an Octobox app will be made with ESLint and Stylelint. If the linters lint, the test will past.");
   await new Promise(r => setTimeout(r, 1000));
   // make app and linter configs. we're not actually messing with the app to make it "dirty", we're messing with the linter configs instead. its easier.
-  execSync("npm create octobox-app -- argumented internal --path lintertest --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE --routing FALSE");
+  execSync("npm create octobox-app -- argumented internal --path lintertest --tailwind TRUE --eslint TRUE --stylelint TRUE --recommended_eslint_config FALSE --recommended_stylelint_config FALSE --custom_fallbacks FALSE --recommended_windows FALSE");
   fs.writeFileSync("./lintertest/.eslintrc.js", `module.exports = {
   "root": true,
   "env": {
