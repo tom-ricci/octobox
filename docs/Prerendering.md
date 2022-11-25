@@ -36,7 +36,7 @@ export const Config: CompilierConfig = {
   type: "dynamic"
 };
 ```
-> Note:\
+> **Note**\
 > Path params compile to directories in the final build.\
 > For example, if you had the window `/src/windows/$user/Window.tsx`, and the params `["thomas", "admin"]`, the compilier would prerender `http://localhost/thomas` and `http://localhost/admin`. Your final build would include `/thomas/index.html` and `/admin/index.html`.
 
@@ -57,7 +57,7 @@ compile = {
   200?: "root" | "all"
 }
 ```
-> Note:\
+> **Note**\
 > By default, it will be defined as the following:
 > ```json
 > {
@@ -69,7 +69,7 @@ compile = {
 > ```
 > This is the best configuration for most apps. With this config, all compiled windows will be saved to both an `index.html` file and `404.html` file.
 
-#### Definitions
+#### **Definitions**
 * `index`
   * Represents `index.html` files.
   * Values
@@ -91,7 +91,7 @@ compile = {
             * When specified, a `200.html` file will only be generated for the root window. If the root window has compilation disabled, no `200.html` files will be generated at all.
         * `"all"`
             * When specified, a `200.html` file will be generated for every compiled window in the app.
-> Note:\
+> **Note**\
 > Configuration entires will not override one another.
 > 
 > For example, given the following, every compiled route will save to all three types of files: `index.html`, `404.html`, and `200.html`.
