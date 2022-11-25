@@ -504,20 +504,4 @@ const storeRootPage = (pages: {path: string, html: string}[], type: "index" | "4
 
 init().catch(console.error);
 
-
-// TODO: docs
-
-/*
-TODO: notes
- dont use the string "jtbuksxfmarnecqwldhigvpyo" in meta tag attributes, static route path segments, dynamic compile params, nor session storage keys
- dont use #root[data-jtbuksxfmarnecqwldhigvpyo-pn]
- redirects aren't supported by compilier - expect wonky outputs
- if a window is named assets, or named any other directory used by vite to compile, it will not exist in the final prerendered html.
- we dont use hydration, we use a weird psuedo-hydration kinda thing that has all the prerendered content but doesnt display it if javascript is enabled, then the app creates a root and loads like a regular react app
- compile in package.json style:
- "compile": {
-    "index": "root | all",
-    "404": "root | all",
-    "200": "root | all"
-  }
- */
+// TODO: make tests
