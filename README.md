@@ -1,4 +1,4 @@
-<p align="center">🚨 <strong>Looking for maintainers!!<strong> 🚨<br><br>I began this project as a junior in high school, but now I'm in university. I'm pursuing a dual major at a very fast-paced institution and as a result have little free time, so I'm looking for maintainers to continue this project. If you're interested, <a href="mailto:me@thomasricci.dev">send me an email</a>.</p>
+<p align="center">🚨 <strong>Looking for maintainers!!<strong> 🚨<br><br>I began this project as a junior in high school, but now I'm in university. I don't have much free time, so I'm looking for maintainers to continue this project. If you're interested, <a href="mailto:me@thomasricci.dev">send me an email</a>.</p>
 
 <hr>
 
